@@ -1,0 +1,79 @@
+[
+  {
+    "homeowner_id": 1,
+    "name": "Aminah Binti Kamal(PLS-01-02)",
+    "unit": "PLS-01-02",
+    "email": "aminah2@gmail.com",
+    "project_name": "Skyline Kangar Harmoni"
+  },
+  {
+    "homeowner_id": 2,
+    "name": "Ali Bin Abu(Unit B-12-03, Residensi Harmoni)",
+    "unit": "Unit B-12-03, Residensi Harmoni",
+    "email": "siti.aminah@email.com",
+    "project_name": "-"
+  },
+  {
+    "homeowner_id": 3,
+    "name": "Zaiful Bin Mohd(C-01-5)",
+    "unit": "C-01-5",
+    "email": "zaiful3@gmail.com",
+    "project_name": "-"
+  },
+  {
+    "homeowner_id": 4,
+    "name": "Nur Dijah Binti Hamid(D-12-8)",
+    "unit": "D-12-8",
+    "email": "Dijah@gmail.com",
+    "project_name": "-"
+  },
+  {
+    "homeowner_id": 9,
+    "name": "Rahmat Bin Mohd Rasyid(Unit B-12-03, Residensi Harmoni)",
+    "unit": "Unit B-12-03, Residensi Harmoni",
+    "email": "Rahmat@gmail.com",
+    "project_name": "-"
+  },
+  {
+    "homeowner_id": 10,
+    "name": "Homeowner B(A-02-02)",
+    "unit": "A-02-02",
+    "email": "homeowner2@demo.local",
+    "project_name": "-"
+  },
+  {
+    "homeowner_id": 11,
+    "name": "Homeowner A(A-01-01)",
+    "unit": "A-01-01",
+    "email": "homeowner1@demo.local",
+    "project_name": "-"
+  },
+  {
+    "homeowner_id": 12,
+    "name": "abu",
+    "unit": "-",
+    "email": "d@gmail.com",
+    "project_name": "-"
+  },
+  {
+    "homeowner_id": 15,
+    "name": "Nabilah",
+    "unit": "-",
+    "email": "nabilah@gmail.com",
+    "project_name": "-"
+  },
+  {
+    "homeowner_id": 16,
+    "name": "Nurul Nabilah",
+    "unit": "-",
+    "email": "nabilah4@gmail.com",
+    "project_name": "Skyline Kuching Sentral"
+  },
+  {
+    "homeowner_id": 18,
+    "name": "Siti Nur Sarah Binti Mohd Abu",
+    "unit": "-",
+    "email": "sarah2@gmail.com",
+    "project_name": "-"
+  }
+]

@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .report-header {
+            text-align: left;
+            margin-bottom: 16px;
+            border-bottom: none;
+            padding-bottom: 0;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .report-title {
+            font-size: 14pt;
+            font-weight: bold;
+            margin: 0 0 6px;
+            color: #000;
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .report-subtitle {
+            font-size: 14pt;
+            line-height: 1.2;
+            font-weight: bold;
+            margin: 2px 0 0;
+            color: #000;
+            text-align: left;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .report-meta {
+            font-size: 12pt;
+            color: #000;
+            margin: 2px 0 0;
+            text-align: left;
+            font-weight: normal;
+            line-height: 1.2;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .report-content {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+        .export-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        /* Ensure the whole preview uses the same base font */
+        body, .container, .report-content, .report-header {
+            font-family: 'Times New Roman', Times, serif;
+        }
+    </style>
+</head>
+<body>
+
+{% include 'partials/top_main.html' %}
+
+<div class="container">
+    <div class="report-header">
+        <div class="report-title">{{ report_title or '' }}</div>
+        <div class="report-subtitle">{{ report_subtitle or '' }}</div>
+        <div class="report-meta">{{ generated_label or 'Tarikh Jana' }}: {{ generated_at }}</div>
+    </div>
+
+    <div class="report-content">{{ report }}</div>
+
+    <div class="export-section">
+        <form action="{{ url_for('routes.export_pdf') }}" method="POST">
+            <input type="hidden" name="role" value="{{ role }}">
+            <input type="hidden" name="ai_report" value="{{ report }}">
+            <button class="btn btn-success">Export PDF</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+
+

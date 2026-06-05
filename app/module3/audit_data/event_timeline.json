@@ -1,0 +1,5186 @@
+[
+  {
+    "event_id": "f52f478d-42fe-426e-a17a-40822a9a9b15",
+    "timestamp": "2026-04-26T17:48:53.214900+08:00",
+    "action": "report_generated",
+    "report_id": "d2c22817-f98c-4377-82b8-c8e7cac655ad",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "fb81967f-51e8-493a-baaa-e1c881a3f6ec",
+    "timestamp": "2026-04-26T17:48:53.228312+08:00",
+    "action": "pdf_export",
+    "report_id": "d2c22817-f98c-4377-82b8-c8e7cac655ad",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "c2196d81-2d36-43fb-b8d7-8641ac8d1b32"
+    }
+  },
+  {
+    "event_id": "617bd529-752b-47ca-a043-6f626fd95f36",
+    "timestamp": "2026-04-26T21:20:41.139149+08:00",
+    "action": "report_generated",
+    "report_id": "51ac9bba-f13e-4a81-a64f-d610cf37dfe9",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "27766e7a-bc2f-46fe-acb0-1250cf115284",
+    "timestamp": "2026-04-26T21:20:41.175300+08:00",
+    "action": "pdf_export",
+    "report_id": "51ac9bba-f13e-4a81-a64f-d610cf37dfe9",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "57b1fb0e-48c7-4ecc-96a0-5f5326a8ea5e"
+    }
+  },
+  {
+    "event_id": "62616472-7b59-484c-af68-5d7faa53d416",
+    "timestamp": "2026-04-26T21:58:14.560744+08:00",
+    "action": "report_generated",
+    "report_id": "607e517c-0f3e-4edd-8731-8d06d6311e17",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "a8194f35-8618-491f-bba4-0529477c7a08",
+    "timestamp": "2026-04-26T21:58:14.603272+08:00",
+    "action": "pdf_export",
+    "report_id": "607e517c-0f3e-4edd-8731-8d06d6311e17",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "0ca15f7f-9f4f-4f0f-965c-b20207d0dabd"
+    }
+  },
+  {
+    "event_id": "5827f3d0-eff1-4f4f-9b52-7773e0fa8b75",
+    "timestamp": "2026-04-26T22:02:42.183005+08:00",
+    "action": "report_generated",
+    "report_id": "4c7f9295-821b-4e06-9e7a-d1cba7b4dfab",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "35a69182-0661-4f88-81be-dfee0bfcef4c",
+    "timestamp": "2026-04-26T22:02:42.213855+08:00",
+    "action": "pdf_export",
+    "report_id": "4c7f9295-821b-4e06-9e7a-d1cba7b4dfab",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "d257f08b-fb6b-4fa5-93d9-16e9a7afdf16"
+    }
+  },
+  {
+    "event_id": "34823617-a0d0-45b0-b97b-7bfbe90d15f2",
+    "timestamp": "2026-04-26T22:10:43.180946+08:00",
+    "action": "report_generated",
+    "report_id": "83a5563e-3566-4b8e-a772-abb7f75e21db",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "a1a8ca70-c0ec-49d2-ac99-adbc561f4f44",
+    "timestamp": "2026-04-26T22:10:43.207974+08:00",
+    "action": "pdf_export",
+    "report_id": "83a5563e-3566-4b8e-a772-abb7f75e21db",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "669fbe37-e32b-40a1-9798-a5dfa390bad9"
+    }
+  },
+  {
+    "event_id": "63fe3d51-203a-41df-becd-d851466b9cf4",
+    "timestamp": "2026-04-26T22:15:31.821133+08:00",
+    "action": "report_generated",
+    "report_id": "b0a62869-3119-4473-9434-096bd665f509",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "7de923d7-5766-43ac-ae36-c61ff7ce56ec",
+    "timestamp": "2026-04-26T22:15:31.851109+08:00",
+    "action": "pdf_export",
+    "report_id": "b0a62869-3119-4473-9434-096bd665f509",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "673ce4cb-84d0-435d-b674-2ece7b09090f"
+    }
+  },
+  {
+    "event_id": "569d8060-d700-4cde-addc-051d24ef82e2",
+    "timestamp": "2026-04-26T22:34:37.122816+08:00",
+    "action": "report_generated",
+    "report_id": "081a9fb5-d571-4209-befe-b48983e4f6a9",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "6287e655-a4ab-48d2-8daf-e81ece415d4d",
+    "timestamp": "2026-04-26T22:34:37.145748+08:00",
+    "action": "pdf_export",
+    "report_id": "081a9fb5-d571-4209-befe-b48983e4f6a9",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "cd5a0b5f-b41c-47e3-9b00-8f7211af42cc"
+    }
+  },
+  {
+    "event_id": "f276e92f-e0eb-4571-86ee-9467de5c1f96",
+    "timestamp": "2026-04-26T22:39:15.144489+08:00",
+    "action": "report_generated",
+    "report_id": "60532175-1129-4e3b-8dc1-f20b6b5b1d1c",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "84270ad5-8a5b-4a92-b2ec-3717d841bd00",
+    "timestamp": "2026-04-26T22:39:15.173365+08:00",
+    "action": "pdf_export",
+    "report_id": "60532175-1129-4e3b-8dc1-f20b6b5b1d1c",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "a65bb875-2673-48e4-bd7c-dbd79d13ccb9"
+    }
+  },
+  {
+    "event_id": "06aa0fa3-3a86-4151-b21c-ab578fbb293f",
+    "timestamp": "2026-04-26T22:43:57.428181+08:00",
+    "action": "report_generated",
+    "report_id": "25293230-a467-4691-b5e2-2a314788f1a5",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "853630e4-99d4-43a6-adfd-bdfa623345c0",
+    "timestamp": "2026-04-26T22:43:57.450072+08:00",
+    "action": "pdf_export",
+    "report_id": "25293230-a467-4691-b5e2-2a314788f1a5",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "2a61fea1-7499-430e-a409-2d503949a8d4"
+    }
+  },
+  {
+    "event_id": "ae8c877b-baff-4bb3-8098-1230ee9889fa",
+    "timestamp": "2026-04-26T22:47:05.729115+08:00",
+    "action": "report_generated",
+    "report_id": "9f01f4ab-35ac-4e82-98f1-ac47ff3bc7a0",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "e62a1558-04e3-4660-9c72-1f0661c8621a",
+    "timestamp": "2026-04-26T22:47:05.751996+08:00",
+    "action": "pdf_export",
+    "report_id": "9f01f4ab-35ac-4e82-98f1-ac47ff3bc7a0",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "ba1988a1-462d-4a90-b076-408d475e8c03"
+    }
+  },
+  {
+    "event_id": "2db87b99-58f7-4ee1-b759-a197d0753922",
+    "timestamp": "2026-04-26T22:56:54.566300+08:00",
+    "action": "report_generated",
+    "report_id": "19d87a19-6c1a-4180-a3af-95ba9fed877d",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "b65c1936-5c21-4b86-b662-19c7e9c7436d",
+    "timestamp": "2026-04-26T22:56:54.612890+08:00",
+    "action": "pdf_export",
+    "report_id": "19d87a19-6c1a-4180-a3af-95ba9fed877d",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "9d7f3d04-cd9b-469e-b0ec-21831344e884"
+    }
+  },
+  {
+    "event_id": "fd75b9ac-cdfc-49b0-b206-5c76fc01a7a2",
+    "timestamp": "2026-04-27T23:33:12.478804+08:00",
+    "action": "report_generated",
+    "report_id": "50626c1f-2a39-4724-ab25-ef06a51e089f",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 0
+    }
+  },
+  {
+    "event_id": "b1baed99-e1fb-4ddd-bac5-c7437ee925dd",
+    "timestamp": "2026-04-27T23:33:12.500604+08:00",
+    "action": "pdf_export",
+    "report_id": "50626c1f-2a39-4724-ab25-ef06a51e089f",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 0,
+      "language": "ms",
+      "signature_id": "0bf434c0-f667-4abf-8bec-ea9b2ebe97da"
+    }
+  },
+  {
+    "event_id": "f3bab037-14a9-45ea-827f-42b33e1359da",
+    "timestamp": "2026-04-27T23:39:21.010841+08:00",
+    "action": "report_generated",
+    "report_id": "edc3d924-a504-4721-8fcc-d6c60911c21c",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 0
+    }
+  },
+  {
+    "event_id": "77036b0e-4e6f-435f-b87c-c6d92be56d48",
+    "timestamp": "2026-04-27T23:39:21.040773+08:00",
+    "action": "pdf_export",
+    "report_id": "edc3d924-a504-4721-8fcc-d6c60911c21c",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 0,
+      "language": "ms",
+      "signature_id": "ef4a5d9f-413f-429e-b262-388bd7076eb1"
+    }
+  },
+  {
+    "event_id": "b328e558-af4f-4d36-8ccb-eafd176d352d",
+    "timestamp": "2026-04-27T23:43:11.290836+08:00",
+    "action": "report_generated",
+    "report_id": "62b5d9c5-69f2-4201-ba3d-ff13d5004463",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 0
+    }
+  },
+  {
+    "event_id": "b96e69f5-8f92-4478-9933-868d70ac00e9",
+    "timestamp": "2026-04-27T23:43:11.310765+08:00",
+    "action": "pdf_export",
+    "report_id": "62b5d9c5-69f2-4201-ba3d-ff13d5004463",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 0,
+      "language": "ms",
+      "signature_id": "5f9a63ec-d8a0-419c-b551-ffae87fa7210"
+    }
+  },
+  {
+    "event_id": "60faef3b-3d2a-444a-89b5-2ef097b2cf19",
+    "timestamp": "2026-04-27T23:43:53.626807+08:00",
+    "action": "report_generated",
+    "report_id": "d6f8c1f9-c299-48bc-9e98-80a59be36f52",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 0
+    }
+  },
+  {
+    "event_id": "04fe2cbb-b33a-4b28-805d-af0a74221390",
+    "timestamp": "2026-04-27T23:43:53.674848+08:00",
+    "action": "pdf_export",
+    "report_id": "d6f8c1f9-c299-48bc-9e98-80a59be36f52",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 0,
+      "language": "ms",
+      "signature_id": "febb3af7-4ae9-4e56-9046-b8f5eb8e31a4"
+    }
+  },
+  {
+    "event_id": "f409f913-f750-4916-87f9-52eaf328dd93",
+    "timestamp": "2026-04-27T23:51:00.309470+08:00",
+    "action": "report_generated",
+    "report_id": "ab2de491-f4e3-4552-9717-b8cdaabbd584",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 0
+    }
+  },
+  {
+    "event_id": "637eeed7-2605-4ed6-804d-73f5b0974055",
+    "timestamp": "2026-04-27T23:51:00.332035+08:00",
+    "action": "pdf_export",
+    "report_id": "ab2de491-f4e3-4552-9717-b8cdaabbd584",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 0,
+      "language": "en",
+      "signature_id": "0e3f5a2e-f879-4af2-bc38-dfa03b8ef2fc"
+    }
+  },
+  {
+    "event_id": "cc62c88b-b8ea-4f81-a99f-06aac8f0effe",
+    "timestamp": "2026-04-27T23:53:42.994898+08:00",
+    "action": "report_generated",
+    "report_id": "0a74fd5f-0edd-4608-9107-015b0ca91978",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 0
+    }
+  },
+  {
+    "event_id": "6c04d7a8-600a-45d8-8d44-8d3ef4cc3c3b",
+    "timestamp": "2026-04-27T23:53:43.025621+08:00",
+    "action": "pdf_export",
+    "report_id": "0a74fd5f-0edd-4608-9107-015b0ca91978",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 0,
+      "language": "ms",
+      "signature_id": "e325d260-66cd-4098-96d1-06de4328202a"
+    }
+  },
+  {
+    "event_id": "a4f45b9e-3416-4862-8078-8f486941b35d",
+    "timestamp": "2026-04-27T23:56:33.486511+08:00",
+    "action": "report_generated",
+    "report_id": "bad1c9d2-d037-4cb2-99ba-4302cfb784f8",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "769251bd-601b-44b0-a17d-b891e0e43579",
+    "timestamp": "2026-04-27T23:56:33.515547+08:00",
+    "action": "pdf_export",
+    "report_id": "bad1c9d2-d037-4cb2-99ba-4302cfb784f8",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "6a1e950a-858b-4976-afc3-9b1be60364af"
+    }
+  },
+  {
+    "event_id": "f1e6ffb8-03f9-4cab-abf8-c50ee98ce1b2",
+    "timestamp": "2026-04-27T23:58:27.074348+08:00",
+    "action": "report_generated",
+    "report_id": "d00c6df6-981b-4e80-9ad4-c6f2a64a53b6",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "de16862b-9b48-4958-a0e4-391f05e47eaf",
+    "timestamp": "2026-04-27T23:58:27.104319+08:00",
+    "action": "pdf_export",
+    "report_id": "d00c6df6-981b-4e80-9ad4-c6f2a64a53b6",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "8c49098f-804d-4ea3-91d6-522221c8133a"
+    }
+  },
+  {
+    "event_id": "26dca717-7277-4ed3-b306-938c75780507",
+    "timestamp": "2026-04-28T00:01:31.037290+08:00",
+    "action": "report_generated",
+    "report_id": "fb1c19f3-e492-4531-9836-698e3896d139",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "71bcc340-16aa-446a-95fd-3f584c49e79c",
+    "timestamp": "2026-04-28T00:01:31.052052+08:00",
+    "action": "pdf_export",
+    "report_id": "fb1c19f3-e492-4531-9836-698e3896d139",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "ac7f21e6-007b-4d43-aa8c-a033e96c8a48"
+    }
+  },
+  {
+    "event_id": "e869d3de-889d-41e6-9458-f2b886e37bee",
+    "timestamp": "2026-04-28T00:02:32.246101+08:00",
+    "action": "report_generated",
+    "report_id": "a5821a27-1e49-442a-9951-9081ccacada5",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "0a11a38e-5e54-4aaa-ba9a-51d4d3433bad",
+    "timestamp": "2026-04-28T00:02:32.265014+08:00",
+    "action": "pdf_export",
+    "report_id": "a5821a27-1e49-442a-9951-9081ccacada5",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "e1285746-592d-46ab-a545-76c62dd8d794"
+    }
+  },
+  {
+    "event_id": "e21802dd-8770-4e9f-9211-16b7f07892a7",
+    "timestamp": "2026-04-28T00:14:19.732304+08:00",
+    "action": "report_generated",
+    "report_id": "06cd3897-3e3a-477d-97fd-b7524651cebd",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "230907ba-908b-4cd6-834e-89e6e703286e",
+    "timestamp": "2026-04-28T00:14:19.758379+08:00",
+    "action": "pdf_export",
+    "report_id": "06cd3897-3e3a-477d-97fd-b7524651cebd",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "en",
+      "signature_id": "2a5de256-98aa-422c-8128-12871b57b01c"
+    }
+  },
+  {
+    "event_id": "cfecbedf-c6c5-4830-b0ca-7c5e876b94fa",
+    "timestamp": "2026-04-28T00:22:44.462129+08:00",
+    "action": "report_generated",
+    "report_id": "04512a22-0fc3-41b7-a09c-9c90cf62a9e1",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "9d55b66a-5520-471e-8f6d-1c9267fec68c",
+    "timestamp": "2026-04-28T00:22:44.490731+08:00",
+    "action": "pdf_export",
+    "report_id": "04512a22-0fc3-41b7-a09c-9c90cf62a9e1",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "82f98c5a-c8b8-4bce-bb3e-151ffdb285f1"
+    }
+  },
+  {
+    "event_id": "c84309cc-5cc6-4416-80d3-755f9a69beed",
+    "timestamp": "2026-04-28T00:24:55.480149+08:00",
+    "action": "report_generated",
+    "report_id": "db054a5f-3035-49fd-bd4e-e7efae3b6d33",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "dcac49d9-57a1-46f6-839c-21b839b6e2cf",
+    "timestamp": "2026-04-28T00:24:55.517161+08:00",
+    "action": "pdf_export",
+    "report_id": "db054a5f-3035-49fd-bd4e-e7efae3b6d33",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "c4302cd5-1c4e-452f-9b4a-9f4692d4bbe7"
+    }
+  },
+  {
+    "event_id": "22baf2e8-eb52-4633-8f2b-03170f8c883a",
+    "timestamp": "2026-04-28T00:26:56.938225+08:00",
+    "action": "report_generated",
+    "report_id": "6c7666a2-0bc3-4984-bb88-345c050f6c4f",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "c5f4146c-ac28-4909-977c-2e76e17c0252",
+    "timestamp": "2026-04-28T00:26:56.966090+08:00",
+    "action": "pdf_export",
+    "report_id": "6c7666a2-0bc3-4984-bb88-345c050f6c4f",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "en",
+      "signature_id": "87d00380-4510-41ca-a155-e3d5a2adbcf4"
+    }
+  },
+  {
+    "event_id": "043371e7-59a2-4300-a0da-f78a49b765bf",
+    "timestamp": "2026-04-28T21:50:50.211985+08:00",
+    "action": "report_generated",
+    "report_id": "1c9a176e-19d4-4980-a4e2-3075832c5bd5",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "e7aaa37e-ce26-412f-9736-b03eac861cec",
+    "timestamp": "2026-04-28T21:50:50.237240+08:00",
+    "action": "pdf_export",
+    "report_id": "1c9a176e-19d4-4980-a4e2-3075832c5bd5",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "e5bf3f1b-e3cc-48be-885e-15b214e0ad51"
+    }
+  },
+  {
+    "event_id": "9df849ee-98a8-449e-816d-c19301039164",
+    "timestamp": "2026-04-28T22:07:56.387629+08:00",
+    "action": "report_generated",
+    "report_id": "23cd18f0-2f32-4a5a-b35e-55ae2c60cfb9",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "9025d4ba-92f2-4c2b-9280-f5280021b7ff",
+    "timestamp": "2026-04-28T22:07:56.414746+08:00",
+    "action": "pdf_export",
+    "report_id": "23cd18f0-2f32-4a5a-b35e-55ae2c60cfb9",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "388d7786-aadf-45b9-98f8-e8f13465279f"
+    }
+  },
+  {
+    "event_id": "73f00872-82f9-4120-b400-f76acdc512c8",
+    "timestamp": "2026-04-28T22:20:28.640745+08:00",
+    "action": "report_generated",
+    "report_id": "af470286-f9b5-4e41-a349-362d7429a4f5",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "dcd44612-ec06-4755-bed7-cccd1870906a",
+    "timestamp": "2026-04-28T22:20:28.661702+08:00",
+    "action": "pdf_export",
+    "report_id": "af470286-f9b5-4e41-a349-362d7429a4f5",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "e113a15a-23df-4bdb-93f0-76092edf6315"
+    }
+  },
+  {
+    "event_id": "e1da5a6a-2c3a-43ea-8f13-73df587d92de",
+    "timestamp": "2026-04-28T22:29:06.432763+08:00",
+    "action": "report_generated",
+    "report_id": "04ef79ad-1830-4bfb-aea3-f4b746ed49ee",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "9decdeb4-7121-4e0a-8c34-b7b46521ca44",
+    "timestamp": "2026-04-28T22:29:06.456780+08:00",
+    "action": "pdf_export",
+    "report_id": "04ef79ad-1830-4bfb-aea3-f4b746ed49ee",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "792005f3-4a4a-431f-be82-9d5a97279407"
+    }
+  },
+  {
+    "event_id": "9e178251-d81a-4986-a627-911578243995",
+    "timestamp": "2026-04-28T23:45:14.258250+08:00",
+    "action": "report_generated",
+    "report_id": "00cbf86b-a288-4cad-a414-58204460a5cc",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 4
+    }
+  },
+  {
+    "event_id": "d7ee9a7d-a3e6-4def-a71d-d34f3c1d4e32",
+    "timestamp": "2026-04-28T23:45:14.295646+08:00",
+    "action": "pdf_export",
+    "report_id": "00cbf86b-a288-4cad-a414-58204460a5cc",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 4,
+      "language": "ms",
+      "signature_id": "16b1fd98-ce96-4d78-868a-d2a8590743bc"
+    }
+  },
+  {
+    "event_id": "759d6d40-8e3c-4447-9982-a0379e587e03",
+    "timestamp": "2026-04-30T15:45:56.713443+08:00",
+    "action": "report_generated",
+    "report_id": "6f505210-624d-403b-a75b-ecb3ebdb9ef7",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "81f8ce7d-df9d-44f0-a454-9634ecc31e51",
+    "timestamp": "2026-04-30T15:45:56.731087+08:00",
+    "action": "pdf_export",
+    "report_id": "6f505210-624d-403b-a75b-ecb3ebdb9ef7",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "fe6f5636-3535-4bb6-80b0-3dd9f49af7fb"
+    }
+  },
+  {
+    "event_id": "0c0f51ca-fc74-4a19-93ab-250e417b1b65",
+    "timestamp": "2026-04-30T15:56:35.844925+08:00",
+    "action": "report_generated",
+    "report_id": "806dde03-6a1f-48a7-a4fc-1ce96c1ebf81",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "45b5fb54-2395-4762-8f88-7563453d15ed",
+    "timestamp": "2026-04-30T15:56:35.873897+08:00",
+    "action": "pdf_export",
+    "report_id": "806dde03-6a1f-48a7-a4fc-1ce96c1ebf81",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "e9afbacc-a047-43f3-84ac-1fd71d2d3ba3"
+    }
+  },
+  {
+    "event_id": "f453374c-e632-4cff-81b9-1ed83a4c3125",
+    "timestamp": "2026-04-30T16:36:42.574086+08:00",
+    "action": "report_generated",
+    "report_id": "10678191-6cb5-41bc-98a2-a5f53f9135bb",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "0b5c92dc-ee48-4177-9d81-fd4da6fc7f64",
+    "timestamp": "2026-04-30T16:36:42.600740+08:00",
+    "action": "pdf_export",
+    "report_id": "10678191-6cb5-41bc-98a2-a5f53f9135bb",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "04cad226-c171-468c-b0d4-2f6eeb72c08d"
+    }
+  },
+  {
+    "event_id": "d2401764-5206-47af-8b58-1c54ec9a7d39",
+    "timestamp": "2026-04-30T16:39:55.360864+08:00",
+    "action": "report_generated",
+    "report_id": "68441232-fc85-4932-add5-9e554be5c11f",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "4e71ce53-de95-4202-83a7-45fec0976367",
+    "timestamp": "2026-04-30T16:39:55.380547+08:00",
+    "action": "pdf_export",
+    "report_id": "68441232-fc85-4932-add5-9e554be5c11f",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "f74b88a1-235f-4d80-9ef4-d43bb1ec3763"
+    }
+  },
+  {
+    "event_id": "3ff0f4bd-810d-4f05-a16d-e452aa448238",
+    "timestamp": "2026-04-30T16:43:13.906183+08:00",
+    "action": "report_generated",
+    "report_id": "777df2bd-fc18-491b-ba52-1007cb6e2c9a",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "ddfb09fc-317c-409e-b7db-8e0b6074e743",
+    "timestamp": "2026-04-30T16:43:13.928194+08:00",
+    "action": "pdf_export",
+    "report_id": "777df2bd-fc18-491b-ba52-1007cb6e2c9a",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "dc0855c4-b07a-4d25-b25f-f37c9bcb383a"
+    }
+  },
+  {
+    "event_id": "c8a0bddd-eb6a-4bf5-806b-281d049bd758",
+    "timestamp": "2026-04-30T16:51:48.492690+08:00",
+    "action": "report_generated",
+    "report_id": "cba2f09b-2746-47a7-815c-af4f235a7162",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "e749c376-c1a9-45bb-8ef6-8b0aef9ec514",
+    "timestamp": "2026-04-30T16:51:48.513584+08:00",
+    "action": "pdf_export",
+    "report_id": "cba2f09b-2746-47a7-815c-af4f235a7162",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "cbb5c5ce-a66a-4049-beb7-12822e09fccd"
+    }
+  },
+  {
+    "event_id": "59bf982a-ed00-416d-b5d2-19aead985617",
+    "timestamp": "2026-04-30T17:03:57.536954+08:00",
+    "action": "report_generated",
+    "report_id": "fd42adfc-3ca3-4149-b500-b5e47fee40a1",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "2e6109ae-346c-4987-915e-7221dbbefee1",
+    "timestamp": "2026-04-30T17:03:57.565023+08:00",
+    "action": "pdf_export",
+    "report_id": "fd42adfc-3ca3-4149-b500-b5e47fee40a1",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "97687c46-feea-4a32-bc68-942e66d95c94"
+    }
+  },
+  {
+    "event_id": "fd14e016-ccdb-4a71-9621-d3d8d3c0a0e4",
+    "timestamp": "2026-04-30T17:22:16.070544+08:00",
+    "action": "report_generated",
+    "report_id": "cf3b8fa3-4a53-44dd-a934-bdeb0e92bb1a",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "f0b71aa1-6ce9-4257-a9b4-a445f1da94a5",
+    "timestamp": "2026-04-30T17:22:16.088284+08:00",
+    "action": "pdf_export",
+    "report_id": "cf3b8fa3-4a53-44dd-a934-bdeb0e92bb1a",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "92d102ac-eb0b-4546-ae94-bf54d3078bc4"
+    }
+  },
+  {
+    "event_id": "ded5c068-b54e-440a-bf4e-7f2e948f65d8",
+    "timestamp": "2026-05-02T18:34:23.079414+08:00",
+    "action": "report_generated",
+    "report_id": "71b566c0-1f3c-419f-a6ef-bd6eb9090c0e",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 5
+    }
+  },
+  {
+    "event_id": "8350a641-76ff-4e7b-b79d-4cc60db26ac5",
+    "timestamp": "2026-05-02T18:34:23.112871+08:00",
+    "action": "pdf_export",
+    "report_id": "71b566c0-1f3c-419f-a6ef-bd6eb9090c0e",
+    "user_id": 6,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 5,
+      "language": "ms",
+      "signature_id": "29213e84-f52d-4127-8402-e99a4aff8eb8"
+    }
+  },
+  {
+    "event_id": "ac83829b-5ca0-46b9-96a9-4ca103519f65",
+    "timestamp": "2026-05-02T18:35:21.873007+08:00",
+    "action": "report_generated",
+    "report_id": "8958a609-ba7b-4d14-bb15-9b987cdc6dcf",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "de2a5aa3-f037-4e6c-aaec-34f797d608d7",
+    "timestamp": "2026-05-02T18:35:21.902138+08:00",
+    "action": "pdf_export",
+    "report_id": "8958a609-ba7b-4d14-bb15-9b987cdc6dcf",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "4082671b-acea-4f16-a2ad-a97e5daa82d7"
+    }
+  },
+  {
+    "event_id": "234d167d-b85d-4374-9bde-6de0a1f6d570",
+    "timestamp": "2026-05-02T18:49:04.813600+08:00",
+    "action": "report_generated",
+    "report_id": "dcd6b83e-bcad-4b9d-bda8-909384a4c3cc",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "a989f654-038c-4c64-ae5a-44e96428e27f",
+    "timestamp": "2026-05-02T18:49:04.907327+08:00",
+    "action": "pdf_export",
+    "report_id": "dcd6b83e-bcad-4b9d-bda8-909384a4c3cc",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "7543be56-e3c9-461b-a414-b49b8151a65f"
+    }
+  },
+  {
+    "event_id": "640aaa48-8599-4bbf-b5f9-cf599566275d",
+    "timestamp": "2026-05-02T19:04:52.638122+08:00",
+    "action": "report_generated",
+    "report_id": "32d4e4db-a85f-4274-8302-39492a98e29e",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "c38b189c-31ea-43cd-919d-c7f24ad52f5d",
+    "timestamp": "2026-05-02T19:04:52.689822+08:00",
+    "action": "pdf_export",
+    "report_id": "32d4e4db-a85f-4274-8302-39492a98e29e",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "44f82a06-33f8-4eec-b42e-787e59955e3e"
+    }
+  },
+  {
+    "event_id": "e7ac5b01-edd9-47b2-bbbf-78ecd5a551cb",
+    "timestamp": "2026-05-02T19:27:24.897595+08:00",
+    "action": "report_generated",
+    "report_id": "9f39b11e-7149-4075-ae02-332956b79911",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "7d358853-5578-4850-b15f-3c949aea52fa",
+    "timestamp": "2026-05-02T19:27:24.918621+08:00",
+    "action": "pdf_export",
+    "report_id": "9f39b11e-7149-4075-ae02-332956b79911",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "8c21a146-ae5e-4c01-aef3-b1c26409aa84"
+    }
+  },
+  {
+    "event_id": "f962ca9c-ac50-45de-8fe6-02426d77a993",
+    "timestamp": "2026-05-02T19:51:48.276710+08:00",
+    "action": "report_generated",
+    "report_id": "49a5fdc1-ac22-40fa-995c-2f601280cdc0",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "a1fbe69e-ae73-4fd1-8f1a-dc2af725fc1b",
+    "timestamp": "2026-05-02T19:51:48.358922+08:00",
+    "action": "pdf_export",
+    "report_id": "49a5fdc1-ac22-40fa-995c-2f601280cdc0",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "fb69fc57-3d8c-4bee-a06e-1b30858abed0"
+    }
+  },
+  {
+    "event_id": "abe6bc46-7c7c-4dfc-b6ab-d13087dbb7ad",
+    "timestamp": "2026-05-02T20:25:26.484678+08:00",
+    "action": "report_generated",
+    "report_id": "3617e8f1-a67c-47ea-834c-1b48140e8921",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "a461a97e-1e25-4294-ae71-8b972f718b9c",
+    "timestamp": "2026-05-02T20:25:26.527678+08:00",
+    "action": "pdf_export",
+    "report_id": "3617e8f1-a67c-47ea-834c-1b48140e8921",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "af3e17f2-2b0f-4975-9099-52d659393683"
+    }
+  },
+  {
+    "event_id": "00c24666-b241-4e80-8ec4-ceeec04c2c02",
+    "timestamp": "2026-05-05T16:36:44.212975+08:00",
+    "action": "report_generated",
+    "report_id": "d49d0330-89b5-41f2-aba4-df85590aef58",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "6006928e-bab8-49dc-b529-2bf7cdc30e02",
+    "timestamp": "2026-05-05T16:36:44.251338+08:00",
+    "action": "pdf_export",
+    "report_id": "d49d0330-89b5-41f2-aba4-df85590aef58",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "b99f4a93-a8ce-42d2-88bc-37217e89c3cb"
+    }
+  },
+  {
+    "event_id": "fc25ed63-6cdf-49a2-8b8f-2c81490b2fd3",
+    "timestamp": "2026-05-05T16:46:27.259906+08:00",
+    "action": "report_generated",
+    "report_id": "7f143b79-e306-4282-a479-ee335636de83",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "c590da02-6250-4c61-ac5c-ee02a950bc52",
+    "timestamp": "2026-05-05T16:46:27.288960+08:00",
+    "action": "pdf_export",
+    "report_id": "7f143b79-e306-4282-a479-ee335636de83",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "f6f718de-2c38-4772-b5bc-67fe98764061"
+    }
+  },
+  {
+    "event_id": "9faa8e01-0838-4c73-a5f8-9393e295e00f",
+    "timestamp": "2026-05-05T16:48:45.071979+08:00",
+    "action": "report_generated",
+    "report_id": "d9460df8-2c3a-477b-90bb-9ed5d3bb5f4d",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "8579511e-a9b0-437a-84f9-3e3f4a3f9ca8",
+    "timestamp": "2026-05-05T16:48:45.096562+08:00",
+    "action": "pdf_export",
+    "report_id": "d9460df8-2c3a-477b-90bb-9ed5d3bb5f4d",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "b617f269-060f-4c90-b9b2-3a74062b7426"
+    }
+  },
+  {
+    "event_id": "aebb87ec-6996-4c38-82bc-4b8304f91cd4",
+    "timestamp": "2026-05-05T16:58:26.624393+08:00",
+    "action": "report_generated",
+    "report_id": "01b79a8b-8344-456e-b783-8ab7444a1acf",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "6a7163a1-8705-45ca-b063-bfc5dc175a8f",
+    "timestamp": "2026-05-05T16:58:26.646002+08:00",
+    "action": "pdf_export",
+    "report_id": "01b79a8b-8344-456e-b783-8ab7444a1acf",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "44b9c8c7-31fb-48b1-b415-d259309ea34b"
+    }
+  },
+  {
+    "event_id": "213b3da4-df7b-47d3-9b1f-03b147b0b2ca",
+    "timestamp": "2026-05-05T17:03:48.311506+08:00",
+    "action": "report_generated",
+    "report_id": "722d5067-0b1e-4877-8b5f-0708672b5dfe",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "9370066e-f556-4117-8bb3-6f2a3d7a2a06",
+    "timestamp": "2026-05-05T17:03:48.330303+08:00",
+    "action": "pdf_export",
+    "report_id": "722d5067-0b1e-4877-8b5f-0708672b5dfe",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "85d36ab5-2c50-4347-ad38-310a45a4aace"
+    }
+  },
+  {
+    "event_id": "c6d3654b-b613-45a4-af7c-13819435ccf3",
+    "timestamp": "2026-05-05T17:35:13.907023+08:00",
+    "action": "report_generated",
+    "report_id": "127a05a9-57b5-40f1-90fc-7bb45d6080bf",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "cde75a24-2eb9-411d-bba8-79da49b6352e",
+    "timestamp": "2026-05-05T17:35:13.925633+08:00",
+    "action": "pdf_export",
+    "report_id": "127a05a9-57b5-40f1-90fc-7bb45d6080bf",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "29ac17a5-eda6-443c-a7c3-69a11191cc3d"
+    }
+  },
+  {
+    "event_id": "4abb89f4-4c0f-46ff-af60-753788e2c34d",
+    "timestamp": "2026-05-05T17:40:23.643202+08:00",
+    "action": "report_generated",
+    "report_id": "60ec358f-30be-4de8-aafc-6cacc6ad78d4",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "07a1a89b-cad4-4e4c-8728-2cafdf544ecd",
+    "timestamp": "2026-05-05T17:40:23.665585+08:00",
+    "action": "pdf_export",
+    "report_id": "60ec358f-30be-4de8-aafc-6cacc6ad78d4",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "e4310813-cc2e-46cd-a2f9-3e56f293aac2"
+    }
+  },
+  {
+    "event_id": "7d13ff93-93cc-4236-b3e1-1e225a194163",
+    "timestamp": "2026-05-05T18:09:17.737968+08:00",
+    "action": "report_generated",
+    "report_id": "df9770da-6915-4945-9a36-713b8b37b13c",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "a5c43a09-9974-431b-b106-840d29323588",
+    "timestamp": "2026-05-05T18:09:17.754892+08:00",
+    "action": "pdf_export",
+    "report_id": "df9770da-6915-4945-9a36-713b8b37b13c",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "fef8e2f5-23b7-43f3-8dd2-ad4c65167e22"
+    }
+  },
+  {
+    "event_id": "4dc55438-ce74-487a-a475-4067353e73c9",
+    "timestamp": "2026-05-05T18:12:42.075303+08:00",
+    "action": "report_generated",
+    "report_id": "3b13624b-e644-425e-bb38-16260ea40b94",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "62cdf9d9-db84-4b72-aa7b-8ea59e4d896c",
+    "timestamp": "2026-05-05T18:12:42.093015+08:00",
+    "action": "pdf_export",
+    "report_id": "3b13624b-e644-425e-bb38-16260ea40b94",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "a4f579ea-f953-438c-ae03-ff6774ac6edd"
+    }
+  },
+  {
+    "event_id": "ab7c154e-612c-4bf4-b7f3-10fffa162f31",
+    "timestamp": "2026-05-05T18:16:59.004688+08:00",
+    "action": "report_generated",
+    "report_id": "db9feb16-162b-42cf-923b-07458ce24d8a",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "3a4607d7-e29a-4438-bdcc-ac7c428f8134",
+    "timestamp": "2026-05-05T18:16:59.025789+08:00",
+    "action": "pdf_export",
+    "report_id": "db9feb16-162b-42cf-923b-07458ce24d8a",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "c5fece9a-9990-446a-a130-1b7f6881775c"
+    }
+  },
+  {
+    "event_id": "47325e1e-2da6-4957-9b2a-c891a97eefd3",
+    "timestamp": "2026-05-05T18:26:07.767634+08:00",
+    "action": "report_generated",
+    "report_id": "49eb167d-2273-4770-a417-880660f6abbb",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "590c7d19-a513-4f88-bc54-bda9af6c83c5",
+    "timestamp": "2026-05-05T18:26:07.787320+08:00",
+    "action": "pdf_export",
+    "report_id": "49eb167d-2273-4770-a417-880660f6abbb",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "07e34c71-0486-4119-98d4-ae057d592d94"
+    }
+  },
+  {
+    "event_id": "d20503f7-e3ce-4543-84fd-9ae219a198e2",
+    "timestamp": "2026-05-05T23:39:41.180846+08:00",
+    "action": "report_generated",
+    "report_id": "4eb6caa1-e603-4136-917c-aa6286a37c63",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "4367d262-1441-4381-9abf-faa9ee758207",
+    "timestamp": "2026-05-05T23:39:41.208391+08:00",
+    "action": "pdf_export",
+    "report_id": "4eb6caa1-e603-4136-917c-aa6286a37c63",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "0900ba20-d761-4028-a9af-1d568f5fe8fc"
+    }
+  },
+  {
+    "event_id": "ffd1154d-3a93-4573-8477-61534acf15c0",
+    "timestamp": "2026-05-05T23:46:21.644202+08:00",
+    "action": "report_generated",
+    "report_id": "449cba51-69b3-4d25-8412-28f5e7aaba96",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "445e742e-fb41-4a3c-81ad-e5691082964c",
+    "timestamp": "2026-05-05T23:46:21.669509+08:00",
+    "action": "pdf_export",
+    "report_id": "449cba51-69b3-4d25-8412-28f5e7aaba96",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "169ec27d-894d-4d72-b58a-e5a7d842e56c"
+    }
+  },
+  {
+    "event_id": "2f57d82a-e688-4a6e-84fe-e4e7597ad2f8",
+    "timestamp": "2026-05-05T23:53:44.120889+08:00",
+    "action": "report_generated",
+    "report_id": "b9f079ec-bbd7-4046-9733-9f16d4e357b8",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "ac92c4f6-d71f-471d-b617-fd07f1647bb8",
+    "timestamp": "2026-05-05T23:53:44.141764+08:00",
+    "action": "pdf_export",
+    "report_id": "b9f079ec-bbd7-4046-9733-9f16d4e357b8",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "8a4b0a76-26d0-44a2-9286-effec453e00e"
+    }
+  },
+  {
+    "event_id": "7ceba09d-eac2-4822-8b6c-725edd1949c4",
+    "timestamp": "2026-05-06T19:43:42.489384+08:00",
+    "action": "report_generated",
+    "report_id": "7d2594ca-01c8-4405-8065-caaaf50bf0c1",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "f673f63d-5517-4a50-9060-41d3b21d5de1",
+    "timestamp": "2026-05-06T19:43:42.510910+08:00",
+    "action": "pdf_export",
+    "report_id": "7d2594ca-01c8-4405-8065-caaaf50bf0c1",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "12a31b71-69b4-48dc-8310-6fe1697856e5"
+    }
+  },
+  {
+    "event_id": "fae5eae0-14d7-4829-8a4e-43cb83b89c65",
+    "timestamp": "2026-05-06T22:10:53.674031+08:00",
+    "action": "report_generated",
+    "report_id": "d0fe7aa2-1198-45b3-b15f-7b9e43b040b1",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "6d657a20-bb3e-457b-b50f-0829b4c5775b",
+    "timestamp": "2026-05-06T22:10:53.703841+08:00",
+    "action": "pdf_export",
+    "report_id": "d0fe7aa2-1198-45b3-b15f-7b9e43b040b1",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "1440459e-7f79-4ca4-bc36-5c30d9c1f3a7"
+    }
+  },
+  {
+    "event_id": "8cd4e41e-b2e1-4647-bfc9-b5bda930e524",
+    "timestamp": "2026-05-06T22:22:45.464375+08:00",
+    "action": "report_generated",
+    "report_id": "9385da59-619b-4e55-8e6b-f2f494c51ded",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "7dfd3c16-199c-45ba-9244-2e5ea81834d5",
+    "timestamp": "2026-05-06T22:22:45.505078+08:00",
+    "action": "pdf_export",
+    "report_id": "9385da59-619b-4e55-8e6b-f2f494c51ded",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "442c0fd1-ce4b-44dc-91d4-9b4a24631947"
+    }
+  },
+  {
+    "event_id": "e855310e-efd4-46f0-a13f-50cb0493cf57",
+    "timestamp": "2026-05-11T22:09:59.760132+08:00",
+    "action": "report_generated",
+    "report_id": "14699d36-2bd4-4730-9470-f9923b0b1c3f",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "90dbbf75-7d13-4c09-8195-1098045c4264",
+    "timestamp": "2026-05-11T22:09:59.782601+08:00",
+    "action": "pdf_export",
+    "report_id": "14699d36-2bd4-4730-9470-f9923b0b1c3f",
+    "user_id": 1,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "cdccfb7c-e891-46dc-b93b-ec07ea174218"
+    }
+  },
+  {
+    "event_id": "d6269a28-215b-42b5-b5c0-c872a64ae2e7",
+    "timestamp": "2026-05-12T04:14:59.075574+08:00",
+    "action": "report_generated",
+    "report_id": "c9ab3ed6-dee6-4ead-a399-0dc718a12d58",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "96727771-36d0-4217-a8b2-3fc0aea3d91d",
+    "timestamp": "2026-05-12T04:14:59.100226+08:00",
+    "action": "pdf_export",
+    "report_id": "c9ab3ed6-dee6-4ead-a399-0dc718a12d58",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "c1509628-d061-4f7c-bbe6-c7131fad6c68"
+    }
+  },
+  {
+    "event_id": "d243e078-853f-4319-8f06-412b8fde68d6",
+    "timestamp": "2026-05-12T04:27:34.339185+08:00",
+    "action": "report_generated",
+    "report_id": "52c9b56e-bfe2-40df-b061-6f7b7d3354b2",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "0c1f862c-ee7d-4640-b3df-01ef1e46be09",
+    "timestamp": "2026-05-12T04:27:34.364702+08:00",
+    "action": "pdf_export",
+    "report_id": "52c9b56e-bfe2-40df-b061-6f7b7d3354b2",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "f3cb0924-8e78-40c8-93f3-c89442c94232"
+    }
+  },
+  {
+    "event_id": "0d38c1fb-f5d7-4630-afc7-be1208d5e31a",
+    "timestamp": "2026-05-12T04:28:10.433785+08:00",
+    "action": "report_generated",
+    "report_id": "9d33dadd-3ffc-41b3-a1b8-cd055986f84c",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "7545ef7d-da78-472b-9cdd-323bc8089fd8",
+    "timestamp": "2026-05-12T04:28:10.463234+08:00",
+    "action": "pdf_export",
+    "report_id": "9d33dadd-3ffc-41b3-a1b8-cd055986f84c",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "20b8b44e-25dd-4bf0-b9a7-fdd1607c562d"
+    }
+  },
+  {
+    "event_id": "320af46d-9089-43e9-a24e-f4657ad93791",
+    "timestamp": "2026-05-12T07:35:24.970365+08:00",
+    "action": "report_generated",
+    "report_id": "03df33cb-9cf1-4efc-aade-a5dab88e1772",
+    "user_id": 14,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "c191ee21-1c3a-47a5-a10e-9c2d36c3ad3f",
+    "timestamp": "2026-05-12T07:35:25.624029+08:00",
+    "action": "pdf_export",
+    "report_id": "03df33cb-9cf1-4efc-aade-a5dab88e1772",
+    "user_id": 14,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "86a7e56a-bc90-43b2-bf8c-bb58a59585a0"
+    }
+  },
+  {
+    "event_id": "0c506e78-90dd-4488-9f7a-e93d9e96390c",
+    "timestamp": "2026-05-13T01:08:27.647887+08:00",
+    "action": "report_generated",
+    "report_id": "9aaf042d-9d70-4c9a-b6e7-473a0f441da1",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "8215c945-bdb1-4c72-9cd9-290f12bee1b1",
+    "timestamp": "2026-05-13T01:08:27.687217+08:00",
+    "action": "pdf_export",
+    "report_id": "9aaf042d-9d70-4c9a-b6e7-473a0f441da1",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "28cb224d-854d-4772-9cc4-9121b494f047"
+    }
+  },
+  {
+    "event_id": "d3e7d6eb-d0f5-4aeb-af44-b7e20a1dcd5a",
+    "timestamp": "2026-05-13T01:09:43.369845+08:00",
+    "action": "report_generated",
+    "report_id": "8bbf01f1-7085-434a-8fc6-eec8c2c10a95",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "553752b3-9df8-4d8c-b7ff-567cd99aac28",
+    "timestamp": "2026-05-13T01:09:43.401893+08:00",
+    "action": "pdf_export",
+    "report_id": "8bbf01f1-7085-434a-8fc6-eec8c2c10a95",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "fda416ef-3521-4724-b2f0-60f0b0564ae6"
+    }
+  },
+  {
+    "event_id": "a8189ca7-3908-4733-802b-04166e295ade",
+    "timestamp": "2026-05-13T01:13:02.898458+08:00",
+    "action": "report_generated",
+    "report_id": "d133791e-01d0-49dc-aaf0-de0ce50bf964",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "2154ea3d-6962-4d26-8f5c-57c042c16462",
+    "timestamp": "2026-05-13T01:13:02.950114+08:00",
+    "action": "pdf_export",
+    "report_id": "d133791e-01d0-49dc-aaf0-de0ce50bf964",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "a073a46b-1223-4c91-99e5-e57eb28487fa"
+    }
+  },
+  {
+    "event_id": "49a5626b-c899-406d-84c4-9d233563bdea",
+    "timestamp": "2026-05-13T01:19:11.788447+08:00",
+    "action": "report_generated",
+    "report_id": "a5a60de1-6363-4709-b315-d1cdf4135084",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "10feb2fe-d11a-4687-b64d-482e117c2a96",
+    "timestamp": "2026-05-13T01:19:11.823836+08:00",
+    "action": "pdf_export",
+    "report_id": "a5a60de1-6363-4709-b315-d1cdf4135084",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "525fb85d-092d-4744-884b-5b775c36a791"
+    }
+  },
+  {
+    "event_id": "bab747c5-46ab-4d15-a0c2-74983ecb98fb",
+    "timestamp": "2026-05-13T01:25:08.717568+08:00",
+    "action": "report_generated",
+    "report_id": "28fe6f32-ffbd-4ce5-be39-9df9d724c375",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "43e2050d-3a1c-44c8-95da-b4e41e664d67",
+    "timestamp": "2026-05-13T01:25:08.774825+08:00",
+    "action": "pdf_export",
+    "report_id": "28fe6f32-ffbd-4ce5-be39-9df9d724c375",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "48b656f1-8108-42aa-9724-2ecb08ab134a"
+    }
+  },
+  {
+    "event_id": "4069f31a-6a99-4631-9b15-57cd83dfc498",
+    "timestamp": "2026-05-13T01:30:46.260578+08:00",
+    "action": "report_generated",
+    "report_id": "a5df19a3-1d40-48e4-a65f-3d72abea9a05",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "547c94c5-ba35-47cf-9723-1f23b57c7e12",
+    "timestamp": "2026-05-13T01:30:46.312906+08:00",
+    "action": "pdf_export",
+    "report_id": "a5df19a3-1d40-48e4-a65f-3d72abea9a05",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "047a72ad-df57-444a-b35a-4ed20ce80f07"
+    }
+  },
+  {
+    "event_id": "d417b787-541c-4e22-957f-4199031668d0",
+    "timestamp": "2026-05-13T01:33:38.455169+08:00",
+    "action": "report_generated",
+    "report_id": "48bad681-f141-4138-81a0-f6ce348f8b3b",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "3075dcbe-d39c-49cf-8f1c-7101899629b7",
+    "timestamp": "2026-05-13T01:33:38.511876+08:00",
+    "action": "pdf_export",
+    "report_id": "48bad681-f141-4138-81a0-f6ce348f8b3b",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "bf8670e1-a1ec-42cd-9c6c-d257d4991260"
+    }
+  },
+  {
+    "event_id": "a5361de3-0441-4bad-9df1-f5ff6d0818c7",
+    "timestamp": "2026-05-13T01:38:23.855827+08:00",
+    "action": "report_generated",
+    "report_id": "11ef4cfe-94ab-4eb0-8e23-dfc94a61e294",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "0d4f1fdc-3b1d-498b-9e29-741813e7a3bb",
+    "timestamp": "2026-05-13T01:38:23.892377+08:00",
+    "action": "pdf_export",
+    "report_id": "11ef4cfe-94ab-4eb0-8e23-dfc94a61e294",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "36840ad4-d94d-4f79-bc79-79777d255838"
+    }
+  },
+  {
+    "event_id": "e7a36139-9493-4ca1-b506-80ea67c00e44",
+    "timestamp": "2026-05-13T01:50:44.866099+08:00",
+    "action": "report_generated",
+    "report_id": "071afa84-9166-4065-84f7-ca4abb77b291",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "28eba486-5087-4ea9-add6-3b1967640fca",
+    "timestamp": "2026-05-13T01:50:44.894973+08:00",
+    "action": "pdf_export",
+    "report_id": "071afa84-9166-4065-84f7-ca4abb77b291",
+    "user_id": 19,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "0a04f46e-387b-471b-a32f-ddfecafa2668"
+    }
+  },
+  {
+    "event_id": "19e29454-5c82-43eb-a2e8-7f0ad3bb6bc8",
+    "timestamp": "2026-05-20T13:17:17.779439+08:00",
+    "action": "report_generated",
+    "report_id": "965a2890-2fba-4b74-9d73-0601c2fc57a3",
+    "user_id": 18,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "eea447f6-24f1-4f41-b61b-ac33ac4ff4cb",
+    "timestamp": "2026-05-20T13:17:17.817714+08:00",
+    "action": "pdf_export",
+    "report_id": "965a2890-2fba-4b74-9d73-0601c2fc57a3",
+    "user_id": 18,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "b7e6d1e8-9caa-488d-bf62-f9258e5c4015"
+    }
+  },
+  {
+    "event_id": "a8dd13b2-c01b-4af3-8b36-e2cc31e270cf",
+    "timestamp": "2026-05-20T13:18:25.405235+08:00",
+    "action": "report_generated",
+    "report_id": "faa85964-15ef-43e0-a025-80b054b35706",
+    "user_id": 18,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "46b3df24-da8f-4d0b-9003-ff8fa05f695b",
+    "timestamp": "2026-05-20T13:18:25.453116+08:00",
+    "action": "pdf_export",
+    "report_id": "faa85964-15ef-43e0-a025-80b054b35706",
+    "user_id": 18,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "153089a9-d74a-40fa-9a4d-b21669ac91cd"
+    }
+  },
+  {
+    "event_id": "064624bc-764d-4eb4-9bc7-e05e74db6eea",
+    "timestamp": "2026-05-23T21:46:20.768494+08:00",
+    "action": "report_generated",
+    "report_id": "646f970b-8be0-4388-9c66-4c7494ccb0e3",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "0594ef56-d8f9-42eb-adf0-396656e9e1b2",
+    "timestamp": "2026-05-23T21:46:20.796422+08:00",
+    "action": "pdf_export",
+    "report_id": "646f970b-8be0-4388-9c66-4c7494ccb0e3",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "a8c31cd4-3680-4600-8da3-21473665db82"
+    }
+  },
+  {
+    "event_id": "f4791e8f-8729-486d-8b6c-7aa2da9bb00e",
+    "timestamp": "2026-05-23T21:49:12.891004+08:00",
+    "action": "report_generated",
+    "report_id": "38b5b1f5-bda1-4791-bd01-7ee7ca3c0402",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "de5b88bd-ef9d-4e31-a1c1-18981699b282",
+    "timestamp": "2026-05-23T21:49:12.923914+08:00",
+    "action": "pdf_export",
+    "report_id": "38b5b1f5-bda1-4791-bd01-7ee7ca3c0402",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "46eebbed-6ac4-4a9b-801b-f681035f8a62"
+    }
+  },
+  {
+    "event_id": "493ef00e-b9f9-42b0-a154-db5382c13280",
+    "timestamp": "2026-05-23T21:49:35.800032+08:00",
+    "action": "report_generated",
+    "report_id": "6836f54f-fbc7-4cde-8ef5-8a06389b2b0f",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "13ffa2f9-be37-47cd-abce-976fef2901ba",
+    "timestamp": "2026-05-23T21:49:35.836523+08:00",
+    "action": "pdf_export",
+    "report_id": "6836f54f-fbc7-4cde-8ef5-8a06389b2b0f",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "0a660f06-cfa8-467e-b7a5-3fc880a9f6b1"
+    }
+  },
+  {
+    "event_id": "3d658cc2-d4f7-468d-add4-4b5a6817a6e0",
+    "timestamp": "2026-05-23T23:39:18.857278+08:00",
+    "action": "report_generated",
+    "report_id": "ba527f79-2e55-4a1c-befc-0bd9ba5ee228",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "7e4eca95-85f8-4b22-8d48-b7987bf064a4",
+    "timestamp": "2026-05-23T23:39:18.881025+08:00",
+    "action": "pdf_export",
+    "report_id": "ba527f79-2e55-4a1c-befc-0bd9ba5ee228",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "ddf9829d-1110-444f-a0e6-e2a9080a076b"
+    }
+  },
+  {
+    "event_id": "934a54c7-e172-4ca0-869a-50a5c784df30",
+    "timestamp": "2026-05-23T23:43:22.404063+08:00",
+    "action": "report_generated",
+    "report_id": "0a2b18a9-51dc-4748-9b64-03be75b4a523",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "eb240553-886b-47a5-981a-0ad5c22c659c",
+    "timestamp": "2026-05-23T23:43:22.423936+08:00",
+    "action": "pdf_export",
+    "report_id": "0a2b18a9-51dc-4748-9b64-03be75b4a523",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "5c9ed914-c73e-493e-845e-63d52c393f21"
+    }
+  },
+  {
+    "event_id": "a60e47d6-3298-4f0c-be96-96dec773f22a",
+    "timestamp": "2026-05-23T23:43:51.945106+08:00",
+    "action": "report_generated",
+    "report_id": "18167e07-67f3-433a-908e-9ecbed9caad8",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "bf912153-1d2e-479f-8f1d-781ace4827f5",
+    "timestamp": "2026-05-23T23:43:51.966562+08:00",
+    "action": "pdf_export",
+    "report_id": "18167e07-67f3-433a-908e-9ecbed9caad8",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "64080cc7-1206-4fcb-9cbd-0587f388ea45"
+    }
+  },
+  {
+    "event_id": "71b9a9c4-eed5-4f8a-9c3d-1522d3fe2f6d",
+    "timestamp": "2026-05-24T12:41:23.505568+08:00",
+    "action": "report_generated",
+    "report_id": "2e2b1b36-6298-44f5-a43c-04d6ef6bcaa6",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "5e6e29ba-b46e-48f4-b952-b32c60754f4f",
+    "timestamp": "2026-05-24T12:41:23.540583+08:00",
+    "action": "pdf_export",
+    "report_id": "2e2b1b36-6298-44f5-a43c-04d6ef6bcaa6",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "57786126-c557-41e8-938c-288087d8f11e"
+    }
+  },
+  {
+    "event_id": "89111250-a3e0-47b0-995c-be1f368c660b",
+    "timestamp": "2026-05-24T12:52:38.041889+08:00",
+    "action": "report_generated",
+    "report_id": "d3f8f2a4-29c1-4f30-9609-c623f0895fbd",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "b712b8a7-fdcb-4636-83f8-83e02a47baf2",
+    "timestamp": "2026-05-24T12:52:38.071466+08:00",
+    "action": "pdf_export",
+    "report_id": "d3f8f2a4-29c1-4f30-9609-c623f0895fbd",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "87e103f0-e3fc-4bdc-aca6-46efc02c6628"
+    }
+  },
+  {
+    "event_id": "1019bf90-73b6-47cc-a3d0-f28c4aa7ba80",
+    "timestamp": "2026-05-24T21:57:10.372725+08:00",
+    "action": "report_generated",
+    "report_id": "4d8117a6-1571-4043-8fec-b896347f8d90",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "3c63ac87-8288-44db-94c5-4bcc45d9fdb8",
+    "timestamp": "2026-05-24T21:57:10.424488+08:00",
+    "action": "pdf_export",
+    "report_id": "4d8117a6-1571-4043-8fec-b896347f8d90",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "b9b0dbb3-df92-4b66-9af0-ad73964e849f"
+    }
+  },
+  {
+    "event_id": "db9782d0-fb25-4750-88fe-7bf70725b3a6",
+    "timestamp": "2026-05-24T22:40:57.103526+08:00",
+    "action": "report_generated",
+    "report_id": "fe911709-6f1d-4bb0-9ba9-83c0b25efaf4",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "bf38879a-5d18-41fc-a3e2-d2751fa645d5",
+    "timestamp": "2026-05-24T22:40:57.133900+08:00",
+    "action": "pdf_export",
+    "report_id": "fe911709-6f1d-4bb0-9ba9-83c0b25efaf4",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "14cb6c14-7d30-4914-a102-a6158b428e17"
+    }
+  },
+  {
+    "event_id": "71f89839-1025-4148-b4fd-1dd0cbcf2154",
+    "timestamp": "2026-05-25T18:28:54.716646+08:00",
+    "action": "report_generated",
+    "report_id": "172a7ada-fbc2-4d5e-8d87-5ce9c7434d38",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "0abf9b19-6764-41e7-99a1-349ad2f17063",
+    "timestamp": "2026-05-25T18:28:54.756863+08:00",
+    "action": "pdf_export",
+    "report_id": "172a7ada-fbc2-4d5e-8d87-5ce9c7434d38",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "69a1528c-4a55-4b9b-b1c2-dd90c9410f3a"
+    }
+  },
+  {
+    "event_id": "456d5b9d-6341-4c95-ae9e-7ac502854d24",
+    "timestamp": "2026-05-25T18:33:58.063423+08:00",
+    "action": "report_generated",
+    "report_id": "b69fb7a1-e9b4-4890-9fb4-f1662a068ee4",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "7b364d2a-9351-4e20-a920-e500fc5fb6c0",
+    "timestamp": "2026-05-25T18:33:58.082539+08:00",
+    "action": "pdf_export",
+    "report_id": "b69fb7a1-e9b4-4890-9fb4-f1662a068ee4",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "c040a359-e526-4be3-9089-e5fb8dd7108e"
+    }
+  },
+  {
+    "event_id": "d653c18e-0b91-4346-b753-af238b748826",
+    "timestamp": "2026-05-25T18:34:54.757828+08:00",
+    "action": "report_generated",
+    "report_id": "59042ca2-dfcf-4cdd-8236-f623c31e8994",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "f7b404cc-c8bb-456e-891f-2a0318ef0d70",
+    "timestamp": "2026-05-25T18:34:54.787077+08:00",
+    "action": "pdf_export",
+    "report_id": "59042ca2-dfcf-4cdd-8236-f623c31e8994",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "11de0107-e795-4bfd-a31e-e04acfb74ede"
+    }
+  },
+  {
+    "event_id": "ace2feba-d903-4f97-822a-865e897f5292",
+    "timestamp": "2026-05-25T18:36:00.729304+08:00",
+    "action": "report_generated",
+    "report_id": "c9b60b51-cc8d-4d40-aecd-2dc5f7a5901a",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "3e30f9c7-de58-46a4-aab6-05b92cebeab9",
+    "timestamp": "2026-05-25T18:36:00.766004+08:00",
+    "action": "pdf_export",
+    "report_id": "c9b60b51-cc8d-4d40-aecd-2dc5f7a5901a",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "cc91841e-4595-4e98-a11a-01722b8c0e22"
+    }
+  },
+  {
+    "event_id": "c764f490-c1dd-46d1-b830-ac14e943eddd",
+    "timestamp": "2026-05-25T18:38:41.467182+08:00",
+    "action": "report_generated",
+    "report_id": "bbccba74-204b-4872-8765-ca82fecc6555",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "7525e7e8-b2a8-4b96-986d-94b8d68e6908",
+    "timestamp": "2026-05-25T18:38:41.492637+08:00",
+    "action": "pdf_export",
+    "report_id": "bbccba74-204b-4872-8765-ca82fecc6555",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "6b4cb256-b7de-4ec9-8505-ddcd06623865"
+    }
+  },
+  {
+    "event_id": "391a3b06-949f-4556-8be8-a787a3f264e1",
+    "timestamp": "2026-05-25T18:41:34.968772+08:00",
+    "action": "report_generated",
+    "report_id": "833d3b99-2a9d-4b19-8106-e42aec122aee",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "af14dd1d-4c9d-4a35-afc7-99976d7dea76",
+    "timestamp": "2026-05-25T18:41:34.992216+08:00",
+    "action": "pdf_export",
+    "report_id": "833d3b99-2a9d-4b19-8106-e42aec122aee",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "6480a9e2-ad01-4c61-9c43-720ad6cda225"
+    }
+  },
+  {
+    "event_id": "1c5360b2-ecd1-4a6a-a29d-07c468b20c66",
+    "timestamp": "2026-05-25T18:56:49.321649+08:00",
+    "action": "report_generated",
+    "report_id": "89f39cec-6ce2-434f-9198-9764f8402971",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "4b5bb4a2-a463-4652-a2eb-39bb9930920f",
+    "timestamp": "2026-05-25T18:56:49.354959+08:00",
+    "action": "pdf_export",
+    "report_id": "89f39cec-6ce2-434f-9198-9764f8402971",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "0a3cbec5-9425-4c68-879c-fb8d2c9ccfe1"
+    }
+  },
+  {
+    "event_id": "6c62b087-2ecc-469e-b24b-de04fc4583e5",
+    "timestamp": "2026-05-25T18:57:16.088358+08:00",
+    "action": "report_generated",
+    "report_id": "c4f8f06e-80dc-46e7-b7dc-c3d838c07eca",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "254fe596-e4b5-466c-9cf0-650901072271",
+    "timestamp": "2026-05-25T18:57:16.111351+08:00",
+    "action": "pdf_export",
+    "report_id": "c4f8f06e-80dc-46e7-b7dc-c3d838c07eca",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "64b41cb7-6e20-4257-b74a-0dd989d3c231"
+    }
+  },
+  {
+    "event_id": "b1cb6271-75fa-4599-9246-52694b41ad3e",
+    "timestamp": "2026-05-25T19:21:32.599891+08:00",
+    "action": "report_generated",
+    "report_id": "111a93e5-0351-4498-b2e9-77642a7c0c1b",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "c6695b4f-30ea-4027-882b-6b96c264fb34",
+    "timestamp": "2026-05-25T19:21:32.625749+08:00",
+    "action": "pdf_export",
+    "report_id": "111a93e5-0351-4498-b2e9-77642a7c0c1b",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "d889d78a-8088-4da4-b204-f8706003d443"
+    }
+  },
+  {
+    "event_id": "60de8483-803e-48a5-808f-c868701bba9a",
+    "timestamp": "2026-05-25T19:35:12.478870+08:00",
+    "action": "report_generated",
+    "report_id": "8b026afe-d38c-4519-8e37-3dfe85a38507",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "4c555c60-969a-47fd-8625-b383b96560c2",
+    "timestamp": "2026-05-25T19:35:12.502772+08:00",
+    "action": "pdf_export",
+    "report_id": "8b026afe-d38c-4519-8e37-3dfe85a38507",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "eb1596fa-98bd-4da9-aa02-b1467021fc47"
+    }
+  },
+  {
+    "event_id": "027fa8c7-5fd1-49ac-a351-13b6be5dfc6f",
+    "timestamp": "2026-05-25T19:35:43.690318+08:00",
+    "action": "report_generated",
+    "report_id": "c6f06323-b881-40ec-b6f6-a155fb628062",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "ece93489-78ad-4363-a91a-2f8886c721b2",
+    "timestamp": "2026-05-25T19:35:43.721807+08:00",
+    "action": "pdf_export",
+    "report_id": "c6f06323-b881-40ec-b6f6-a155fb628062",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "81479881-c0d6-4604-9b18-df16a628686c"
+    }
+  },
+  {
+    "event_id": "824f1c88-ca87-4cac-a679-d806fd0d5887",
+    "timestamp": "2026-05-25T19:36:41.189052+08:00",
+    "action": "report_generated",
+    "report_id": "0a9c7815-9816-474e-a0ee-22c46898e99d",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "d9b8f21a-9a41-4d22-ad01-004b9fdf5eae",
+    "timestamp": "2026-05-25T19:36:41.209034+08:00",
+    "action": "pdf_export",
+    "report_id": "0a9c7815-9816-474e-a0ee-22c46898e99d",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "37b7c732-298d-4620-bb3d-d9c6c5203af5"
+    }
+  },
+  {
+    "event_id": "0d1ce0b6-bfd6-448e-9d49-a0c3bec08ac7",
+    "timestamp": "2026-05-25T19:36:59.554506+08:00",
+    "action": "report_generated",
+    "report_id": "aaa85e86-481a-4f46-9ef7-5618e9849bc8",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "90f65bdc-8966-432e-b80d-40283a6ad25b",
+    "timestamp": "2026-05-25T19:36:59.576823+08:00",
+    "action": "pdf_export",
+    "report_id": "aaa85e86-481a-4f46-9ef7-5618e9849bc8",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "cc3f3ad6-e909-4e15-a13c-1bb5fdcece5f"
+    }
+  },
+  {
+    "event_id": "d3f2180f-e367-48f0-9d7a-fabfd6d1205b",
+    "timestamp": "2026-05-25T19:39:35.273304+08:00",
+    "action": "report_generated",
+    "report_id": "7670cb38-5a54-4b66-97ce-13e95166da56",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "ac818141-9273-4e02-bf35-e97ff32e72cc",
+    "timestamp": "2026-05-25T19:39:35.298902+08:00",
+    "action": "pdf_export",
+    "report_id": "7670cb38-5a54-4b66-97ce-13e95166da56",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "625d822d-eb06-434a-bb42-bc7b35447b71"
+    }
+  },
+  {
+    "event_id": "13f08fb8-e015-4d5b-b86d-a9bc5e7c8a76",
+    "timestamp": "2026-05-25T19:47:34.769357+08:00",
+    "action": "report_generated",
+    "report_id": "e9bb8df2-2083-4099-9178-c46352f2df6f",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "8550c730-f881-4c3a-b8e9-b66fe9a28100",
+    "timestamp": "2026-05-25T19:47:34.794204+08:00",
+    "action": "pdf_export",
+    "report_id": "e9bb8df2-2083-4099-9178-c46352f2df6f",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "6f572d8e-474c-47db-a0e4-07335e003e30"
+    }
+  },
+  {
+    "event_id": "691b569e-46b7-4b31-b1ed-795257683c6b",
+    "timestamp": "2026-05-25T20:00:35.593737+08:00",
+    "action": "report_generated",
+    "report_id": "bf9f73ae-e06d-4e2e-85d1-e0ab65d138d0",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "4c3c10cb-0bb5-4987-907c-1de76cb686f3",
+    "timestamp": "2026-05-25T20:00:35.630174+08:00",
+    "action": "pdf_export",
+    "report_id": "bf9f73ae-e06d-4e2e-85d1-e0ab65d138d0",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "120aee28-1cad-474a-a7c1-7fb7b5d76343"
+    }
+  },
+  {
+    "event_id": "46dc0d61-a50d-4df9-b3ce-8b1eff249fd0",
+    "timestamp": "2026-05-25T20:06:03.087478+08:00",
+    "action": "report_generated",
+    "report_id": "f14fdaa3-1667-46d3-bf16-968f345a1bae",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "5b23cbf5-1b0f-4cab-8709-01e276e41745",
+    "timestamp": "2026-05-25T20:06:03.112905+08:00",
+    "action": "pdf_export",
+    "report_id": "f14fdaa3-1667-46d3-bf16-968f345a1bae",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "0c5a1c68-3ba5-402b-ab28-e28e147c6815"
+    }
+  },
+  {
+    "event_id": "efb850ea-4ad9-4236-80cf-0f0fe764c8e4",
+    "timestamp": "2026-05-25T20:09:37.474900+08:00",
+    "action": "report_generated",
+    "report_id": "ef6c3dde-5e90-4401-936b-20f7d6eec71c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "3075be93-a763-468b-913f-1c309dcfa2ab",
+    "timestamp": "2026-05-25T20:09:37.508617+08:00",
+    "action": "pdf_export",
+    "report_id": "ef6c3dde-5e90-4401-936b-20f7d6eec71c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "b4d058b7-0f3c-4539-92ee-b818bb7e4ad7"
+    }
+  },
+  {
+    "event_id": "46868a0a-dae0-4e2e-9cf0-685030d9900f",
+    "timestamp": "2026-05-25T20:10:04.928980+08:00",
+    "action": "report_generated",
+    "report_id": "f297e215-3968-414f-8cfa-4c4458d66926",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "fab79d73-575b-454d-9c6d-ca62884cfe58",
+    "timestamp": "2026-05-25T20:10:04.959551+08:00",
+    "action": "pdf_export",
+    "report_id": "f297e215-3968-414f-8cfa-4c4458d66926",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "4aa87368-79a5-4ae9-89bd-684908ee39dc"
+    }
+  },
+  {
+    "event_id": "e1e42615-6336-4c9c-a53c-ba899d009835",
+    "timestamp": "2026-05-25T20:17:05.728123+08:00",
+    "action": "report_generated",
+    "report_id": "cb3ef123-adfc-4224-8067-cb240041588e",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "b1ae2b37-91ef-45bb-b6d5-94c08627dd6d",
+    "timestamp": "2026-05-25T20:17:05.753693+08:00",
+    "action": "pdf_export",
+    "report_id": "cb3ef123-adfc-4224-8067-cb240041588e",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "f86404a8-fff9-452c-9ace-6e4dcd848a39"
+    }
+  },
+  {
+    "event_id": "9e067326-fb18-4121-8b6d-8faba308bc3b",
+    "timestamp": "2026-05-25T20:22:23.580363+08:00",
+    "action": "report_generated",
+    "report_id": "cf9eba6b-9886-4b65-9d07-bd50918868fa",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "4e1d15d7-1715-4497-bb09-271c44abfe34",
+    "timestamp": "2026-05-25T20:22:23.613048+08:00",
+    "action": "pdf_export",
+    "report_id": "cf9eba6b-9886-4b65-9d07-bd50918868fa",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "19a3b5ae-f7e1-409e-a6be-485c5b43764c"
+    }
+  },
+  {
+    "event_id": "9b218376-4f56-4b3f-aef7-e7fd2b1078ff",
+    "timestamp": "2026-05-25T20:27:38.450983+08:00",
+    "action": "report_generated",
+    "report_id": "0c4d43c2-f9da-4dd6-8325-1de5b71e7f4a",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "98f4f000-19a1-4975-b871-07d0b1376cc4",
+    "timestamp": "2026-05-25T20:27:38.482049+08:00",
+    "action": "pdf_export",
+    "report_id": "0c4d43c2-f9da-4dd6-8325-1de5b71e7f4a",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "b932d8ad-c896-42d5-8567-7833b5d52f19"
+    }
+  },
+  {
+    "event_id": "83570cf8-c334-4ded-8edf-b8ea511b38b9",
+    "timestamp": "2026-05-25T20:29:29.852733+08:00",
+    "action": "report_generated",
+    "report_id": "1132ae94-fc26-4390-a01a-5b426d53500c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "9fa2ec9d-f882-4d31-b40a-de4eecbb9ba7",
+    "timestamp": "2026-05-25T20:29:29.875345+08:00",
+    "action": "pdf_export",
+    "report_id": "1132ae94-fc26-4390-a01a-5b426d53500c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "c4a0a0ff-73dd-4c26-823a-cdae6bc2c76a"
+    }
+  },
+  {
+    "event_id": "e97b2a9b-4fbc-4b5f-b775-011fc0e2a6e0",
+    "timestamp": "2026-05-25T20:44:15.297142+08:00",
+    "action": "report_generated",
+    "report_id": "011810d6-6302-46ab-89f5-184a4a56d792",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "526d7d02-b5b9-4543-987d-693b358f5cc7",
+    "timestamp": "2026-05-25T20:44:15.360213+08:00",
+    "action": "pdf_export",
+    "report_id": "011810d6-6302-46ab-89f5-184a4a56d792",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "26f0bbdf-9307-4d80-9bdc-0e190b0835a2"
+    }
+  },
+  {
+    "event_id": "753cc286-7ab3-4fdd-b02a-d2eb8fb921b4",
+    "timestamp": "2026-05-25T20:46:34.392958+08:00",
+    "action": "report_generated",
+    "report_id": "8d1f6f31-d972-4525-be43-b3095ae44e3e",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "22fe648f-aeaa-428e-8cfb-1010622ba47c",
+    "timestamp": "2026-05-25T20:46:34.415728+08:00",
+    "action": "pdf_export",
+    "report_id": "8d1f6f31-d972-4525-be43-b3095ae44e3e",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "6c38ebd8-81a4-47d1-9bea-f8b9fa42df86"
+    }
+  },
+  {
+    "event_id": "096816e3-b81d-4067-ae50-af225a788324",
+    "timestamp": "2026-05-25T20:49:41.513722+08:00",
+    "action": "report_generated",
+    "report_id": "f9df5655-742f-448e-ad7f-bc01f6eb1736",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "bd3e472e-a629-47b7-8486-05abb227268b",
+    "timestamp": "2026-05-25T20:49:41.540536+08:00",
+    "action": "pdf_export",
+    "report_id": "f9df5655-742f-448e-ad7f-bc01f6eb1736",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "8e6dd441-f40e-4844-bdc5-2127b772a568"
+    }
+  },
+  {
+    "event_id": "8b835d14-1be4-40ea-8a87-e0f00847433c",
+    "timestamp": "2026-05-25T20:53:56.429173+08:00",
+    "action": "report_generated",
+    "report_id": "386fb566-1e69-419f-a0ea-c837f9fce94f",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "6ff95b51-d835-417d-b5a5-70df84381235",
+    "timestamp": "2026-05-25T20:53:56.461754+08:00",
+    "action": "pdf_export",
+    "report_id": "386fb566-1e69-419f-a0ea-c837f9fce94f",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "5531ee18-dc95-4b16-a143-9fa04d5b44d3"
+    }
+  },
+  {
+    "event_id": "da00eb47-b2e5-4c0d-b140-9d213f8ac72f",
+    "timestamp": "2026-05-25T20:55:40.739362+08:00",
+    "action": "report_generated",
+    "report_id": "8f08bc7b-b878-48cb-980b-d40dcc822e3c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "60219db1-57a7-44b9-a6ac-559b38209546",
+    "timestamp": "2026-05-25T20:55:40.772825+08:00",
+    "action": "pdf_export",
+    "report_id": "8f08bc7b-b878-48cb-980b-d40dcc822e3c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "aae0d96f-4fac-4ef7-a531-7cb9114d4d3d"
+    }
+  },
+  {
+    "event_id": "75cc4f36-1221-4f68-87b7-be36f41e2e22",
+    "timestamp": "2026-05-25T20:59:38.575504+08:00",
+    "action": "report_generated",
+    "report_id": "cf628520-dbda-495f-995f-225e9a4274d2",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "919cb32f-dbc5-4b67-bb44-ef7d8044f356",
+    "timestamp": "2026-05-25T20:59:38.604863+08:00",
+    "action": "pdf_export",
+    "report_id": "cf628520-dbda-495f-995f-225e9a4274d2",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "6ab62b26-4b80-4e99-9cb0-d334596f2a4e"
+    }
+  },
+  {
+    "event_id": "123161b7-0c94-4720-82af-cd71032e1602",
+    "timestamp": "2026-05-25T21:03:52.311678+08:00",
+    "action": "report_generated",
+    "report_id": "7af0dc96-db64-4a08-b8c1-1b9062dd1d7f",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "d5ceab69-6a5e-4877-8a0c-4d2fc7d5ec05",
+    "timestamp": "2026-05-25T21:03:52.339860+08:00",
+    "action": "pdf_export",
+    "report_id": "7af0dc96-db64-4a08-b8c1-1b9062dd1d7f",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "d78115a7-b2ea-4368-842c-867c17dc8b51"
+    }
+  },
+  {
+    "event_id": "f592ad60-ca5b-47ea-8998-758302918764",
+    "timestamp": "2026-05-25T21:07:27.340187+08:00",
+    "action": "report_generated",
+    "report_id": "93456e62-513f-4d75-a4a5-e6ca977fcbba",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "fc49dcdc-24d5-4ef2-8bfd-4c0c506b53cf",
+    "timestamp": "2026-05-25T21:07:27.367461+08:00",
+    "action": "pdf_export",
+    "report_id": "93456e62-513f-4d75-a4a5-e6ca977fcbba",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "db39761b-f594-4c73-85a3-0fb9eb583bd3"
+    }
+  },
+  {
+    "event_id": "580b27f9-1bb5-4899-a2ce-9a99bb05042b",
+    "timestamp": "2026-05-25T21:14:57.281749+08:00",
+    "action": "report_generated",
+    "report_id": "a07495db-806b-49e7-85c2-05dd5e74947c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "f03a85fd-e127-4389-8472-4a8a5f638092",
+    "timestamp": "2026-05-25T21:14:57.300756+08:00",
+    "action": "pdf_export",
+    "report_id": "a07495db-806b-49e7-85c2-05dd5e74947c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "adb4dc2b-26fa-418e-a9aa-ed1e37d211f3"
+    }
+  },
+  {
+    "event_id": "d53cc97a-d7ff-468a-a8dc-b334a19141b6",
+    "timestamp": "2026-05-25T21:18:24.955509+08:00",
+    "action": "report_generated",
+    "report_id": "9447cbe9-0bfd-4518-8189-052948928c07",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "81fc80be-d165-45a1-b4d5-e9f4a3b43f60",
+    "timestamp": "2026-05-25T21:18:24.974965+08:00",
+    "action": "pdf_export",
+    "report_id": "9447cbe9-0bfd-4518-8189-052948928c07",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "c2c7a87b-e295-4539-be5b-9afab23799ef"
+    }
+  },
+  {
+    "event_id": "de1f7567-637f-40de-bd2b-84ad948c03ef",
+    "timestamp": "2026-05-25T21:21:03.109603+08:00",
+    "action": "report_generated",
+    "report_id": "43fb4bbc-db55-4072-b5fa-db13f455658b",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "af38cb93-4e82-4b5d-a2a0-d32f489eb11c",
+    "timestamp": "2026-05-25T21:21:03.135865+08:00",
+    "action": "pdf_export",
+    "report_id": "43fb4bbc-db55-4072-b5fa-db13f455658b",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "3f03b035-e0e5-4b96-aeb7-21a317026e63"
+    }
+  },
+  {
+    "event_id": "8915dfb6-6659-4b5a-accd-200f9365de45",
+    "timestamp": "2026-05-25T21:21:25.323637+08:00",
+    "action": "report_generated",
+    "report_id": "b5f34e5e-20ba-4b33-aa1c-ebe1bcf25bc5",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "d13b7f91-a3f9-448d-8d96-b2a4a637caa8",
+    "timestamp": "2026-05-25T21:21:25.350204+08:00",
+    "action": "pdf_export",
+    "report_id": "b5f34e5e-20ba-4b33-aa1c-ebe1bcf25bc5",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "df12d5e2-9100-41e1-bd7a-6df7702ff3cb"
+    }
+  },
+  {
+    "event_id": "66dd4701-15e9-45fc-b6f7-412ef7c7a0c5",
+    "timestamp": "2026-05-25T21:21:28.691896+08:00",
+    "action": "report_generated",
+    "report_id": "fcad8334-5a3d-4335-beb8-923db039d3c9",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "32d98fbc-af93-4878-a097-51ad13624109",
+    "timestamp": "2026-05-25T21:21:28.724094+08:00",
+    "action": "pdf_export",
+    "report_id": "fcad8334-5a3d-4335-beb8-923db039d3c9",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "2bb171a4-240b-46df-8787-2d325cf0de91"
+    }
+  },
+  {
+    "event_id": "a842b34a-2512-4992-a2f1-c4b1bbed1d0a",
+    "timestamp": "2026-05-26T23:14:21.784437+08:00",
+    "action": "report_generated",
+    "report_id": "4e6c7483-13fe-4210-9061-f435d577c602",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "fcdbdf10-d01c-4d97-8459-e1f2f03c1cbe",
+    "timestamp": "2026-05-26T23:14:21.842456+08:00",
+    "action": "pdf_export",
+    "report_id": "4e6c7483-13fe-4210-9061-f435d577c602",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "22fa3005-38e0-450f-89c0-56b056c333df"
+    }
+  },
+  {
+    "event_id": "df71f9ca-9527-4414-bd8e-2dcf82d0158f",
+    "timestamp": "2026-05-26T23:15:05.100911+08:00",
+    "action": "report_generated",
+    "report_id": "578b896c-195c-4926-9dda-d61c8caf0579",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "18d8db9d-680a-4e05-896e-2a45b52a745f",
+    "timestamp": "2026-05-26T23:15:05.143460+08:00",
+    "action": "pdf_export",
+    "report_id": "578b896c-195c-4926-9dda-d61c8caf0579",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "fc20bb8a-a27a-4e1d-9afa-056f61436f47"
+    }
+  },
+  {
+    "event_id": "799fc76d-ffa5-46ad-9409-0d7691e81164",
+    "timestamp": "2026-05-26T23:19:24.665557+08:00",
+    "action": "report_generated",
+    "report_id": "2235e5cd-e415-46c6-85d1-388a5c01120c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "1d51819c-8150-4fcf-9be8-7b2360f259b6",
+    "timestamp": "2026-05-26T23:19:24.706431+08:00",
+    "action": "pdf_export",
+    "report_id": "2235e5cd-e415-46c6-85d1-388a5c01120c",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "596c3a0b-e64e-4276-9432-15e5ebae4d04"
+    }
+  },
+  {
+    "event_id": "0d113f20-019f-475e-a6e5-56d41fe45226",
+    "timestamp": "2026-05-26T23:26:14.050056+08:00",
+    "action": "report_generated",
+    "report_id": "c32094a9-047e-45e1-9300-a489a619822b",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "45cc7fcf-df0b-4b03-bd1e-944c45325d96",
+    "timestamp": "2026-05-26T23:26:14.080061+08:00",
+    "action": "pdf_export",
+    "report_id": "c32094a9-047e-45e1-9300-a489a619822b",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "afcb65f6-a722-4472-849b-88e16455bb16"
+    }
+  },
+  {
+    "event_id": "b88e3ded-e9e0-45dd-92c3-6e03389d0f33",
+    "timestamp": "2026-05-26T23:30:36.419678+08:00",
+    "action": "report_generated",
+    "report_id": "e9c585d7-9182-4699-801e-f3cc098b9ed5",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "552ff8ed-c511-41bc-8519-d46363061608",
+    "timestamp": "2026-05-26T23:30:36.468877+08:00",
+    "action": "pdf_export",
+    "report_id": "e9c585d7-9182-4699-801e-f3cc098b9ed5",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "9fd00ba5-4e43-4dbc-8e52-5ca859b2acad"
+    }
+  },
+  {
+    "event_id": "1d6d5523-f7b8-4f6c-9093-bfe42d845f9f",
+    "timestamp": "2026-05-26T23:33:41.248217+08:00",
+    "action": "report_generated",
+    "report_id": "ee4ef453-46af-437a-84e9-c67ec83bf3b9",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "37297588-7b30-4d2a-a141-dcd4d50041ed",
+    "timestamp": "2026-05-26T23:33:41.284848+08:00",
+    "action": "pdf_export",
+    "report_id": "ee4ef453-46af-437a-84e9-c67ec83bf3b9",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "dfa98a04-20e4-4474-9c72-3accd97cc1cf"
+    }
+  },
+  {
+    "event_id": "862f7bac-8874-4745-88ec-942854a0a97c",
+    "timestamp": "2026-05-26T23:34:05.578750+08:00",
+    "action": "report_generated",
+    "report_id": "d406fced-9d47-422d-88aa-d905f2a8c514",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "c43f44b9-a10a-447b-bfaf-eddea6223119",
+    "timestamp": "2026-05-26T23:34:05.623273+08:00",
+    "action": "pdf_export",
+    "report_id": "d406fced-9d47-422d-88aa-d905f2a8c514",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "e17c86fe-5562-42cb-b2f0-4f2b8ce52e10"
+    }
+  },
+  {
+    "event_id": "87cd7bc5-9635-4ab9-8dba-7dc411d2ce73",
+    "timestamp": "2026-05-26T23:34:07.690507+08:00",
+    "action": "report_generated",
+    "report_id": "3e65d8cd-2bfa-4b7e-a892-e4d54fef42d7",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "00561b27-e279-402f-8649-07d59e075e01",
+    "timestamp": "2026-05-26T23:34:07.730479+08:00",
+    "action": "pdf_export",
+    "report_id": "3e65d8cd-2bfa-4b7e-a892-e4d54fef42d7",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "bc244628-922c-4af2-bd15-a21c85964a37"
+    }
+  },
+  {
+    "event_id": "ad37a740-c290-49b1-9026-596f99659f45",
+    "timestamp": "2026-05-26T23:38:22.472703+08:00",
+    "action": "report_generated",
+    "report_id": "5be98012-6a25-4c59-b4b3-16a13b72ce50",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "49e2c13b-a465-41a0-8fa4-ff8ded0b76fa",
+    "timestamp": "2026-05-26T23:38:22.507094+08:00",
+    "action": "pdf_export",
+    "report_id": "5be98012-6a25-4c59-b4b3-16a13b72ce50",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "5710e1fc-2740-48b2-b63c-7173e813022e"
+    }
+  },
+  {
+    "event_id": "f71ad61f-1285-4c03-a11b-81225bc823e7",
+    "timestamp": "2026-05-26T23:41:38.919544+08:00",
+    "action": "report_generated",
+    "report_id": "cc4925b0-b0ed-40ad-af56-3aead9da1a57",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "8bb70ad7-c829-40a5-addc-fa8edfd6fb7a",
+    "timestamp": "2026-05-26T23:41:38.985740+08:00",
+    "action": "pdf_export",
+    "report_id": "cc4925b0-b0ed-40ad-af56-3aead9da1a57",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "9e616748-610c-44e8-9d19-e8097ecabed9"
+    }
+  },
+  {
+    "event_id": "e31217d7-4978-43b0-b7f9-8532d7d45b9b",
+    "timestamp": "2026-05-26T23:41:39.101388+08:00",
+    "action": "report_generated",
+    "report_id": "669ff38e-eaa2-44fa-8736-a2488b8e3d99",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "cd449f6c-ed8f-4918-b9ac-d31405210e2a",
+    "timestamp": "2026-05-26T23:41:39.163251+08:00",
+    "action": "pdf_export",
+    "report_id": "669ff38e-eaa2-44fa-8736-a2488b8e3d99",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "f1a584c6-9391-44b7-b74d-4d12b74f02b0"
+    }
+  },
+  {
+    "event_id": "ba2c397b-05c6-4bed-9530-39b855167500",
+    "timestamp": "2026-05-26T23:42:37.848244+08:00",
+    "action": "report_generated",
+    "report_id": "2a86bfe2-4ca1-4c01-bcd6-bd17e2a41333",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "b35fdc5f-1162-4f25-a217-fe9b3578885d",
+    "timestamp": "2026-05-26T23:42:37.928379+08:00",
+    "action": "pdf_export",
+    "report_id": "2a86bfe2-4ca1-4c01-bcd6-bd17e2a41333",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "8643c008-544d-463f-858f-d60a017790fe"
+    }
+  },
+  {
+    "event_id": "90b9c507-eedc-456e-9834-e1cdac6fe59e",
+    "timestamp": "2026-05-26T23:47:53.407311+08:00",
+    "action": "report_generated",
+    "report_id": "1c15232c-cb1a-4662-955b-a4510c692e5b",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "0adc05d4-c60c-4b57-a139-4751a2f43bd6",
+    "timestamp": "2026-05-26T23:47:53.452550+08:00",
+    "action": "pdf_export",
+    "report_id": "1c15232c-cb1a-4662-955b-a4510c692e5b",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "d4c6dd17-3b37-41e9-9460-007f53db73b0"
+    }
+  },
+  {
+    "event_id": "913d8f3a-7fe0-4d2e-96ce-572ad93465e2",
+    "timestamp": "2026-05-26T23:55:23.678833+08:00",
+    "action": "report_generated",
+    "report_id": "d1b304b2-8222-4d17-bf8b-f053fa5dde3a",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "b319e6e2-9445-4aa2-9d08-e96d00e6ba80",
+    "timestamp": "2026-05-26T23:55:23.731091+08:00",
+    "action": "pdf_export",
+    "report_id": "d1b304b2-8222-4d17-bf8b-f053fa5dde3a",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "29a8baa7-443c-4ffb-8ac3-061a2ac563f6"
+    }
+  },
+  {
+    "event_id": "7718a12c-554b-49f8-8461-9850cadfc7ed",
+    "timestamp": "2026-05-26T23:58:21.969286+08:00",
+    "action": "report_generated",
+    "report_id": "e42130d5-f4b0-4f57-9d8b-3c6498171958",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "83117ae5-3396-443d-bd6f-cb48685a6b84",
+    "timestamp": "2026-05-26T23:58:22.004197+08:00",
+    "action": "pdf_export",
+    "report_id": "e42130d5-f4b0-4f57-9d8b-3c6498171958",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "9b5a69f0-1596-464b-9425-9344ac1ca404"
+    }
+  },
+  {
+    "event_id": "ad7c18a7-d1d5-4c06-9f08-53a34d8f664b",
+    "timestamp": "2026-05-27T00:06:12.414286+08:00",
+    "action": "report_generated",
+    "report_id": "b2ce8162-2a29-4d60-a5dc-e4321f0997f4",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "8d4233f9-0db3-409f-a016-917f317117d4",
+    "timestamp": "2026-05-27T00:06:12.457777+08:00",
+    "action": "pdf_export",
+    "report_id": "b2ce8162-2a29-4d60-a5dc-e4321f0997f4",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "43ddfb50-92b1-4386-b855-94fec92d735e"
+    }
+  },
+  {
+    "event_id": "2c5dc786-010a-498c-a59a-66e2aafc9ac3",
+    "timestamp": "2026-05-27T00:08:44.914970+08:00",
+    "action": "report_generated",
+    "report_id": "36d0ff7f-fe27-471e-98de-830fdcdd9469",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "f239402b-074a-46a5-b85c-43226b4a8668",
+    "timestamp": "2026-05-27T00:08:44.965435+08:00",
+    "action": "pdf_export",
+    "report_id": "36d0ff7f-fe27-471e-98de-830fdcdd9469",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "417e5fcf-031b-4b73-b6a0-ce7b50513426"
+    }
+  },
+  {
+    "event_id": "11f94163-997b-4415-8da0-32a61c527d86",
+    "timestamp": "2026-05-27T00:13:10.451013+08:00",
+    "action": "report_generated",
+    "report_id": "84c3e85f-8978-4100-8649-7b9fd0454f93",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "d0a041dd-6fa2-46f9-9b12-1e4afdf4cf20",
+    "timestamp": "2026-05-27T00:13:10.486323+08:00",
+    "action": "pdf_export",
+    "report_id": "84c3e85f-8978-4100-8649-7b9fd0454f93",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "262cfcaa-70ff-4d56-8b00-fb10b1be917c"
+    }
+  },
+  {
+    "event_id": "a547c8c0-02c2-4637-a1d8-d6032be10a93",
+    "timestamp": "2026-05-27T00:17:53.416779+08:00",
+    "action": "report_generated",
+    "report_id": "9377496c-97f2-4456-bf45-2c3a1b4f4c1f",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "bd0467f9-bb03-408b-96e6-4ac694d96a49",
+    "timestamp": "2026-05-27T00:17:53.459851+08:00",
+    "action": "pdf_export",
+    "report_id": "9377496c-97f2-4456-bf45-2c3a1b4f4c1f",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "7210b661-43ef-4161-9b1c-bda58ad46219"
+    }
+  },
+  {
+    "event_id": "1e85e988-08df-42a5-b064-5a68232ef0f1",
+    "timestamp": "2026-05-27T00:19:06.975072+08:00",
+    "action": "report_generated",
+    "report_id": "f7b85f28-f25c-478b-b34f-cb2608292cf6",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "2ca5e401-9c4d-4953-a49b-be808796e13e",
+    "timestamp": "2026-05-27T00:19:07.022120+08:00",
+    "action": "pdf_export",
+    "report_id": "f7b85f28-f25c-478b-b34f-cb2608292cf6",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "1e9c27ae-6449-4e65-a5be-4e406d3dd07c"
+    }
+  },
+  {
+    "event_id": "7d6a5b67-fb20-4ee3-9630-a5a42908397e",
+    "timestamp": "2026-05-27T00:19:16.075596+08:00",
+    "action": "report_generated",
+    "report_id": "52a7aad7-4385-4864-a1d2-11baacf1d6ee",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "e94014c2-c0cc-48db-aa55-7d4400b1f1bb",
+    "timestamp": "2026-05-27T00:19:16.144885+08:00",
+    "action": "pdf_export",
+    "report_id": "52a7aad7-4385-4864-a1d2-11baacf1d6ee",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "72e4d17b-0526-4f27-ab78-5f2d433157ec"
+    }
+  },
+  {
+    "event_id": "ea346c4f-d58a-4bab-90e9-e635fc671aaf",
+    "timestamp": "2026-05-27T00:21:04.902519+08:00",
+    "action": "report_generated",
+    "report_id": "cbc10bdf-4555-4b7c-94ff-bd36cbea953e",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "054a28db-8ac8-4397-b424-d525affd1c2b",
+    "timestamp": "2026-05-27T00:21:04.953207+08:00",
+    "action": "pdf_export",
+    "report_id": "cbc10bdf-4555-4b7c-94ff-bd36cbea953e",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "d9fe96b9-3fb3-44de-90e6-c82499bda3d9"
+    }
+  },
+  {
+    "event_id": "54f9632b-3364-46b9-9ae0-f6db08e26b34",
+    "timestamp": "2026-05-27T00:23:54.844585+08:00",
+    "action": "report_generated",
+    "report_id": "b27799c5-fffb-417b-abe3-ad1988327bf1",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "cdbd1069-98b4-4ab7-bdd6-297e8c31f126",
+    "timestamp": "2026-05-27T00:23:54.912425+08:00",
+    "action": "pdf_export",
+    "report_id": "b27799c5-fffb-417b-abe3-ad1988327bf1",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "43ded5ea-b8f6-4088-835f-01c78e295a25"
+    }
+  },
+  {
+    "event_id": "8d6183f9-2eab-4019-aaae-0df941d611b8",
+    "timestamp": "2026-05-27T00:23:57.278003+08:00",
+    "action": "report_generated",
+    "report_id": "34db45d6-5ec9-473f-bf28-d776e70af424",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "47f6c45c-204a-4aed-9afd-02175ab2d578",
+    "timestamp": "2026-05-27T00:23:57.334450+08:00",
+    "action": "pdf_export",
+    "report_id": "34db45d6-5ec9-473f-bf28-d776e70af424",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "f1123f41-0e4d-4026-9679-eb706bda6c6a"
+    }
+  },
+  {
+    "event_id": "1ad8f4bd-b0a6-4740-8193-a0189b2468be",
+    "timestamp": "2026-05-27T00:26:38.876735+08:00",
+    "action": "report_generated",
+    "report_id": "fae2bf79-43a6-42cb-8bd4-250ceb79ff42",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "b5aa5dbc-3ddb-403b-af7c-4e5c3eabddcc",
+    "timestamp": "2026-05-27T00:26:38.922829+08:00",
+    "action": "pdf_export",
+    "report_id": "fae2bf79-43a6-42cb-8bd4-250ceb79ff42",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "a80debc2-3bf3-46a1-9ce9-fe57662cef22"
+    }
+  },
+  {
+    "event_id": "4aa6fc3a-b0c6-49f7-b1c2-b23c271ddb9a",
+    "timestamp": "2026-05-27T00:31:14.621396+08:00",
+    "action": "report_generated",
+    "report_id": "16f495fa-89cc-4867-ac13-81b1a8cf1fc6",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "dc0e4dc7-3ca0-4c0e-94ab-9465d9b03448",
+    "timestamp": "2026-05-27T00:31:14.662781+08:00",
+    "action": "pdf_export",
+    "report_id": "16f495fa-89cc-4867-ac13-81b1a8cf1fc6",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "53920704-7230-456a-b2be-bc920f481ee3"
+    }
+  },
+  {
+    "event_id": "e493eb43-ae92-44bc-8cf0-8ea59ef2cd6e",
+    "timestamp": "2026-05-27T00:31:44.792921+08:00",
+    "action": "report_generated",
+    "report_id": "45323039-89fb-4711-bcff-48e5d18f3012",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "af35602e-7f44-4a1b-8f3e-7e01bf128df1",
+    "timestamp": "2026-05-27T00:31:44.842384+08:00",
+    "action": "pdf_export",
+    "report_id": "45323039-89fb-4711-bcff-48e5d18f3012",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "93cbe028-c94a-425a-85c9-6f1360d643f7"
+    }
+  },
+  {
+    "event_id": "ee814562-4567-43d0-b1a6-807aa053a73e",
+    "timestamp": "2026-05-27T00:40:37.331256+08:00",
+    "action": "report_generated",
+    "report_id": "41502f43-9d40-4da6-b914-0cffabce1aab",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "08dfb976-a29d-41b8-8508-f46597ed5296",
+    "timestamp": "2026-05-27T00:40:37.390056+08:00",
+    "action": "pdf_export",
+    "report_id": "41502f43-9d40-4da6-b914-0cffabce1aab",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "f8c95f8b-fe15-459b-beb6-ea88d998960c"
+    }
+  },
+  {
+    "event_id": "81c0e87a-757c-4bb7-a13e-e47dd086cb5e",
+    "timestamp": "2026-05-27T00:40:38.963262+08:00",
+    "action": "report_generated",
+    "report_id": "c2f28b42-ad08-461e-8f13-cc3f5dc82e7c",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "8ecfaea6-8bfd-452d-8adb-78759d76df28",
+    "timestamp": "2026-05-27T00:40:39.020388+08:00",
+    "action": "pdf_export",
+    "report_id": "c2f28b42-ad08-461e-8f13-cc3f5dc82e7c",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "37432c6e-2af1-4a0a-ac07-d522759aecd1"
+    }
+  },
+  {
+    "event_id": "789f3bb6-4d17-48d0-b993-17f74df3de24",
+    "timestamp": "2026-05-27T00:40:54.241725+08:00",
+    "action": "report_generated",
+    "report_id": "7529278f-1486-47ca-9b30-83be4a67fca1",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "6604847b-6ac9-409c-bb88-dade0938ed33",
+    "timestamp": "2026-05-27T00:40:54.280660+08:00",
+    "action": "pdf_export",
+    "report_id": "7529278f-1486-47ca-9b30-83be4a67fca1",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "63dff796-0962-4e2f-8cbc-b21f01cfd0d1"
+    }
+  },
+  {
+    "event_id": "d7555def-0b96-4323-9878-785f497226fc",
+    "timestamp": "2026-05-27T00:42:28.077706+08:00",
+    "action": "report_generated",
+    "report_id": "5f168863-6ca1-49b1-9866-33fe8e087b2d",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "41f468a0-c14d-48d5-84d5-5b517a0e4c26",
+    "timestamp": "2026-05-27T00:42:28.118873+08:00",
+    "action": "pdf_export",
+    "report_id": "5f168863-6ca1-49b1-9866-33fe8e087b2d",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "1bb553da-eedd-4839-8fb5-1c781c7d745d"
+    }
+  },
+  {
+    "event_id": "791f5031-9858-42d3-85a1-278c007581d0",
+    "timestamp": "2026-05-27T00:42:51.536500+08:00",
+    "action": "report_generated",
+    "report_id": "4292366e-3833-49d7-abc8-45ec3ecb8f3c",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "510702a5-4fb1-4ecc-b266-aa2298e1427d",
+    "timestamp": "2026-05-27T00:42:51.578501+08:00",
+    "action": "pdf_export",
+    "report_id": "4292366e-3833-49d7-abc8-45ec3ecb8f3c",
+    "user_id": 5,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "52d63a9d-d234-49e4-8de9-99cfc09506e3"
+    }
+  },
+  {
+    "event_id": "0ea5b66e-af0a-4ab5-b3c9-5875c24e288d",
+    "timestamp": "2026-05-27T00:43:51.777169+08:00",
+    "action": "report_generated",
+    "report_id": "26c02c36-6173-4f05-84a9-964ab2b510d6",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "c5daa128-d91e-4eb3-a869-c229151d570a",
+    "timestamp": "2026-05-27T00:43:51.817860+08:00",
+    "action": "pdf_export",
+    "report_id": "26c02c36-6173-4f05-84a9-964ab2b510d6",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "4a61213e-94d3-4bde-8bcf-88818ed85f35"
+    }
+  },
+  {
+    "event_id": "2370901d-b5b2-48fd-8847-c1e30cc42a0e",
+    "timestamp": "2026-05-27T00:44:36.350080+08:00",
+    "action": "report_generated",
+    "report_id": "09c49dba-d5e1-401d-a176-a6b635e41dc8",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "042f1e0b-bd10-43af-8544-d7192c4bf145",
+    "timestamp": "2026-05-27T00:44:36.395598+08:00",
+    "action": "pdf_export",
+    "report_id": "09c49dba-d5e1-401d-a176-a6b635e41dc8",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "11131774-f15b-460b-bbc9-7d7657e5a8ae"
+    }
+  },
+  {
+    "event_id": "9c101d69-3147-4666-8616-c95a2c54101c",
+    "timestamp": "2026-06-02T19:09:03.051967+08:00",
+    "action": "report_generated",
+    "report_id": "af9b9ccb-4914-421f-8b4d-de09edd557e0",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "45c5a676-208c-4e75-bd32-06c1049a6b40",
+    "timestamp": "2026-06-02T19:09:03.103717+08:00",
+    "action": "pdf_export",
+    "report_id": "af9b9ccb-4914-421f-8b4d-de09edd557e0",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "be4da43e-d451-43df-b4b2-1ce99f9b0e19"
+    }
+  },
+  {
+    "event_id": "33b7b314-4dd8-4968-bfe7-959b1b61595f",
+    "timestamp": "2026-06-02T19:16:37.904801+08:00",
+    "action": "report_generated",
+    "report_id": "c99be415-f883-4da7-8a37-00a69a35546b",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "792dffc6-d541-4416-9a2f-129b38124378",
+    "timestamp": "2026-06-02T19:16:37.978440+08:00",
+    "action": "pdf_export",
+    "report_id": "c99be415-f883-4da7-8a37-00a69a35546b",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "543d26c8-2fff-476f-833e-c4186a19cb76"
+    }
+  },
+  {
+    "event_id": "23630413-1ae3-4048-8c1e-e3f61c8e41da",
+    "timestamp": "2026-06-02T19:17:21.477680+08:00",
+    "action": "report_generated",
+    "report_id": "a0b60f20-01e6-473e-9f51-d0a98072fa79",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "3171aa6e-b8ec-44f2-bf25-f3b5148ba223",
+    "timestamp": "2026-06-02T19:17:21.537631+08:00",
+    "action": "pdf_export",
+    "report_id": "a0b60f20-01e6-473e-9f51-d0a98072fa79",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "1acb5304-86ca-4901-9e96-fb4aa0e57697"
+    }
+  },
+  {
+    "event_id": "2126f958-d942-4ec1-8bde-0795b2c135f1",
+    "timestamp": "2026-06-02T19:28:21.578714+08:00",
+    "action": "report_generated",
+    "report_id": "3451efdb-ccc2-4a52-86a2-3ec053e79b74",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "87c9075a-5bd1-4126-93e5-ee5b978d87ab",
+    "timestamp": "2026-06-02T19:28:21.619088+08:00",
+    "action": "pdf_export",
+    "report_id": "3451efdb-ccc2-4a52-86a2-3ec053e79b74",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "bcaf9759-a5ac-4fdd-b165-da14bac352d7"
+    }
+  },
+  {
+    "event_id": "e5017502-2ab5-4a93-b9c6-2a63ecaacec0",
+    "timestamp": "2026-06-02T20:54:30.348960+08:00",
+    "action": "report_generated",
+    "report_id": "b7170e48-b51a-4963-be5f-b3797b309d46",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "dcc125ec-52e0-4e4b-b29f-70ce1ff07aae",
+    "timestamp": "2026-06-02T20:54:30.392642+08:00",
+    "action": "pdf_export",
+    "report_id": "b7170e48-b51a-4963-be5f-b3797b309d46",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "6d9e7f89-8a80-47a3-8544-0e5f7ea6c18a"
+    }
+  },
+  {
+    "event_id": "c35df21a-a091-4bd5-b910-ad33c5377a9b",
+    "timestamp": "2026-06-02T21:33:55.373227+08:00",
+    "action": "report_generated",
+    "report_id": "83f7cb4c-edb0-4e0e-a2ed-bd134a5e184f",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "40de776f-d953-4c64-83ca-b8959a99137f",
+    "timestamp": "2026-06-02T21:33:55.406276+08:00",
+    "action": "pdf_export",
+    "report_id": "83f7cb4c-edb0-4e0e-a2ed-bd134a5e184f",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "0f15402c-ca3c-4575-b677-643cc40e36fa"
+    }
+  },
+  {
+    "event_id": "bb1b9cb1-78de-4538-9ef0-3ea31e78d2f3",
+    "timestamp": "2026-06-02T21:37:45.739261+08:00",
+    "action": "report_generated",
+    "report_id": "f1ce267b-dec2-4a62-acbd-02520f9fb5a9",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "e1421d1c-dc04-4bd6-9ec7-6caf8df551da",
+    "timestamp": "2026-06-02T21:37:45.781958+08:00",
+    "action": "pdf_export",
+    "report_id": "f1ce267b-dec2-4a62-acbd-02520f9fb5a9",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "d1a9d2c5-4169-428f-9c45-d3764fa84816"
+    }
+  },
+  {
+    "event_id": "866e4ba4-256c-45e4-98cd-934b9e54c365",
+    "timestamp": "2026-06-02T21:38:31.350310+08:00",
+    "action": "report_generated",
+    "report_id": "977ddb22-bf68-4b61-8963-79351f49469e",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "f0998d6c-7399-4c8b-a54d-083e00fc5972",
+    "timestamp": "2026-06-02T21:38:31.380261+08:00",
+    "action": "pdf_export",
+    "report_id": "977ddb22-bf68-4b61-8963-79351f49469e",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "7a985549-6d29-4aa2-888c-23a2f4919478"
+    }
+  },
+  {
+    "event_id": "a04eb87b-64b5-4a58-85fe-687b67166bcb",
+    "timestamp": "2026-06-02T21:51:30.580857+08:00",
+    "action": "report_generated",
+    "report_id": "23680f66-fb63-4d90-beb7-333748d04c64",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "16c3a6a1-e3b3-48f1-bc92-464efd34e409",
+    "timestamp": "2026-06-02T21:51:30.632992+08:00",
+    "action": "pdf_export",
+    "report_id": "23680f66-fb63-4d90-beb7-333748d04c64",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "5f0c2def-3133-4a12-95d8-3b7312d44d32"
+    }
+  },
+  {
+    "event_id": "5bf0b41d-cab9-4999-a2a2-a3bd947249f7",
+    "timestamp": "2026-06-02T21:52:16.176597+08:00",
+    "action": "report_generated",
+    "report_id": "10333a2f-3183-4de3-841b-3c9a1bf755c2",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "44b890ef-b1b1-4560-a474-1329413b55dd",
+    "timestamp": "2026-06-02T21:52:16.225492+08:00",
+    "action": "pdf_export",
+    "report_id": "10333a2f-3183-4de3-841b-3c9a1bf755c2",
+    "user_id": 17,
+    "role": "Legal",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "03646439-c24a-469e-9382-91582b4799cf"
+    }
+  },
+  {
+    "event_id": "eac8ff32-0e42-48b3-85d1-e5631e79953a",
+    "timestamp": "2026-06-02T21:54:36.703642+08:00",
+    "action": "report_generated",
+    "report_id": "ecf9b954-6744-4f92-81ce-265316e54963",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "f84d90cc-c4b1-4fd8-8187-9e40722d649f",
+    "timestamp": "2026-06-02T21:54:36.744029+08:00",
+    "action": "pdf_export",
+    "report_id": "ecf9b954-6744-4f92-81ce-265316e54963",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "a64487e2-3e93-4d37-97e5-de7a029db357"
+    }
+  },
+  {
+    "event_id": "fa65a589-f1cb-465f-b94b-714af80058f9",
+    "timestamp": "2026-06-02T21:55:05.286579+08:00",
+    "action": "report_generated",
+    "report_id": "4b8037ce-1101-4440-a59c-b44a7d8b8731",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "b469f5c0-9ae1-4fe0-b812-662650e549f6",
+    "timestamp": "2026-06-02T21:55:05.361856+08:00",
+    "action": "pdf_export",
+    "report_id": "4b8037ce-1101-4440-a59c-b44a7d8b8731",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "0ea591b0-6b3c-4b2d-a251-a65746467207"
+    }
+  },
+  {
+    "event_id": "a8db93b5-38e1-4ff8-a356-efc95b51d1cc",
+    "timestamp": "2026-06-05T00:16:00.135439+08:00",
+    "action": "report_generated",
+    "report_id": "bb7c5475-c07f-4e2e-aec5-49a91a5f64dc",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "512fd79a-fd7b-4fcb-a528-7ffe82c1894e",
+    "timestamp": "2026-06-05T00:16:00.158947+08:00",
+    "action": "pdf_export",
+    "report_id": "bb7c5475-c07f-4e2e-aec5-49a91a5f64dc",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "9140628c-f721-4edc-ad80-a10807fe0d36"
+    }
+  },
+  {
+    "event_id": "f16305ac-65a6-4613-a043-8a964228ecf1",
+    "timestamp": "2026-06-05T00:25:07.230063+08:00",
+    "action": "report_generated",
+    "report_id": "d9dd5b1a-0501-46b2-8fd9-047d5f5a3ad3",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "922d0737-128a-4f4a-9fc7-2d23a006ef1f",
+    "timestamp": "2026-06-05T00:25:07.255241+08:00",
+    "action": "pdf_export",
+    "report_id": "d9dd5b1a-0501-46b2-8fd9-047d5f5a3ad3",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "2d655c5c-1ce7-415c-907b-e2276c949917"
+    }
+  },
+  {
+    "event_id": "07aab87f-6f51-4583-a1ab-8ef275142d4d",
+    "timestamp": "2026-06-05T00:28:20.032018+08:00",
+    "action": "report_generated",
+    "report_id": "07a8afba-e790-4b56-86ff-b5a0a5a0aa5a",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "47d1cfb9-e724-46d4-b571-045d5f89a476",
+    "timestamp": "2026-06-05T00:28:20.069621+08:00",
+    "action": "pdf_export",
+    "report_id": "07a8afba-e790-4b56-86ff-b5a0a5a0aa5a",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "eb8e7d66-442f-4dde-a0d9-c1786d1ce43f"
+    }
+  },
+  {
+    "event_id": "9024588c-515b-46a9-86cf-d3be9a333706",
+    "timestamp": "2026-06-05T00:36:58.644326+08:00",
+    "action": "report_generated",
+    "report_id": "d0c97ee3-4bef-46a1-af6e-f5ff7503c7ad",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "7b9954e6-c28a-4b1c-a7d4-14fc58d0b9fd",
+    "timestamp": "2026-06-05T00:36:58.666148+08:00",
+    "action": "pdf_export",
+    "report_id": "d0c97ee3-4bef-46a1-af6e-f5ff7503c7ad",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "d31444b8-b8a7-46db-b933-34e406090308"
+    }
+  },
+  {
+    "event_id": "2eb0b8d0-0966-4760-bc59-6fc32291f6c1",
+    "timestamp": "2026-06-05T00:53:13.563402+08:00",
+    "action": "report_generated",
+    "report_id": "224d318a-b9d0-4c7d-a01a-cd634026d892",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "febd31d1-bc81-4e9e-8d54-9a04db9b1731",
+    "timestamp": "2026-06-05T00:53:13.596336+08:00",
+    "action": "pdf_export",
+    "report_id": "224d318a-b9d0-4c7d-a01a-cd634026d892",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "dc383ca6-2c72-458c-96be-1a355b6f081a"
+    }
+  },
+  {
+    "event_id": "ff3541a2-2a0d-404e-9c8d-c815233500ab",
+    "timestamp": "2026-06-05T01:01:35.109048+08:00",
+    "action": "report_generated",
+    "report_id": "f52f516c-215c-4007-88c8-99097f41d3c3",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "f7ff6602-cb96-431f-a180-ea71718accc6",
+    "timestamp": "2026-06-05T01:01:35.134487+08:00",
+    "action": "pdf_export",
+    "report_id": "f52f516c-215c-4007-88c8-99097f41d3c3",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "8de67ad3-0229-41d3-86cd-fc46ba6c28da"
+    }
+  },
+  {
+    "event_id": "bb72f749-e37c-4392-9b45-fb18585030d5",
+    "timestamp": "2026-06-05T01:12:39.713839+08:00",
+    "action": "report_generated",
+    "report_id": "c63464b1-89a5-48fa-bfeb-006cdcb2786d",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "c59933b8-b1e2-4c01-b81a-2c4d303cca99",
+    "timestamp": "2026-06-05T01:12:39.736082+08:00",
+    "action": "pdf_export",
+    "report_id": "c63464b1-89a5-48fa-bfeb-006cdcb2786d",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "94031ebf-ae16-4a68-81fa-4271787c8881"
+    }
+  },
+  {
+    "event_id": "6120639a-e2c3-418e-84b7-4ceefa4994f6",
+    "timestamp": "2026-06-05T01:19:10.731599+08:00",
+    "action": "report_generated",
+    "report_id": "fe8cf04d-cc86-488f-bc15-797cca5b18ce",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "4b6c25fc-7f30-49e9-9e8a-298a2a7b162b",
+    "timestamp": "2026-06-05T01:19:10.752579+08:00",
+    "action": "pdf_export",
+    "report_id": "fe8cf04d-cc86-488f-bc15-797cca5b18ce",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "71bf96c7-e455-4615-95d6-a4b940443ff3"
+    }
+  },
+  {
+    "event_id": "acc426ac-db7d-4f95-937f-eb92dac65d18",
+    "timestamp": "2026-06-05T01:29:37.117013+08:00",
+    "action": "report_generated",
+    "report_id": "fc6199c1-4df2-41fa-bf08-56a7334619a5",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "58abd3e0-94ca-4ce8-b448-675dbe072e20",
+    "timestamp": "2026-06-05T01:29:37.138325+08:00",
+    "action": "pdf_export",
+    "report_id": "fc6199c1-4df2-41fa-bf08-56a7334619a5",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "0611758d-5c49-422d-9408-b0c31e6723a2"
+    }
+  },
+  {
+    "event_id": "02e2c7cb-6137-41ef-95fa-f67939d97350",
+    "timestamp": "2026-06-05T01:32:00.616962+08:00",
+    "action": "report_generated",
+    "report_id": "fe534fd4-f9d0-42d6-9ff7-013686c2f498",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "a5e40351-c245-4f21-9cd7-151a12b174da",
+    "timestamp": "2026-06-05T01:32:00.640980+08:00",
+    "action": "pdf_export",
+    "report_id": "fe534fd4-f9d0-42d6-9ff7-013686c2f498",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "13b4d832-3944-4d04-8425-46b869ed7f34"
+    }
+  },
+  {
+    "event_id": "c05d37aa-485c-44da-9162-7465e0f4e335",
+    "timestamp": "2026-06-05T01:41:11.232390+08:00",
+    "action": "report_generated",
+    "report_id": "63daae3b-1db7-4703-952b-237b1ee5f760",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "5689e983-2aae-4587-af31-bc3eb553688a",
+    "timestamp": "2026-06-05T01:41:11.259712+08:00",
+    "action": "pdf_export",
+    "report_id": "63daae3b-1db7-4703-952b-237b1ee5f760",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "dfafe7dd-d6f3-467a-92d2-757ff29f49a3"
+    }
+  },
+  {
+    "event_id": "f057edad-b40a-47b1-bbb9-7c05ab6f6474",
+    "timestamp": "2026-06-05T01:47:03.018263+08:00",
+    "action": "report_generated",
+    "report_id": "fec7efbe-6738-4e03-9e0b-6032331ddffa",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "f4775016-d62f-4115-92e4-8b4d299becca",
+    "timestamp": "2026-06-05T01:47:03.041634+08:00",
+    "action": "pdf_export",
+    "report_id": "fec7efbe-6738-4e03-9e0b-6032331ddffa",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "191a897e-97c5-449a-a0d7-7e09faad3433"
+    }
+  },
+  {
+    "event_id": "4e09a12b-ee4c-4bf3-bcbd-3e174cf9b3b0",
+    "timestamp": "2026-06-05T01:50:04.042463+08:00",
+    "action": "report_generated",
+    "report_id": "9c5e44e9-6bb2-4fc3-a67a-ec816ad23770",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "adca39c0-170c-45c1-b982-58bec5331a6f",
+    "timestamp": "2026-06-05T01:50:04.065773+08:00",
+    "action": "pdf_export",
+    "report_id": "9c5e44e9-6bb2-4fc3-a67a-ec816ad23770",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "f4e36f69-e708-409f-a0e9-debc4eff5b47"
+    }
+  },
+  {
+    "event_id": "54bfecfc-c9dc-4894-9c85-51caa56adeda",
+    "timestamp": "2026-06-05T01:54:02.336453+08:00",
+    "action": "report_generated",
+    "report_id": "61467ea9-b20d-4149-8cb7-1225402f8ae4",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "77eaf40e-1a3f-4143-88f3-0062f0605da2",
+    "timestamp": "2026-06-05T01:54:02.362699+08:00",
+    "action": "pdf_export",
+    "report_id": "61467ea9-b20d-4149-8cb7-1225402f8ae4",
+    "user_id": 23,
+    "role": "Developer",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "5ac9a4e1-d921-43c4-9d88-2fa099f5c6e7"
+    }
+  },
+  {
+    "event_id": "caf79ded-e623-457c-8772-377be687d71b",
+    "timestamp": "2026-06-05T14:46:50.821240+08:00",
+    "action": "report_generated",
+    "report_id": "ccdd5b9b-f840-4bd8-8c81-c3a1156ad71c",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "7f0c1690-87fc-4670-a452-293783b0d70e",
+    "timestamp": "2026-06-05T14:46:50.871897+08:00",
+    "action": "pdf_export",
+    "report_id": "ccdd5b9b-f840-4bd8-8c81-c3a1156ad71c",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "5aabf040-0018-4054-bdb3-c92d7ffb0280"
+    }
+  },
+  {
+    "event_id": "9b0cf48c-132f-47ea-a765-7a7b268b74ed",
+    "timestamp": "2026-06-05T14:51:42.221019+08:00",
+    "action": "report_generated",
+    "report_id": "080ec9f2-5dc4-48a6-9a2a-a427af3bb8c3",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "d5eac0eb-3bb3-42fa-91ee-a076e95ec23c",
+    "timestamp": "2026-06-05T14:51:42.314576+08:00",
+    "action": "pdf_export",
+    "report_id": "080ec9f2-5dc4-48a6-9a2a-a427af3bb8c3",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "bf702e22-6704-42a7-adfc-6627812784b3"
+    }
+  },
+  {
+    "event_id": "dd3e3383-16ec-4226-b11c-5305be929c5d",
+    "timestamp": "2026-06-05T15:14:06.983427+08:00",
+    "action": "report_generated",
+    "report_id": "4acaa2be-b50a-4248-a33a-2cbf1f894890",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "9df8f4f2-fb8a-46e6-be8c-5bc07ed5e820",
+    "timestamp": "2026-06-05T15:14:07.006191+08:00",
+    "action": "pdf_export",
+    "report_id": "4acaa2be-b50a-4248-a33a-2cbf1f894890",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "fe367b2f-f243-4d03-b91c-bd33c94a0fe6"
+    }
+  },
+  {
+    "event_id": "962a486c-5efd-4fd8-98ba-876a1ded0393",
+    "timestamp": "2026-06-05T15:17:37.537375+08:00",
+    "action": "report_generated",
+    "report_id": "d09f434e-c642-4bdc-9b2f-548b3e94f322",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "6680f56c-5ca5-49e1-bf45-fb599aaf4fde",
+    "timestamp": "2026-06-05T15:17:37.566023+08:00",
+    "action": "pdf_export",
+    "report_id": "d09f434e-c642-4bdc-9b2f-548b3e94f322",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "ms",
+      "signature_id": "010a11eb-ad8f-4ffc-be1c-e302c5c06714"
+    }
+  },
+  {
+    "event_id": "81d4a11f-bd37-4df1-aa01-f1142239ff40",
+    "timestamp": "2026-06-05T15:18:06.164993+08:00",
+    "action": "report_generated",
+    "report_id": "4941cc9a-c375-4360-a450-67f635a37f0d",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 1
+    }
+  },
+  {
+    "event_id": "b325753e-abf7-4200-88f6-c2223201b48a",
+    "timestamp": "2026-06-05T15:18:06.188969+08:00",
+    "action": "pdf_export",
+    "report_id": "4941cc9a-c375-4360-a450-67f635a37f0d",
+    "user_id": 16,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 1,
+      "language": "en",
+      "signature_id": "f8288daf-182f-4f6e-97e2-a0d0a2b80dd0"
+    }
+  },
+  {
+    "event_id": "241e62e2-1b2a-492b-939a-055c2e3a1cbc",
+    "timestamp": "2026-06-05T15:39:29.763022+08:00",
+    "action": "report_generated",
+    "report_id": "f38ba9be-402e-44cb-9c57-63d865399074",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "8e714519-f03b-4ab2-b282-5c52ce4309be",
+    "timestamp": "2026-06-05T15:39:29.791551+08:00",
+    "action": "pdf_export",
+    "report_id": "f38ba9be-402e-44cb-9c57-63d865399074",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "b294e33e-2fa7-4eab-9970-fc5b7382f662"
+    }
+  },
+  {
+    "event_id": "8385ff0a-af71-44fc-b38d-f789b736f96b",
+    "timestamp": "2026-06-05T15:43:28.700484+08:00",
+    "action": "report_generated",
+    "report_id": "84df0725-9910-4669-b046-77fb4a8ff39e",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "ms",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "d047d35c-78a0-4021-a0a5-f55e42f60fdc",
+    "timestamp": "2026-06-05T15:43:28.724947+08:00",
+    "action": "pdf_export",
+    "report_id": "84df0725-9910-4669-b046-77fb4a8ff39e",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "ms",
+      "signature_id": "a67f1614-0779-4ef8-b8f9-cfe5b6d77965"
+    }
+  },
+  {
+    "event_id": "65e0e511-995d-4a60-bbb9-e192b22f93bb",
+    "timestamp": "2026-06-05T15:44:28.734568+08:00",
+    "action": "report_generated",
+    "report_id": "5aff8336-e720-4ef3-b3e9-8c2bebfebd53",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "language": "en",
+      "defect_count": 2
+    }
+  },
+  {
+    "event_id": "1553e8e1-7cce-4f61-b77a-0772a78bd1aa",
+    "timestamp": "2026-06-05T15:44:28.757727+08:00",
+    "action": "pdf_export",
+    "report_id": "5aff8336-e720-4ef3-b3e9-8c2bebfebd53",
+    "user_id": 20,
+    "role": "Homeowner",
+    "defect_id": null,
+    "details": {
+      "defect_count": 2,
+      "language": "en",
+      "signature_id": "abfda574-db6a-4910-9e8d-291f392df6d2"
+    }
+  }
+]

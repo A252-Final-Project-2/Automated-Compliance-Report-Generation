@@ -1,0 +1,14 @@
+venv/
+myenv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.cache/
+cache/
+audit_data/
+evidence/
+.git/
+.gitignore
+.env

@@ -1,0 +1,75 @@
+x
+^x
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+
+# Ignore Flask instance folder (local files like logs, database, etc.)
+instance/
+
+# Ignore virtual environment directories
+env/
+venv/
+.venv/
+env.bak/
+
+# Ignore Conda environment (miniforge) related directories
+.conda/
+.condarc
+conda-meta/
+envs/
+
+# Ignore Docker-related files
+# **/Dockerfile*
+# **/docker-compose.override.yml
+**/.docker/
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore local configuration files for IDEs or editors
+.vscode/
+.idea/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore the data folder if it contains sensitive or large files (like database dumps)
+# data/
+
+# Ignore logs
+*.log
+
+# Ignore environment.yml if you want to commit a specific version manually
+# (If not, you can uncomment this line)
+# environment.yml
+
+# Ignore test output directories
+tests/__pycache__/
+
+# Ignore build artifacts from Python setup
+build/
+dist/
+*.egg-info/
+
+# Ignore the Python egg cache
+.eggs/
+
+# Ignore any temporary or backup files
+*.bak
+*.swp
+*.swo
+
+# Ignore database files (if any, e.g., SQLite)
+*.db
+*.sqlite
+
+# Ignore coverage reports or pytest cache
+.coverage
+*.cover
+.pytest_cache/
+nosetests.xml

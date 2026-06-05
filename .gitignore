@@ -1,0 +1,10 @@
+myenv/
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Generated runtime/cache artifacts
+app/module3/cache/
+app/module3/*.log
+app/module3/audit_data/*.bak

@@ -1,0 +1,24 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: module3_app
+    env_file:
+      - .env
+    environment:
+      DB_HOST: ${DB_HOST:-host.docker.internal}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_NAME: ${DB_NAME:-compliance_db}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-nabilah}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      FLASK_SECRET_KEY: ${FLASK_SECRET_KEY:-dev-secret-key-change-me}
+      FLASK_ENV: development
+      FLASK_DEBUG: "1"
+    ports:
+      - "${APP_PORT:-5050}:5000"
+    volumes:
+      - ./:/app
+    command: python app.py
+    restart: unless-stopped

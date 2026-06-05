@@ -1,0 +1,32 @@
+<svg width="720" height="880" viewBox="0 0 720 880" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="50" y1="40" x2="680" y2="840" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f3d3e"/>
+      <stop offset="1" stop-color="#0a1f2f"/>
+    </linearGradient>
+    <linearGradient id="soft" x1="170" y1="160" x2="560" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7dd3c7" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#93c5fd" stop-opacity="0.10"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="720" height="880" rx="36" fill="url(#bg)"/>
+
+  <circle cx="124" cy="98" r="76" fill="#7dd3c7" fill-opacity="0.10"/>
+  <circle cx="630" cy="786" r="124" fill="#93c5fd" fill-opacity="0.10"/>
+
+  <rect x="118" y="154" width="484" height="570" rx="28" fill="url(#soft)" stroke="rgba(226,232,240,0.30)"/>
+
+  <rect x="168" y="236" width="384" height="16" rx="8" fill="#dbeafe" fill-opacity="0.85"/>
+  <rect x="168" y="272" width="312" height="14" rx="7" fill="#cbd5e1" fill-opacity="0.7"/>
+  <rect x="168" y="304" width="268" height="14" rx="7" fill="#cbd5e1" fill-opacity="0.55"/>
+
+  <rect x="168" y="364" width="384" height="122" rx="16" fill="#08212f" fill-opacity="0.78" stroke="#7dd3c7" stroke-opacity="0.35"/>
+  <path d="M208 430L274 390L344 444L428 376L512 430" stroke="#7dd3c7" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="168" y="526" width="180" height="64" rx="12" fill="#0d3040"/>
+  <rect x="372" y="526" width="180" height="64" rx="12" fill="#0d3040"/>
+  <rect x="168" y="612" width="384" height="32" rx="10" fill="#cbd5e1" fill-opacity="0.35"/>
+
+  <text x="168" y="706" fill="#e2e8f0" font-size="24" font-family="Segoe UI, sans-serif" opacity="0.9">Compliance Workspace</text>
+</svg>

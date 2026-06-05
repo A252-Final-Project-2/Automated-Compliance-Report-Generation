@@ -1,0 +1,18 @@
+{
+  "queried_username": "daniellee",
+  "login_account": {
+    "username": "daniellee",
+    "role": "Developer",
+    "user_id": 14,
+    "is_active": true
+  },
+  "mapped_user": {
+    "id": 14,
+    "full_name": "gAAAAABqAh9sgSRuA-IzuznoZCkqgFMxxxtJVJ4tH2gpkDTKPRtjD5FsRnW8WCHLxjCHeeztaYEGmKBIZDVvaJRDfapQg4E3iw==",
+    "unit": "gAAAAABqAh9s1Od1PmmJHG2uHr92qMAW-5nTxeK407hGLrYdaXdsPBISpVgMw66sn6Gd6SLGNAtDHFVpqyVpflkvHK9lFiEq0g==",
+    "role": "Legal",
+    "email": "gAAAAABqAh9slVNGfQsB5lnuInFWKm1FWBLKUVKGszpv-XqQx-Amhi0Sk_H_qdKbEv8ZRgnRQcrGJbtldBCqt3bgMsnHJ_vf9pFD5v0_YTgWwWH6d2rFWVI=",
+    "avatar_url": "/static/uploads/avatars/user_14.png?v=1778524027"
+  },
+  "possible_users_by_full_name": []
+}

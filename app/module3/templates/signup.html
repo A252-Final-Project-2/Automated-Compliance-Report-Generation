@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Compliance Workspace</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { font-family: 'Manrope', 'Segoe UI', sans-serif; background: linear-gradient(180deg,#eef4ff 0%, #f6f9ff 100%); }
+        .signup-container { max-width: 760px; margin: 48px auto; padding: 0 20px; }
+        .signup-header { background: linear-gradient(90deg,#0b3a8c 0%, #2563eb 100%); color: #fff; padding: 22px 26px; border-radius: 12px; box-shadow: 0 12px 36px rgba(11,58,140,0.12); }
+        .signup-header h1 { margin:0; font-size:22px; letter-spacing: -0.2px }
+        .signup-header p { margin:6px 0 0; color: rgba(255,255,255,0.9); font-size:14px; max-width:800px }
+        .signup-shell { max-width: 760px; width: 100%; box-sizing: border-box; margin: 18px auto 0; background: #ffffff; padding: 26px 28px; border-radius: 12px; box-shadow: 0 10px 30px rgba(38,70,170,0.06); border: 1px solid rgba(34,50,99,0.04); }
+        .signup-shell h2 { margin:0 0 6px; font-size:18px; color:#0f172a; }
+        .signup-shell .sub { color: #475569; margin-bottom:12px; font-size:14px }
+        label{
+            font-weight:600;
+            color:#0f172a;
+            font-size:13px;
+        }
+        input, select { width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(15,23,42,0.06); background:#fcfdff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.6); font-size:14px; color:#0f172a }
+        input::placeholder { color: #9aa6bf }
+        input:focus, select:focus { outline: none; box-shadow: 0 8px 28px rgba(37,99,235,0.10); border-color: rgba(37,99,235,0.35); }
+        .form-row{
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            margin-bottom:18px;
+        }
+        .field-error { color:#b91c1c; font-size:13px; margin-top:6px }
+        .field-error.server { display:block; }
+        .actions { margin-top:18px; display:flex; justify-content:center; gap:12px; align-items:center }
+        .hint { color: #64748b; margin-top:10px }
+        .alert { background: #fff1f2; color:#7f1d1d; border-radius: 8px; padding:10px; }
+        .btn-primary { background: linear-gradient(90deg,#0b3a8c 0%, #2563eb 100%); color:#ffffff; padding:10px 16px; border-radius:10px; border:none; cursor:pointer; font-weight:700; box-shadow: 0 8px 20px rgba(37,99,235,0.12) }
+        .btn-primary:hover { filter: brightness(0.95) }
+        a.link-muted { color:#2563eb; text-decoration:none; font-weight:600 }
+        label.required::after { content: ' *'; color:#dc2626; margin-left:4px; }
+        .small-note { font-size:13px; color:#64748b }
+        .terms-row{
+            display:flex;
+            align-items:flex-start;
+            gap:12px;
+            margin-top:4px;
+        }
+
+        .terms-row input[type="checkbox"]{
+            width:18px;
+            height:18px;
+            margin-top:2px;
+            flex-shrink:0;
+        }
+
+        .terms-label{
+            margin:0;
+            font-size:13px;
+            color:#475569;
+            line-height:1.5;
+            font-weight:500;
+        }
+
+        .terms-label a{
+            color:#2563eb;
+            text-decoration:none;
+            font-weight:600;
+        }
+
+        /* PASSWORD GUIDE */
+
+        .password-guide{
+
+            margin-top:8px;
+
+            font-size:0.82rem;
+
+            line-height:1.6;
+
+            color:#64748b;
+        }
+
+        .password-guide.error{
+            color:#dc2626;
+        }
+
+        .password-guide.success{
+            color:#16a34a;
+        }
+    </style>
+</head>
+<body>
+    {% include 'partials/top_main.html' %}
+    <div class="signup-container">
+        <header class="signup-header">
+            <h1>Create Account</h1>
+            <p>Complete the form below to create your account. Select a role to access role-specific dashboards and features.</p>
+        </header>
+
+        <main class="signup-shell">
+
+        {% if error %}
+        <div class="alert">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('routes.signup') }}">
+            <div class="form-row">
+                <label for="full_name" class="required">Full name</label>
+                <input id="full_name" name="full_name" type="text" required placeholder="Your full name" value="{{ request.form.get('full_name', '') }}">
+            </div>
+            <div class="form-row">
+                <label for="username" class="required">Username</label>
+                <input id="username" name="username" type="text" required placeholder="Choose a username" value="{{ request.form.get('username', '') }}">
+                {% if error_field == 'username' and error %}
+                <div class="field-error server">{{ error }}</div>
+                {% else %}
+                <div class="field-error" id="error-username" style="display:none"></div>
+                {% endif %}
+            </div>
+            <div class="form-row">
+                <label for="email" class="required">Email</label>
+                <input id="signup-email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="Your email address"
+                    value="{{ request.form.get('email', '') }}">
+                {% if error_field == 'email' and error %}
+                <div class="field-error server">{{ error }}</div>
+                {% else %}
+                <div class="field-error" id="error-email" style="display:none"></div>
+                {% endif %}
+            </div>
+            <div class="form-row">
+                <label for="role" class="required">Role</label>
+                <input
+                    type="text"
+                    value="Homeowner"
+                    readonly>
+                <input
+                    type="hidden"
+                    id="role"
+                    name="role"
+                    value="homeowner">
+            </div>
+            <div class="form-row">
+                <label for="password" class="required">
+                    Password
+                </label>
+
+                <input id="password"
+                    name="password"
+                    type="password"
+                    required
+                    minlength="8"
+                    maxlength="50"
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                    title="Password must contain uppercase, lowercase, number and special character."
+                    placeholder="At least 8 characters with uppercase, lowercase, number and symbol">
+                <div id="password-guide" class="password-guide">
+                    Password must contain:
+                    • 8+ characters
+                    • uppercase letter
+                    • lowercase letter
+                    • number
+                    • special character
+
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label for="confirm_password" class="required">
+                    Confirm password
+                </label>
+
+                <input id="confirm_password"
+                    name="confirm_password"
+                    type="password"
+                    required
+                    placeholder="Repeat password">
+                <div id="confirm-status" class="password-guide">
+                    Confirm password must match the password.
+                </div>
+            </div>
+            <div class="terms-row">
+
+                <input
+                    id="accept_terms"
+                    name="accept_terms"
+                    type="checkbox"
+                    value="1"
+                >
+
+                <label for="accept_terms" class="terms-label">
+
+                    By creating an account you agree to our
+
+                    <a href="#">
+                        terms
+                    </a>
+
+                    and
+
+                    <a href="#">
+                        privacy policy
+                    </a>.
+
+                </label>
+
+            </div>
+            <div class="field-error" id="error-accept_terms" style="display:none; margin-top:6px"></div>
+
+            <div class="actions">
+                <button type="submit" class="btn-primary">Create account</button>
+                <a class="link-muted" href="{{ url_for('routes.login') }}">Back to sign in</a>
+            </div>
+            <p class="small-note" style="margin-top:10px">You can change your profile details later from your account settings.</p>
+        </form>
+
+        <div id="form-error" class="alert" style="display:none; margin-top:14px"></div>
+
+    </main>
+
+    <script>
+    (function(){
+        const form = document.querySelector('form');
+        const showError = (id, msg) => {
+            let el = document.getElementById('error-' + id);
+            if (!el) {
+                const input = document.getElementById(id);
+                if (input && input.parentNode) {
+                    el = document.createElement('div');
+                    el.id = 'error-' + id;
+                    el.className = 'field-error';
+                    input.parentNode.appendChild(el);
+                }
+            }
+            if (el) { el.textContent = msg; el.style.display = 'block'; }
+        };
+        const clearError = (id) => {
+            const el = document.getElementById('error-' + id);
+            if (el) { el.textContent = ''; el.style.display = 'none'; }
+        };
+        const setFormError = (msg) => {
+            const fe = document.getElementById('form-error');
+            if (!fe) return;
+            if (!msg) { fe.style.display='none'; fe.textContent=''; }
+            else { fe.style.display='block'; fe.textContent = msg; }
+        };
+
+        form.addEventListener('submit', function(e){
+            setFormError('');
+            ['full_name','username','signup-email','role','password','confirm_password'].forEach(clearError);
+            const errAccept = document.getElementById('error-accept_terms'); if (errAccept) errAccept.style.display='none';
+
+            let valid = true;
+            const fullName = (document.getElementById('full_name').value||'').trim();
+            const username = (document.getElementById('username').value||'').trim();
+            const email = (document.getElementById('signup-email').value||'').trim();
+            const role = (document.getElementById('role').value||'').trim();
+            const password = document.getElementById('password').value||'';
+            const confirm = document.getElementById('confirm_password').value||'';
+            const accept = document.getElementById('accept_terms').checked;
+
+            if (!fullName) { showError('full_name','Full name is required'); valid = false; }
+            if (!username) { showError('username','Username is required'); valid = false; }
+            else if (username.length < 3) { showError('username','Username must be at least 3 characters'); valid = false; }
+            if (!email) { showError('email','Email is required'); valid = false; }
+            else {
+                const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\\.,;:\s@\"]+\.)+[^<>()[\]\\.,;:\s@\"]{2,})$/i;
+                if (!re.test(email)) { showError('email','Enter a valid email address'); valid = false; }
+            }
+            if (!role) { showError('role','Please select a role'); valid = false; }
+            if (!password) { showError('password','Password is required'); valid = false; }
+            else {
+                const strongPassword =
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/;
+                if(password.length < 8){
+                    showError(
+                        'password',
+                        'Password must be at least 8 characters'
+                    );
+                    valid = false;
+                }else if(!strongPassword.test(password)){
+                    showError(
+                        'password',
+                        'Password must contain uppercase, lowercase, number and special character'
+                    );
+                    valid = false;
+                }
+            }
+            if (!confirm) { showError('confirm_password','Please confirm your password'); valid = false; }
+            else if (password !== confirm) { showError('confirm_password','Passwords do not match'); valid = false; }
+            if (!accept) { const el = document.getElementById('error-accept_terms'); if (el) { el.textContent = 'You must accept the terms to create an account.'; el.style.display='block'; } valid = false; }
+
+            if (!valid) {
+                setFormError('Please fix the errors highlighted below.');
+                e.preventDefault();
+                window.scrollTo({top: document.querySelector('.signup-shell').offsetTop - 20, behavior: 'smooth'});
+                return false;
+            }
+
+            e.preventDefault();
+
+            const signupModal =
+                document.getElementById('signup-modal');
+
+            signupModal.classList.add('show');
+
+            document.getElementById('cancel-signup').onclick = function(){
+
+                signupModal.classList.remove('show');
+
+            };
+
+            document.getElementById('confirm-signup').onclick = function(){
+
+                form.submit();
+
+            };
+        });
+
+        // clear specific field on input
+        ['full_name','username','signup-email','role','password','confirm_password'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('input', () => clearError(id));
+        });
+        const acceptEl = document.getElementById('accept_terms'); if (acceptEl) acceptEl.addEventListener('change', ()=> { const e = document.getElementById('error-accept_terms'); if (e) e.style.display='none'; });
+    })();
+
+    // ===== LIVE PASSWORD VALIDATION =====
+
+    const passwordInput =
+        document.getElementById('password');
+
+    const confirmInput =
+        document.getElementById('confirm_password');
+
+    const confirmStatus =
+        document.getElementById('confirm-status');
+
+    if(passwordInput && confirmInput){
+
+        function validatePasswordMatch(){
+
+            const password =
+                passwordInput.value.trim();
+
+            const confirmPassword =
+                confirmInput.value.trim();
+
+            if(password === ''){
+
+                confirmStatus.textContent =
+                    'Confirm password must match the password.';
+
+                confirmStatus.className =
+                    'password-guide';
+
+                return;
+            }
+
+            if(confirmPassword === ''){
+
+                confirmStatus.innerHTML = `
+                    Please confirm your password.<br>
+                    Passwords must match.
+                `;
+
+                confirmStatus.className =
+                    'password-guide error';
+
+                return;
+            }
+
+            if(password === confirmPassword){
+
+                confirmStatus.textContent =
+                    'Passwords match.';
+
+                confirmStatus.className =
+                    'password-guide success';
+
+            }else{
+
+                confirmStatus.textContent =
+                    'Passwords do not match.';
+
+                confirmStatus.className =
+                    'password-guide error';
+            }
+        }
+
+        passwordInput.addEventListener(
+            'input',
+            validatePasswordMatch
+        );
+
+        confirmInput.addEventListener(
+            'input',
+            validatePasswordMatch
+        );
+    }
+
+    </script>
+    <!-- SIGNUP CONFIRM MODAL -->
+    <div id="signup-modal" class="logout-modal">
+
+        <div class="logout-modal-box">
+
+            <div class="logout-icon">
+                ✓
+            </div>
+
+            <h3>Create Account</h3>
+
+            <p>
+                Are you sure you want to create this account?
+            </p>
+
+            <div class="logout-actions">
+
+                <button type="button"
+                        id="cancel-signup"
+                        class="logout-btn cancel-btn">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        id="confirm-signup"
+                        class="logout-btn confirm-btn">
+                    Create
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    <footer class="page-footer">Copyright © 2026 DLP Hub: Compliance & Tribunal System. All Rights Reserved.</footer>
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ role }} Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% include 'partials/top_main.html' %}
+
+<div class="container">
+    <div class="dashboard-grid">
+        <main class="main-panel">
+            <section class="profile-card">
+                {% if user_info.avatar_url %}
+                <div class="avatar"><img src="{{ user_info.avatar_url }}" alt="avatar" class="avatar-img"></div>
+                {% else %}
+                <div class="avatar">{{ (user_info.company_name or user_info.name).split(' ')[0][0] }}{{ (user_info.company_name or user_info.name).split(' ')[1][0] if (user_info.company_name or user_info.name).split(' ')|length > 1 else '' }}</div>
+                {% endif %}
+                <h1>Hello, {{ user_info.company_name or user_info.name }}</h1>
+                <p>Developer company profile</p>
+                {% if user_info.person_in_charge %}
+                <div class="profile-meta">PIC: {{ user_info.person_in_charge }}{% if user_info.contact_state %} ({{ user_info.contact_state }}){% endif %}</div>
+                <div class="profile-meta">{{ user_info.phone_number or 'No phone number on file' }}{% if user_info.email %} · {{ user_info.email }}{% endif %}</div>
+                {% if user_info.office_address %}
+                <div class="profile-meta">{{ user_info.office_address }}</div>
+                {% endif %}
+                {% else %}
+                <div class="profile-meta">{{ user_info.unit or 'Track repair progress and close settled cases automatically' }}</div>
+                {% endif %}
+            </section>
+
+            <div class="panel-top">
+
+                <div class="heading-group">
+
+                    <h2>{{ role }} Dashboard</h2>
+
+                    <p>
+                        Review status, update cases,
+                        and generate tribunal reports.
+                    </p>
+
+                </div>
+
+                <div class="developer-report-layout">
+
+                <!-- LANGUAGE -->
+                <div class="report-row top-report-row">
+
+                    <div class="field-label">
+                        Language
+                    </div>
+
+                    <select
+                        id="language-select"
+                        onchange="invalidateReportExport()">
+
+                        <option value="ms">Bahasa Malaysia</option>
+                        <option value="en">English</option>
+
+                    </select>
+
+                    <div class="report-buttons">
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="generateReport('{{ role }}')">
+
+                            Generate Report
+
+                        </button>
+
+                        <form
+                            id="pdf-form"
+                            action="{{ url_for('routes.export_pdf') }}"
+                            method="POST">
+
+                            <input type="hidden" name="role" value="{{ role }}">
+                            <input type="hidden" name="language" id="pdf-language" value="ms">
+                            <input type="hidden" name="project_name" id="pdf-project-name" value="{{ selected_project_name }}">
+                            <input type="hidden" name="claimant_user_id" id="pdf-claimant-user-id" value="">
+                            <input type="hidden" name="ai_report" id="pdf-ai-report" value="">
+
+                            <button
+                                id="export-btn"
+                                class="btn btn-secondary"
+                                disabled>
+
+                                Export PDF
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!-- PROJECT -->
+                <div class="report-row">
+
+                    <div class="field-label">
+                        Project
+                    </div>
+
+                    <select
+                        id="project-select"
+                        onchange="handleProjectChange()">
+
+                        <option value="" {% if not selected_project_name %}selected{% endif %}>
+                            Choose project
+                        </option>
+
+                        {% if project_claimants_map %}
+
+                            {% for project in project_claimants_map.keys() %}
+
+                            <option
+                                value="{{ project }}"
+                                {% if selected_project_name == project %}
+                                selected
+                                {% endif %}
+                            >
+
+                                {{ project }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <option value="">
+                                No projects available
+                            </option>
+
+                        {% endif %}
+
+                    </select>
+
+                </div>
+
+                <!-- CLAIMANT -->
+                <div class="report-row">
+
+                    <div class="field-label">
+                        Claimant
+                    </div>
+
+                    <select
+                        id="claimant-select"
+                        onchange="invalidateReportExport()">
+
+                        <option value="" {% if not selected_claimant_user_id %}selected{% endif %}>
+                            Choose claimant
+                        </option>
+
+                        {% set filtered_claimants =
+                            project_claimants_map.get(
+                                selected_project_name,
+                                []
+                            )
+                        %}
+
+                        {% if filtered_claimants %}
+
+                            {% for claimant in filtered_claimants %}
+
+                            <option
+                                value="{{ claimant.homeowner_id }}"
+                                {% if selected_claimant_user_id == claimant.homeowner_id %}selected{% endif %}>
+
+                                {{ claimant.unit or claimant.name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <option value="">
+                                No claimant available
+                            </option>
+
+                        {% endif %}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div id="report-output" class="report-box" style="display:none;">
+                <h2>AI Report Preview</h2>
+                <div class="report-preview" id="report-json"></div>
+            </div>
+
+            <div id="missing-data-panel" class="missing-data-panel" style="display:none;">
+                <h2>Missing Report Data</h2>
+                <p class="panel-note">Review the missing fields before generating or exporting the report.</p>
+                <div class="missing-data-summary" id="missing-data-summary"></div>
+                <div class="missing-data-scroll" id="missing-data-scroll"></div>
+            </div>
+
+            <section class="summary-cards">
+                <div class="summary-card card-all">
+                    <span class="icon icon-all">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.total or 0 }}</span>
+                        <span class="label">Total</span>
+                    </div>
+                </div>
+                <div class="summary-card card-new">
+                    <span class="icon icon-new">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.pending or 0 }}</span>
+                        <span class="label">Pending</span>
+                    </div>
+                </div>
+                <div class="summary-card card-investigation">
+                    <span class="icon icon-investigation">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="5" stroke="currentColor" stroke-width="2"/><path d="M15 15l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.investigation or 0 }}</span>
+                        <span class="label">In Progress</span>
+                    </div>
+                </div>
+                <div class="summary-card card-onhold">
+                    <span class="icon icon-onhold">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="3" height="12" rx="1.5" fill="currentColor"/><rect x="14" y="6" width="3" height="12" rx="1.5" fill="currentColor"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.on_hold or 0 }}</span>
+                        <span class="label">Delayed</span>
+                    </div>
+                </div>
+                <div class="summary-card card-appeal">
+                    <span class="icon icon-appeal">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l6 3v5c0 4-2.5 7.5-6 8-3.5-.5-6-4-6-8V7l6-3Z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 11v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.overdue or 0 }}</span>
+                        <span class="label">Overdue</span>
+                    </div>
+                </div>
+                <div class="summary-card card-resolved">
+                    <span class="icon icon-resolved">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="2" fill="none"/><path d="M9 12.5l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.completed or 0 }}</span>
+                        <span class="label">Completed</span>
+                    </div>
+                </div>
+                <div class="summary-card card-closed">
+                    <span class="icon icon-closed">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 12-12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.closed or 0 }}</span>
+                        <span class="label">Closed</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="card">
+                <h2>Defect Overview</h2>
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                        Status
+                        <select id="filter-status" onchange="applyFilters()" style="min-width: 160px;">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Delayed">Delayed</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                        Unit
+                        <select id="filter-unit" onchange="applyFilters()" style="min-width: 160px;">
+                            <option value="">All Units</option>
+                            {% set units = homeowner_claimants | map(attribute='unit') | unique | list %}
+                            {% for unit in units %}
+                            <option value="{{ unit }}">{{ unit }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <button class="btn btn-secondary" onclick="resetFilters()" style="padding: 0.7rem 1rem;">Reset Filters</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Unit</th>
+                                <th>Description</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+                                <th>Evidence</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="defect-table-body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div id="update-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Update Status</h2>
+        <p style="margin:0 0 12px; color: var(--muted);">Defect ID: <strong id="modal-defect-id"></strong></p>
+        <label style="display:block; margin-bottom:12px; color: var(--muted);">New Status</label>
+        <select id="new-status-select" style="width:100%;">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Delayed">Delayed</option>
+        </select>
+        <div id="completion-date-wrapper" style="display:none; margin-top:14px;">
+            <label style="display:block; margin-bottom:8px; color: var(--muted);">Completion Date</label>
+            <input type="date" id="completion-date">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="confirmUpdate()">Save</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="evidence-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-content" style="max-width:900px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h2>Evidence Preview</h2>
+            <button class="btn btn-secondary" onclick="closeEvidenceModal()">Close</button>
+        </div>
+        <div style="text-align:center;">
+            <img id="evidence-img" src="" alt="evidence" style="max-width:100%; max-height:70vh; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.08);" />
+        </div>
+    </div>
+</div>
+
+<div id="report-dashboard-config"
+    data-project-claimants='{{ project_claimants_map | tojson | forceescape }}'
+    data-default-project="{{ selected_project_name | e }}"
+    data-default-claimant="{{ selected_claimant_user_id }}"
+    style="display:none;"></div>
+
+<script>
+// Defect data from backend
+const allDefects = [
+    {% for defect in defects %}
+    {
+        id: {{ defect.id }},
+        unit: {{ defect.unit | tojson }},
+        desc: {{ defect.desc | tojson }},
+        deadline: {{ defect.deadline | tojson }},
+        status: {{ defect.status | tojson }},
+        display_status: {{ ('Closed' if defect.closed else defect.status) | tojson }},
+        closed: {{ defect.closed | lower }},
+        original_status: {{ defect.status | tojson }},
+        is_overdue: {{ defect.is_overdue | lower }},
+        evidence_uploaded: {{ defect.evidence_uploaded | lower }},
+        evidence_filename: {{ (defect.evidence_filename or '') | tojson }},
+        evidence_files: {{ (defect.evidence_files or []) | tojson }},
+        evidence_count: {{ defect.evidence_count or 0 }},
+        evidence_uploaded_at: {{ (defect.evidence_uploaded_at or '') | tojson }},
+        owner_id: {{ defect.owner_id | tojson }},
+        project_name: {{ (defect.project_name or '') | tojson }},
+    },
+    {% endfor %}
+];
+
+// Populate initial table
+function populateTable(data) {
+    const tbody = document.getElementById('defect-table-body');
+    tbody.innerHTML = '';
+    
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: var(--muted); padding: 2rem;">No defects match the selected filters.</td></tr>';
+    } else {
+        data.forEach(defect => {
+            const statusClass = defect.closed ? 'status-closed-badge' : (defect.display_status === 'Completed' ? 'status-completed' : 'status-pending');
+            const updateButton = defect.closed
+                ? '<button class="btn btn-secondary" disabled title="Case closed">Closed</button>'
+                : `<button class="btn btn-secondary" onclick="updateStatus(${defect.id})">Update</button>`;
+            const row = `
+                <tr>
+                    <td>#${defect.id}</td>
+                    <td>${defect.unit}</td>
+                    <td>${defect.desc}</td>
+                    <td>${defect.deadline}</td>
+                    <td>
+                        <span class="badge ${statusClass}">
+                            ${defect.display_status}
+                        </span>
+                    </td>
+                    <td style="white-space:nowrap;">
+                        ${renderEvidenceImages(defect)}
+                    </td>
+                    <td>
+                        ${updateButton}
+                    </td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+    }
+    
+    // Update summary cards with filtered data
+    updateSummaryCards(data);
+}
+
+function renderEvidenceImages(defect) {
+    const files = Array.isArray(defect.evidence_files) ? defect.evidence_files : [];
+    if (!files.length) return '-';
+    return files.map((file, index) => `
+        <img src="/evidence_image/${defect.id}?index=${index + 1}&v=${encodeURIComponent(file.uploaded_at || '')}"
+            alt="evidence-${defect.id}-${index + 1}"
+            onclick="openEvidenceModal(${defect.id}, ${index + 1})"
+            style="width:56px;height:56px;object-fit:cover;border-radius:6px;cursor:pointer; border:1px solid rgba(0,0,0,0.06); margin-right:6px;">
+    `).join('');
+}
+
+function openEvidenceModal(defectId, imageIndex = 1) {
+    const modal = document.getElementById('evidence-modal');
+    const img = document.getElementById('evidence-img');
+    img.src = `/evidence_image/${defectId}?index=${imageIndex}&v=${Date.now()}`;
+    modal.style.display = 'flex';
+}
+
+function closeEvidenceModal() {
+    const modal = document.getElementById('evidence-modal');
+    const img = document.getElementById('evidence-img');
+    img.src = '';
+    modal.style.display = 'none';
+}
+
+function updateStatus(id) {
+    const defect = allDefects.find(d => Number(d.id) === Number(id));
+    if (defect && defect.closed) {
+        showToast('Case is closed.', 'info');
+        return;
+    }
+    document.getElementById('modal-defect-id').innerText = id;
+    document.getElementById('update-modal').classList.add('show');
+    document.getElementById('new-status-select').value = 'In Progress';
+    document.getElementById('completion-date-wrapper').style.display = 'none';
+    document.getElementById('completion-date').value = '';
+}
+function closeModal() {
+    document.getElementById('update-modal').classList.remove('show');
+}
+function confirmUpdate() {
+    const id = document.getElementById('modal-defect-id').innerText;
+    const status = document.getElementById('new-status-select').value;
+    const completed_date = document.getElementById('completion-date').value;
+
+    if (status === 'Completed' && !completed_date) {
+        showToast('Please select completion date before marking as Completed.', 'warning');
+        return;
+    }
+
+    if (status === 'Completed' && completed_date) {
+        const selectedDate = new Date(`${completed_date}T00:00:00`);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (selectedDate > today) {
+            showToast('Completion date cannot be in the future.', 'warning');
+            return;
+        }
+    }
+
+    fetch('/update_status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status, completed_date })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Status updated.', 'success');
+            closeModal();
+
+            const defectId = parseInt(id, 10);
+            const defect = allDefects.find(d => Number(d.id) === defectId);
+            if (defect) {
+                defect.status = data.new_status || status;
+                defect.display_status = data.new_status || status;
+                defect.original_status = data.new_status || status;
+                defect.completed_date = data.completed_date || '';
+                defect.closed = false;
+            }
+
+            // Prevent stale AI text from being exported after status changes.
+            const reportOutput = document.getElementById('report-output');
+            const reportJson = document.getElementById('report-json');
+            const pdfReport = document.getElementById('pdf-ai-report');
+            const exportBtn = document.getElementById('export-btn');
+
+            if (reportOutput) reportOutput.style.display = 'block';
+            if (reportJson) {
+                reportJson.innerText = 'Status updated. Please generate report again before exporting PDF.';
+            }
+            if (pdfReport) pdfReport.value = '';
+            if (exportBtn) exportBtn.disabled = true;
+
+            applyFilters();
+        } else {
+            showToast(data.error || data.message || 'Update failed.', 'error');
+        }
+    })
+    .catch((error) => showToast(error?.message || 'Update failed.', 'error'));
+}
+const statusSelect = document.getElementById('new-status-select');
+if (statusSelect) {
+    statusSelect.addEventListener('change', function () {
+        const wrapper = document.getElementById('completion-date-wrapper');
+        wrapper.style.display = (this.value === 'Completed') ? 'block' : 'none';
+    });
+}
+</script>
+<button id="back-to-top" type="button" aria-label="Back to top" title="Back to top" style="position:fixed; right:24px; bottom:24px; z-index:1200; display:none; align-items:center; justify-content:center; width:48px; height:48px; border:none; border-radius:999px; background:#2563eb; color:#ffffff; box-shadow:0 12px 30px rgba(37, 99, 235, 0.28); cursor:pointer;">
+    <span style="font-size:20px; line-height:1; font-weight:800;">↑</span>
+</button>
+<script>
+(() => {
+    const button = document.getElementById('back-to-top');
+    if (!button) return;
+
+    const toggleButton = () => {
+        button.style.display = window.scrollY > 200 ? 'inline-flex' : 'none';
+    };
+
+    window.addEventListener('scroll', toggleButton, { passive: true });
+    button.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    toggleButton();
+})();
+</script>
+<script src="{{ url_for('static', filename='dashboard.js') }}?v=report-timeout-fix-1" defer></script>
+<div id="toast"></div>
+<footer class="page-footer">Copyright ©2026 DLP Compliance Report Generator. All Rights Reserved.</footer>
+</body>
+</html>

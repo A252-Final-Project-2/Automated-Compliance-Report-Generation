@@ -1,0 +1,1617 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if role == 'Legal' %}{{ user_info.name or legal.legal_name or account.username or session.get('username') or role }}{% elif role == 'Homeowner' %}{{ personal.full_name or user_info.name or account.username or session.get('username') or role }}{% else %}{{ session.get('username') or account.username or user_info.company_name or user_info.name or role }}{% endif %} Profile</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+    
+    input:invalid,
+    textarea:invalid,
+    select:invalid{
+        border-color:#ef4444;
+    }
+        {% set display_name = personal.full_name or user_info.name or account.username or session.get('username') or role %}
+        {% if role == 'Legal' %}
+            {% set display_name = user_info.name or legal.legal_name or account.username or session.get('username') or role %}
+        {% elif role == 'Developer' %}
+            {% set display_name = session.get('username') or account.username or user_info.company_name or user_info.name or role %}
+        {% endif %}
+    input:valid,
+    textarea:valid,
+        <title>{{ display_name }} Profile</title>
+        border-color:#22c55e;
+    }
+    .auto-filled{
+        background:#f8fafc;
+        border:1px dashed #94a3b8;
+    }
+    .auto-filled-label{
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        font-size:0.78rem;
+        color:#64748b;
+        margin-top:6px;
+    }
+    .profile-shell { max-width:1280px; margin:28px auto; display:grid; grid-template-columns:240px 1fr; gap:20px; }
+    .profile-sidebar{
+      background:#ffffff;
+      border-radius:20px;
+      padding:24px;
+      border:1px solid rgba(15,23,42,0.06);
+      box-shadow:
+          0 10px 15px -3px rgba(0,0,0,0.08),
+          0 4px 6px -2px rgba(0,0,0,0.03);
+    }
+    .profile-content{
+      background:#ffffff;
+      border-radius:20px;
+      padding:32px;
+      border:1px solid rgba(15,23,42,0.06);
+      box-shadow:
+          0 10px 15px -3px rgba(0,0,0,0.08),
+          0 4px 6px -2px rgba(0,0,0,0.03);
+    }
+    .profile-banner{
+      background:
+          linear-gradient(135deg,#2563eb 0%,#1e40af 100%);
+      color:white;
+      padding:28px;
+      border-radius:20px;
+      margin-bottom:28px;
+    }
+    .profile-banner h1{
+        margin:0;
+        font-size:1.8rem;
+    }
+    .profile-banner p{
+        margin-top:8px;
+        opacity:0.9;
+    }
+    .section form{
+        margin-top:18px;
+    }
+    .field{
+        margin-bottom:20px;
+    }
+    label{
+        display:block;
+        margin-bottom:8px;
+        font-size:0.95rem;
+        font-weight:600;
+        color:#334155;
+    }
+    .nav-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:600;
+      color:#475569;
+      transition:all .2s ease;
+    }
+
+    .nav-item:hover{
+        background:#f8fafc;
+        color:#2563eb;
+    }
+
+    .nav-item.active{
+        background:#eff6ff;
+        color:#2563eb;
+        font-weight:700;
+    }
+    .section { display:none }
+    .section.active { display:block }
+    .field { margin-bottom:12px }
+    label { display:block; font-weight:600; margin-bottom:6px }
+    input,
+    textarea{
+        width:100%;
+        padding:12px 14px;
+        border-radius:12px;
+        border:1px solid #dbe4f0;
+        background:#ffffff;
+        font:inherit;
+        transition:all .2s ease;
+        box-sizing:border-box;
+    }
+
+    select{
+      width:100%;
+      padding:12px 44px 12px 14px;
+      border-radius:12px;
+      border:1px solid #dbe4f0;
+      background-color:#ffffff;
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+
+      background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+
+      background-repeat:no-repeat;
+      background-position:right 14px center;
+      background-size:18px;
+
+      font:inherit;
+      transition:all .2s ease;
+      box-sizing:border-box;
+      cursor:pointer;
+  }
+
+    input:focus,
+    select:focus,
+    textarea:focus{
+        outline:none;
+        border-color:#2563eb;
+        box-shadow:0 0 0 4px rgba(37,99,235,0.12);
+    }
+    .btn-primary{
+      border:0;
+      border-radius:14px;
+      padding:12px 18px;
+      font:inherit;
+      font-weight:700;
+      color:#fff;
+      background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);
+      cursor:pointer;
+      transition:all .2s ease;
+      box-shadow:
+          0 10px 20px rgba(37,99,235,0.18);
+    }
+
+    .btn-primary:hover{
+        transform:translateY(-1px);
+        box-shadow:
+            0 16px 24px rgba(37,99,235,0.22);
+    }
+    .btn-primary:disabled {
+        background: #9ca3af; cursor: not-allowed; box-shadow: none; transform: none; filter: none;
+    }
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+        backdrop-filter: blur(4px);
+    }
+    .modal-content {
+        background: #fff;
+        padding: 24px;
+        border-radius: 16px;
+        max-width: 480px;
+        width: 100%;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    .modal-content h2 { margin-top: 0; font-size: 1.25rem; }
+    .modal-actions { margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; }
+    .modal-actions .btn-secondary { background: #f1f5f9; color: #1e293b; border: none; padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 700; }
+    .modal-actions .btn-secondary:hover { background: #e2e8f0; }
+    input[type="file"]{
+      padding:10px;
+      background:#f8fafc;
+      border:1px dashed #cbd5e1;
+      cursor:pointer;
+    }
+
+    /* PASSWORD GUIDE */
+
+    .password-guide{
+
+        margin-top:8px;
+
+        font-size:0.82rem;
+
+        line-height:1.6;
+
+        color:#64748b;
+    }
+
+    .password-guide.error{
+        color:#dc2626;
+    }
+
+    .password-guide.success{
+        color:#16a34a;
+    }
+
+    input[type="file"]:disabled{
+        opacity:0.7;
+        cursor:not-allowed;
+        background:#f1f5f9;
+    }
+  </style>
+</head>
+<body>
+
+    {% set is_main_developer = (session.get('username', '') | lower) == 'main_developer' %}
+
+    <div id="toast"></div>
+
+    {% include 'partials/top_main.html' %}
+
+    <main class="profile-shell">
+    <aside class="profile-sidebar">
+      <div style="text-align:center; margin-bottom:12px">
+        <div style="width:84px;height:84px;border-radius:999px;overflow:hidden;margin:0 auto;">
+        <img id="avatar-preview"
+          src="{{ (user_info.avatar_url or url_for('static', filename='img/default-avatar.png')) }}?v={{ range(1,999999) | random }}"
+          class="avatar-img"
+          alt="avatar"
+          style="width:84px;height:84px;object-fit:cover;border-radius:50%;">
+        </div>
+                <div style="margin-top:8px">{% if role == 'Legal' %}{{ user_info.name or legal.legal_name or account.username or session.get('username') or role }}{% elif role == 'Homeowner' %}{{ personal.full_name or user_info.name or account.username or session.get('username') or role }}{% else %}{{ session.get('username') or account.username or user_info.company_name or user_info.name or role }}{% endif %}</div>
+                <div style="color:var(--muted);font-size:0.9rem">{{ user_info.person_in_charge or user_info.unit }}</div>
+      </div>
+            <nav>
+                <div class="nav-item active" data-target="account">Account</div>
+                <div class="nav-item" data-target="personal">Personal</div>
+                {% if role == 'Homeowner' %}
+                <div class="nav-item" data-target="homeowner">Homeowner</div>
+                <div class="nav-item" data-target="respondent">Respondent (View Only)</div>
+                {% elif role == 'Developer' %}
+                <div class="nav-item" data-target="respondent">Company</div>
+                {% elif role == 'Legal' %}
+                <div class="nav-item" data-target="legal">Legal Profile</div>
+                {% elif role == 'Admin' %}
+                <div class="nav-item" data-target="admin">Admin</div>
+                {% endif %}
+            </nav>
+    </aside>
+
+    <section class="profile-content">
+      <div class="profile-banner">
+          <div>
+              <h1>{% if role == 'Legal' %}{{ user_info.name or legal.legal_name or account.username or session.get('username') or role }}{% elif role == 'Homeowner' %}{{ personal.full_name or user_info.name or account.username or session.get('username') or role }}{% else %}{{ session.get('username') or account.username or user_info.company_name or user_info.name or role }}{% endif %}</h1>
+              <p>{% if role == 'Legal' %}{{ user_info.name or legal.legal_name or account.username or session.get('username') or role }}{% elif role == 'Homeowner' %}{{ personal.full_name or user_info.name or account.username or session.get('username') or role }}{% else %}{{ session.get('username') or account.username or role }}{% endif %} Profile Management</p>
+          </div>
+      </div>
+
+      <div id="account" class="section active">
+        <h3>Account Information</h3>
+        <form id="account-form" method="POST" action="{{ url_for('routes.profile_update', section='account') }}">
+          <div class="field">
+            <label>Username</label>
+
+            <input type="text"
+                id="username"
+                name="username"
+                value="{{ session.get('username') or account.username }}"
+                readonly
+                class="auto-filled">
+    
+            <div class="auto-filled-label">
+                Username cannot be changed
+            </div>
+          </div>
+          <div class="field">
+            <label>New Password (leave blank to keep)</label>
+            <input type="password"
+                id="password"
+                name="password"
+                minlength="8"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                title="Password must contain at least 8 characters, including uppercase, lowercase, number, and special character."
+                placeholder="Minimum 8 characters">
+            <div id="password-guide" class="password-guide">
+                Password must contain:
+                • 8+ characters
+                • uppercase letter
+                • lowercase letter
+                • number
+                • special character
+
+            </div>
+          </div>
+          <div class="field">
+                <label>Confirm Password</label>
+                <input type="password"
+                    id="confirm_password"
+                    name="confirm_password">
+                <div id="confirm-status" class="password-guide">
+                    Confirm password must match the new password.
+                </div>
+          </div>
+          <button type="submit" class="btn-primary">Save Account</button>
+        </form>
+        <hr style="margin:12px 0">
+        <h4>Profile Picture</h4>
+          <form id="avatar-form"
+                method="POST"
+                action="{{ url_for('routes.upload_avatar') }}"
+                enctype="multipart/form-data">
+              <div class="field">
+                  <label>Upload Image</label>
+                  <input
+                      type="file"
+                      name="avatar"
+                      id="avatar-input"
+                      accept=".jpg,.jpeg,.jfif,.png,.webp"
+                      required>
+              </div>
+              <span id="avatar-loading"
+                    style="display:none; margin-top:10px; color:var(--muted);">
+                  Uploading image...
+              </span>
+          </form>
+        </div>
+
+        <div id="personal" class="section">
+            <h3>Personal Details</h3>
+            <form method="POST"
+                action="{{ url_for('routes.profile_update', section='personal') }}">
+                <div class="field">
+                    <label>Full name</label>
+                    <input id="personal-full-name" name="full_name"
+                        value="{{ personal.full_name }}"
+                        required
+                        minlength="3"
+                        maxlength="100"
+                        pattern="[A-Za-z\s@.'-]+"
+                        title="Only letters and valid name characters are allowed.">
+                    {% if role == 'Homeowner' %}
+                    <div class="auto-filled-label">This Personal Full name will be used for Claimant Name below; edit here to change Claimant Name.</div>
+                    {% endif %}
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email"
+                        name="email"
+                        value="{{ personal.email }}"
+                        required
+                        maxlength="120"
+                        placeholder="example@email.com">
+                </div>
+                {% if role != 'Legal' %}
+                <div class="field">
+                    <label>Unit</label>
+                    <input name="unit"
+                        value="{{ personal.unit }}"
+                        class="auto-filled"
+                        readonly>
+                    <div class="auto-filled-label">
+                        {% if role == 'Homeowner' %}
+                        Automatically linked to homeowner defect unit
+                        {% else %}
+                        Automatically linked to your account profile
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                <div class="field">
+                    <label>Role</label>
+                    <input name="role"
+                        value="{{ personal.role }}"
+                        readonly>
+                </div>
+                <button type="submit"
+                    class="btn-primary">
+                    Save Personal
+                </button>
+            </form>
+        </div>
+
+    <div id="homeowner" class="section" style="{% if role != 'Homeowner' %}display:none{% endif %}">
+        <div class="details-card">
+          <div class="details-header">
+            <div>
+              <h3>Claimant Details</h3>
+              <p>Manage claimant and tribunal information.</p>
+            </div>
+          </div>
+          <form method="POST"
+            action="{{ url_for('routes.profile_update', section='homeowner') }}">
+            <div class="details-grid">
+                            <div class="field">
+                                <label>Claimant Name</label>
+                                <input id="claimant-name" type="text"
+                                        name="name"
+                                        value="{{ personal.full_name or homeowner.name }}"
+                                        readonly
+                                        required
+                                        minlength="3"
+                                        maxlength="100"
+                                        pattern="[A-Za-z\s@.'-]+"
+                                        title="Only letters are allowed.">
+                                <div class="auto-filled-label">Claimant Name is taken from your Personal Full name and is managed there.</div>
+                            </div>
+              <div class="field">
+                <label>Phone Number</label>
+                <input type="tel"
+                    id="phone_number"
+                    name="phone_number"
+                    value="{{ homeowner.phone_number }}"
+                    required
+                    maxlength="15"
+                    pattern="^01[0-9]-?[0-9]{7,8}$"
+                    placeholder="e.g. 012-3456789"
+                    title="Enter valid Malaysian phone number.">
+              </div>
+              <div class="field">
+                <label>Identification Card (IC) / Passport Number</label>
+                <input type="text"
+                    id="ic_number"
+                    name="ic_number"
+                    value="{{ homeowner.ic_number }}"
+                    required
+                    maxlength="20"
+                    pattern="^[A-Za-z0-9-]+$"
+                    placeholder="e.g. 010203-10-1234"
+                    title="Only letters, numbers and dash allowed.">
+              </div>
+              <div class="field">
+                <label>State</label>
+                <select id="state-name"
+                  name="state_name"
+                  onchange="syncCourtLocations()">
+                  <option value="">Select State</option>
+                    {% for state_option in state_options %}
+                    <option value="{{ state_option }}"
+                      {% if homeowner.state_name == state_option %}selected{% endif %}>
+                      {{ state_option }}
+                    </option>
+                    {% endfor %}
+                </select>
+              </div>
+              <div class="field">
+                <label>Court Location</label>
+                <select id="court-location"
+                        name="court_location"
+                        data-selected-court="{{ homeowner.court_location | e }}">
+                    <option value="">Select state first</option>
+                </select>
+                <small style="color:var(--muted);">
+                    Tribunal branches are grouped by selected state.
+                </small>
+            </div>
+              <div class="field">
+                <label>Item / Service</label>
+                  <select name="item_service">
+                    {% for item_service_option in item_service_options %}
+                    <option value="{{ item_service_option }}"
+                      {% if homeowner.item_service == item_service_option %}selected{% endif %}>
+                      {{ item_service_option }}
+                      </option>
+                      {% endfor %}
+                  </select>
+              </div>
+              <div class="field">
+                <label>Transaction Date</label>
+                <input type="date"
+                    name="transaction_date"
+                    value="{{ homeowner.transaction_date }}">
+              </div>
+              <div class="field">
+                <label>Claim Amount (RM)</label>
+                <input type="number"
+                    name="claim_amount"
+                    value="{{ homeowner.claim_amount }}"
+                    placeholder="e.g. 12000.00"
+                    min="1"
+                    max="50000"
+                    step="0.01"
+                    required>
+              </div>
+              <div class="field">
+                  <label>Project Name</label>
+                  <select id="project-name"
+                      name="project_name"
+                      onchange="populateProjectDetails()">
+                    <option value="">Select Project</option>
+                    {% for project in projects %}
+                    <option value="{{ project.project_name }}"
+                        {% if homeowner.project_name == project.project_name %}selected{% endif %}>
+                        {{ project.project_name }}
+                    </option>
+                    {% endfor %}
+                  </select>
+              </div>
+              <div class="field">
+                <label>Defect Unit</label>
+                <select id="defect-unit"
+                    name="defect_unit">
+                  <option value="">Select Unit</option>
+                </select>
+              </div>
+              <div class="field">
+                  <label>Defect Property State</label>
+                  <input type="text"
+                    id="defect-state"
+                    name="defect_state"
+                    value="{{ homeowner.defect_state }}"
+                    readonly>
+              </div>
+              <div class="field full-width">
+                  <label>Defect Property Address</label>
+                  <textarea id="defect-property-address"
+                    name="defect_property_address"
+                    readonly>{{ homeowner.defect_property_address }}</textarea>
+              </div>
+                          <div class="field full-width">
+                <label>Home Address (For Correspondence)</label>
+
+                <textarea name="address"
+                  required
+                  minlength="10"
+                  maxlength="300">{{ homeowner.address }}</textarea>
+            </div>
+
+            </div>
+
+            <button type="submit"
+                class="btn-primary">
+                Save Claimant Details
+            </button>
+          </form>
+        </div>
+    </div>
+            <div id="respondent" class="section">
+        <div class="details-card">
+          <div class="details-header">
+            <div>
+                            <h3>{% if role == 'Legal' %}Legal Respondent{% elif role == 'Developer' %}Developer Respondent{% elif role == 'Homeowner' %}Respondent Information (View Only){% else %}Respondent Information{% endif %}</h3>
+                            <p>{% if role == 'Homeowner' %}View the respondent company information linked to your selected project.{% elif role == 'Developer' %}Manage your developer and representative information.{% else %}Manage the respondent company information linked to your account.{% endif %}</p>
+            </div>
+          </div>
+          <form method="POST"
+            action="{{ url_for('routes.profile_update', section='respondent') }}"
+            {% if role == 'Homeowner' %}data-auto-lock{% endif %}>
+            <div class="details-grid">
+              <div class="field">
+                <label>Developer Company</label>
+                <input id="developer-company"
+                  name="company_name"
+                  value="{{ respondent.company_name }}"
+                  readonly>
+                  <div class="auto-filled-label">
+                      Auto-generated from selected project
+                  </div>
+              </div>
+                            {% if not is_main_developer %}
+              <div class="field">
+                <label>Person In Charge</label>
+                <input id="developer-pic"
+                    name="person_in_charge"
+                    value="{{ respondent.person_in_charge }}"
+                    {% if role == 'Developer' %}disabled{% else %}readonly{% endif %}>
+              </div>
+                            {% endif %}
+              <div class="field">
+                <label>Registration Number</label>
+               <input id="developer-registration"
+                    name="registration_number"
+                    value="{{ respondent.registration_number }}"
+                    readonly>
+              </div>
+              <div class="field">
+                                <label>{% if is_main_developer %}Office Phone Number{% else %}Phone Number{% endif %}</label>
+                <input id="developer-phone"
+                    name="phone_number"
+                    value="{{ respondent.phone_number }}"
+                    {% if role == 'Developer' %}disabled{% else %}readonly{% endif %}>
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <input id="developer-email"
+                    name="email"
+                    value="{{ respondent.email }}"
+                    {% if role == 'Developer' %}disabled{% else %}readonly{% endif %}>
+              </div>
+              <div class="field full-width">
+                <label>Company Address</label>
+                <textarea id="developer-address"
+                    name="address"
+                    {% if role == 'Developer' %}disabled{% else %}readonly{% endif %}>{{ respondent.address }}</textarea>
+              </div>
+            </div>
+            {% if role == 'Developer' %}
+            <button type="submit"
+                class="btn-primary">
+                Save Company Details
+            </button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+
+            <div id="legal" class="section" style="{% if role != 'Legal' %}display:none{% endif %}">
+        <div class="details-card">
+          <div class="details-header">
+            <div>
+                            <h3>Legal Profile Information</h3>
+                            <p>Manage your legal practitioner details and contact information.</p>
+            </div>
+          </div>
+          <form method="POST"
+            action="{{ url_for('routes.profile_update', section='legal') }}">
+            <div class="details-grid">
+              <div class="field">
+                <label>Legal Name</label>
+                <input id="legal-name"
+                    name="legal_name"
+                    type="text"
+                    value="{{ legal.legal_name }}"
+                    required>
+              </div>
+              <div class="field">
+                                <label>Office Phone Number</label>
+                <input id="legal-phone"
+                    name="phone_number"
+                    type="tel"
+                    value="{{ legal.phone_number }}">
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <input id="legal-email"
+                    name="email"
+                    type="email"
+                    value="{{ legal.email }}">
+              </div>
+              <div class="field full-width">
+                <label>Office Address</label>
+                <textarea id="legal-address"
+                    name="office_address">{{ legal.office_address }}</textarea>
+              </div>
+            </div>
+            <button type="submit"
+                class="btn-primary">
+                Save Legal Details
+            </button>
+          </form>
+        </div>
+      </div>
+
+            <div id="admin" class="section" style="{% if role != 'Admin' %}display:none{% endif %}">
+                <div class="details-card">
+                    <div class="details-header">
+                        <div>
+                            <h3>Administrator Overview</h3>
+                            <p>View your system access and account details.</p>
+                        </div>
+                    </div>
+                    <div class="details-grid">
+                        <div class="field">
+                            <label>Username</label>
+                            <input value="{{ account.username }}" readonly>
+                        </div>
+                        <div class="field">
+                            <label>Full Name</label>
+                            <input value="{{ personal.full_name }}" readonly>
+                        </div>
+                        <div class="field">
+                            <label>Email</label>
+                            <input value="{{ personal.email }}" readonly>
+                        </div>
+                        <div class="field">
+                            <label>Role</label>
+                            <input value="{{ personal.role }}" readonly>
+                        </div>
+                        <div class="field full-width">
+                            <label>Access Scope</label>
+                            <textarea readonly>System-wide oversight across homeowner, developer, and legal activity.</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+  </main>
+
+  <div id="password-confirm-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+        <h2>Confirm Password Change</h2>
+        <p style="margin:0 0 12px; color: var(--muted);">Are you sure you want to update your password?</p>
+        <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="password-cancel-btn">Cancel</button>
+            <button type="button" class="btn-primary" id="password-confirm-btn">Confirm Update</button>
+        </div>
+    </div>
+  </div>
+
+  <script>
+
+    // avatar upload form shows uploading indicator
+    var avatarForm = document.getElementById('avatar-form');
+    if(avatarForm){
+      avatarForm.addEventListener('submit', function(e){
+        var loading = document.getElementById('avatar-loading');
+        if(loading) loading.style.display = 'inline';
+      });
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = '';
+      toast.id = 'toast';
+      toast.classList.add('show');
+      toast.classList.add(type);
+
+      setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+    }
+
+    const flashMessage = {{ (message or '') | tojson }};
+    if(flashMessage && flashMessage !== "None"){
+        showToast(flashMessage, "success");
+    }
+
+    // ===== PROFILE EDIT FUNCTION =====
+      document.querySelectorAll(
+          '.section form:not(#avatar-form):not([data-auto-lock])'
+      ).forEach(function(form){
+      // all inputs except readonly role
+      const fields = form.querySelectorAll('input, textarea, select');
+
+      // disable all fields first
+      fields.forEach(field => {
+        if(!field.hasAttribute('readonly')){
+          field.disabled = true;
+        }
+      });
+
+      // hide save button first
+      const saveBtn = form.querySelector('button[type="submit"]');
+      if(saveBtn){
+        saveBtn.style.display = 'none';
+      }
+
+      // create edit button
+      const editBtn = document.createElement('button');
+      editBtn.type = 'button';
+      editBtn.textContent = 'Edit';
+      editBtn.className = 'btn-primary';
+
+      // insert edit button before save button
+      form.insertBefore(editBtn, saveBtn);
+
+      // when click edit
+      editBtn.addEventListener('click', function(){
+
+        fields.forEach(field => {
+          if(!field.hasAttribute('readonly')){
+            field.disabled = false;
+          }
+        });
+
+        editBtn.style.display = 'none';
+
+        if(saveBtn){
+          saveBtn.style.display = 'block';
+        }
+      });
+
+    form.addEventListener('submit', async function(e){
+
+        e.preventDefault();
+
+        // ===== ACCOUNT FORM VALIDATION =====
+
+        if(form.id === 'account-form'){
+
+            const password =
+                document.getElementById('password').value.trim();
+
+            const confirmPassword =
+                document.getElementById('confirm_password').value.trim();
+
+            // PASSWORD ENTERED
+            if(password !== ''){
+
+                // PASSWORD MATCH
+                if(password !== confirmPassword){
+
+                    showToast(
+                        'Please confirm your password. Passwords must match.',
+                        'error'
+                    );
+
+                    return;
+                }
+
+                // PASSWORD STRENGTH
+                const strongPassword =
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/;
+
+                if(password.length < 8){
+
+                    showToast(
+                        'Password must be at least 8 characters.',
+                        'error'
+                    );
+
+                    return;
+                }
+
+                if(!strongPassword.test(password)){
+
+                    showToast(
+                        'Password must contain uppercase, lowercase, number and special character.',
+                        'error'
+                    );
+
+                    return;
+                }
+
+                // CHECK SAME AS OLD PASSWORD
+                try{
+
+                    const response =
+                        await fetch('/check-password-same', {
+                            method:'POST',
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body:JSON.stringify({
+                                password:password
+                            })
+                        });
+
+                    const data =
+                        await response.json();
+
+                    if(data.same){
+
+                        showToast(
+                            'New password cannot be the same as current password.',
+                            'error'
+                        );
+
+                        return;
+                    }
+
+                }catch(error){
+
+                    showToast(
+                        'Unable to validate password.',
+                        'error'
+                    );
+
+                    return;
+                }
+            }
+        }
+
+        // ===== SHOW MODAL ONLY IF VALID =====
+
+        const saveModal =
+            document.getElementById('save-modal');
+
+        const confirmBtn =
+            document.getElementById('confirm-save');
+
+        const cancelBtn =
+            document.getElementById('cancel-save');
+
+        if(!saveModal || !confirmBtn || !cancelBtn){
+            return;
+        }
+
+        saveModal.classList.add('show');
+
+        cancelBtn.onclick = function(){
+
+            saveModal.classList.remove('show');
+
+        };
+
+        confirmBtn.onclick = function(){
+
+            if(saveBtn){
+
+                saveBtn.disabled = true;
+
+                saveBtn.textContent = 'Saving...';
+
+                saveBtn.style.opacity = '0.8';
+            }
+
+            saveModal.classList.remove('show');
+
+            form.submit();
+
+        };
+
+    });
+    });
+
+    // avatar upload loading
+    var avatarForm = document.getElementById('avatar-form');
+
+    if(avatarForm){
+      avatarForm.addEventListener('submit', function(){
+        var loading = document.getElementById('avatar-loading');
+
+        if(loading){
+          loading.style.display = 'inline';
+        }
+      });
+    }
+
+    function populateDeveloperPICs() {
+        const companySelect =
+            document.getElementById('developer-company');
+        const picSelect =
+            document.getElementById('developer-pic');
+        if(!companySelect || !picSelect) return;
+        const selectedCompany =
+            companySelect.value;
+        picSelect.innerHTML =
+            '<option value="">Select Person In Charge</option>';
+        if(!selectedCompany) return;
+        const companyData =
+            DEVELOPER_DATA[selectedCompany] || [];
+        companyData.forEach((developer) => {
+            const option =
+                document.createElement('option');
+            option.value =
+                developer.person_in_charge;
+            option.textContent =
+                developer.person_in_charge;
+            picSelect.appendChild(option);
+        });
+    }
+
+    function populateDeveloperInfo() {
+        const companySelect =
+            document.getElementById('developer-company');
+        const picSelect =
+            document.getElementById('developer-pic');
+        const registrationInput =
+            document.getElementById('developer-registration');
+        const phoneInput =
+            document.getElementById('developer-phone');
+        const addressInput =
+            document.getElementById('developer-address');
+        const selectedCompany =
+            companySelect.value;
+        const companyData =
+            DEVELOPER_DATA[selectedCompany] || [];
+        let selectedDeveloper = null;
+        if(picSelect){
+            populateDeveloperPICs();
+            const selectedPIC =
+                picSelect.value;
+            selectedDeveloper =
+                companyData.find(
+                    developer =>
+                        developer.person_in_charge === selectedPIC
+                );
+        } else {
+            selectedDeveloper = companyData[0] || null;
+        }
+        if(!selectedDeveloper) return;
+        registrationInput.value =
+            selectedDeveloper.registration_number || '';
+        phoneInput.value =
+            selectedDeveloper.phone_number || '';
+        addressInput.value =
+            selectedDeveloper.address || '';
+    }
+
+    async function populateProjectDetails(){
+      const selectedUnit =
+        "{{ homeowner.defect_unit }}";
+      const projectSelect =
+          document.getElementById('project-name');
+      const selectedProject =
+          projectSelect.value;
+      if(!selectedProject) return;
+      const response =
+          await fetch(
+              `/api/project-details/${encodeURIComponent(selectedProject)}`
+          );
+      const data = await response.json();
+
+      // UNIT DROPDOWN
+      const unitSelect =
+          document.getElementById('defect-unit');
+
+      unitSelect.innerHTML =
+          '<option value="">Select Unit</option>';
+
+      (data.units || []).forEach((unit) => {
+
+          const option =
+              document.createElement('option');
+
+          option.value = unit;
+          option.textContent = unit;
+
+          if(unit === selectedUnit){
+              option.selected = true;
+          }
+
+          unitSelect.appendChild(option);
+      });
+
+      // STATE
+      document.getElementById(
+          'defect-state'
+      ).value =
+          data.state || '';
+
+      // ADDRESS
+      document.getElementById(
+          'defect-property-address'
+      ).value =
+          data.address || '';
+
+      // RESPONDENT
+      document.getElementById(
+          'developer-company'
+      ).value =
+          data.company_name || '';
+
+      const developerPicInput =
+          document.getElementById('developer-pic');
+      if (developerPicInput) {
+          developerPicInput.value =
+              data.person_in_charge || '';
+      }
+
+      document.getElementById(
+          'developer-registration'
+      ).value =
+          data.registration_number || '';
+
+      document.getElementById(
+          'developer-phone'
+      ).value =
+          data.phone_number || '';
+      document.getElementById(
+          'developer-email'
+      ).value =
+          data.email || '';
+      document.getElementById(
+          'developer-address'
+      ).value =
+          data.developer_address || '';
+    }
+
+    const STATE_COURT_MAP = {{ state_court_map | tojson }};
+    function populateCourtLocations(stateName, selectedCourt) {
+        const courtSelect = document.getElementById('court-location');
+        if (!courtSelect) return;
+        const stateEntry = STATE_COURT_MAP[stateName] || {};
+        const tribunalBranches =
+            stateEntry.tribunal_branches || [];
+        const generalLocations =
+            stateEntry.general_locations || [];
+        const options = [
+            ...tribunalBranches,
+            ...generalLocations.filter(
+                (location) =>
+                    !tribunalBranches.includes(location)
+            )
+        ];
+        courtSelect.innerHTML =
+            '<option value="">Select court location</option>';
+        if (!stateName) {
+            courtSelect.disabled = true;
+            return;
+        }
+        const homeownerSection =
+          document.getElementById('homeowner');
+        const saveBtn =
+            homeownerSection.querySelector(
+                'button[type="submit"]'
+            );
+        if(saveBtn && saveBtn.style.display === 'block'){
+            courtSelect.disabled = false;
+        } else {
+            courtSelect.disabled = true;
+        }
+        if (tribunalBranches.length > 0) {
+            const branchGroup =
+                document.createElement('optgroup');
+            branchGroup.label = 'Tribunal Branches';
+            tribunalBranches.forEach((location) => {
+                const option =
+                    document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                branchGroup.appendChild(option);
+            });
+            courtSelect.appendChild(branchGroup);
+        }
+        if (generalLocations.length > 0) {
+            const generalGroup =
+                document.createElement('optgroup');
+            generalGroup.label =
+                'General Court Locations';
+            generalLocations.forEach((location) => {
+                if (tribunalBranches.includes(location)) {
+                    return;
+                }
+                const option =
+                    document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                generalGroup.appendChild(option);
+            });
+            if (generalGroup.children.length > 0) {
+                courtSelect.appendChild(generalGroup);
+            }
+        }
+        if (selectedCourt && options.includes(selectedCourt)) {
+            courtSelect.value = selectedCourt;
+        }
+    }
+    function syncCourtLocations() {
+        const stateSelect =
+            document.getElementById('state-name');
+        const courtSelect =
+            document.getElementById('court-location');
+        populateCourtLocations(
+            stateSelect.value,
+            courtSelect.dataset.selectedCourt || ''
+        );
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const stateSelect =
+            document.getElementById('state-name');
+        const courtSelect =
+            document.getElementById('court-location');
+        if(stateSelect && courtSelect){
+            populateCourtLocations(
+                stateSelect.value,
+                courtSelect.dataset.selectedCourt || ''
+            );
+        }
+    });
+
+    // avatar preview
+    var avatarInput = document.querySelector('input[name="avatar"]');
+
+    if(avatarInput){
+
+      avatarInput.addEventListener('change', function(){
+
+          var file = avatarInput.files && avatarInput.files[0];
+
+          if(!file) return;
+
+          const allowedTypes = [
+              'image/jpeg',
+              'image/png',
+              'image/webp'
+          ];
+
+          if(!allowedTypes.includes(file.type)){
+
+              showToast('Only JPG, PNG, and WEBP images are allowed.', 'error');
+
+              avatarInput.value = '';
+
+              return;
+          }
+
+          const loading = document.getElementById('avatar-loading');
+
+          if(loading){
+              loading.style.display = 'inline';
+          }
+
+          document.getElementById('avatar-form').submit();
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      syncCourtLocations();
+      const project =
+          document.getElementById('project-name');
+      if(project && project.value){
+          populateProjectDetails();
+      }
+    });
+
+    // ===== USERNAME VALIDATION =====
+
+    const usernameInput =
+        document.getElementById('username');
+
+    const usernameStatus =
+        document.getElementById('username-status');
+
+    let usernameAvailable = true;
+
+    if(usernameInput){
+
+        usernameInput.addEventListener('input', async function(){
+
+            const username =
+                usernameInput.value.trim();
+
+            if(usernameStatus){
+                usernameStatus.textContent = '';
+            }
+
+            if(username.length < 3){
+
+                if(usernameStatus){
+                    usernameStatus.style.color = '#ef4444';
+                    usernameStatus.textContent =
+                        'Username must be at least 3 characters';
+                }
+
+                usernameAvailable = false;
+
+                return;
+            }
+
+            try{
+
+                const response =
+                    await fetch(
+                        `/check-username?username=${encodeURIComponent(username)}`
+                    );
+
+                const data =
+                    await response.json();
+
+                if(data.exists){
+
+                    if(usernameStatus){
+                        usernameStatus.style.color = '#ef4444';
+                        usernameStatus.textContent =
+                            'Username already exists';
+                    }
+
+                    usernameAvailable = false;
+
+                }else{
+
+                    if(usernameStatus){
+                        usernameStatus.style.color = '#22c55e';
+                        usernameStatus.textContent =
+                            'Username available';
+                    }
+
+                    usernameAvailable = true;
+                }
+
+            }catch(error){
+
+                if(usernameStatus){
+                    usernameStatus.style.color = '#ef4444';
+                    usernameStatus.textContent =
+                        'Unable to validate username';
+                }
+
+                usernameAvailable = false;
+            }
+
+        });
+
+    }
+
+    // ===== DUPLICATE VALIDATION =====
+
+    async function validateDuplicate(
+        field,
+        value,
+        statusElement,
+        fieldName
+    ){
+
+        if(!value.trim()) return true;
+
+        if(!statusElement){
+            return true;
+        }
+
+        try{
+
+            const response =
+                await fetch(
+                    `/check-user-data?${field}=${encodeURIComponent(value)}`
+                );
+
+            const data =
+                await response.json();
+
+            const exists =
+                data[`${fieldName}_exists`];
+
+            if(exists){
+
+                statusElement.style.color =
+                    '#ef4444';
+
+                statusElement.textContent =
+                    `${fieldName.replace('_', ' ')} already exists`;
+
+                return false;
+
+            }else{
+
+                statusElement.style.color =
+                    '#22c55e';
+
+                statusElement.textContent =
+                    `${fieldName.replace('_', ' ')} available`;
+
+                return true;
+            }
+
+        }catch(error){
+
+            statusElement.style.color =
+                '#ef4444';
+
+            statusElement.textContent =
+                'Validation failed';
+
+            return false;
+        }
+    }
+
+    // EMAIL
+    const emailInput =
+        document.getElementById('signup-email');
+
+    const emailStatus =
+        document.getElementById('email-status');
+
+    if(emailInput){
+
+        emailInput.addEventListener(
+            'input',
+            async function(){
+
+                await validateDuplicate(
+                    'email',
+                    emailInput.value,
+                    emailStatus,
+                    'email'
+                );
+
+            }
+        );
+    }
+
+    // PHONE
+    const phoneInput =
+        document.getElementById('phone_number');
+
+    const phoneStatus =
+        document.getElementById('phone-status');
+
+    if(phoneInput){
+
+        phoneInput.addEventListener(
+            'input',
+            async function(){
+
+                await validateDuplicate(
+                    'phone_number',
+                    phoneInput.value,
+                    phoneStatus,
+                    'phone'
+                );
+
+            }
+        );
+    }
+
+    // IC
+    const icInput =
+        document.getElementById('ic_number');
+
+    const icStatus =
+        document.getElementById('ic-status');
+
+    if(icInput){
+
+        icInput.addEventListener(
+            'input',
+            async function(){
+
+                await validateDuplicate(
+                    'ic_number',
+                    icInput.value,
+                    icStatus,
+                    'ic'
+                );
+
+            }
+        );
+    }
+
+    // ===== PROFILE TAB PERSIST =====
+
+    const navItems =
+        document.querySelectorAll('.nav-item');
+
+    const sections =
+        document.querySelectorAll('.section');
+
+    function activateTab(target){
+
+        navItems.forEach(item => {
+            item.classList.remove('active');
+        });
+
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
+
+        const activeNav =
+            document.querySelector(
+                `.nav-item[data-target="${target}"]`
+            );
+
+        const activeSection =
+            document.getElementById(target);
+
+        if(activeNav){
+            activeNav.classList.add('active');
+        }
+
+        if(activeSection){
+            activeSection.classList.add('active');
+        }
+
+        localStorage.setItem(
+            'activeProfileTab',
+            target
+        );
+    }
+
+    navItems.forEach(item => {
+
+        item.addEventListener('click', () => {
+
+            const target =
+                item.dataset.target;
+
+            activateTab(target);
+
+        });
+
+    });
+
+    const savedTab =
+        localStorage.getItem(
+            'activeProfileTab'
+        ) || 'account';
+
+    activateTab(savedTab);
+
+    // ===== LIVE PASSWORD VALIDATION =====
+
+    const passwordInput =
+        document.getElementById('password');
+
+    const confirmInput =
+        document.getElementById('confirm_password');
+
+    const confirmStatus =
+        document.getElementById('confirm-status');
+
+    if(passwordInput && confirmInput){
+
+        function validatePasswordMatch(){
+
+            const password =
+                passwordInput.value.trim();
+
+            const confirmPassword =
+                confirmInput.value.trim();
+
+            if(password === ''){
+
+                confirmStatus.textContent =
+                    'Confirm password must match the new password.';
+
+                confirmStatus.className =
+                    'password-guide';
+
+                return;
+            }
+
+            if(confirmPassword === ''){
+
+                confirmStatus.innerHTML = `
+                    Please confirm your password.<br>
+                    Passwords must match.
+                `;
+
+                confirmStatus.className =
+                    'password-guide error';
+
+                return;
+            }
+
+            if(password === confirmPassword){
+
+                confirmStatus.textContent =
+                    'Passwords match.';
+
+                confirmStatus.className =
+                    'password-guide success';
+
+            }else{
+
+                confirmStatus.textContent =
+                    'Passwords do not match.';
+
+                confirmStatus.className =
+                    'password-guide error';
+            }
+        }
+
+        passwordInput.addEventListener(
+            'input',
+            validatePasswordMatch
+        );
+
+        confirmInput.addEventListener(
+            'input',
+            validatePasswordMatch
+        );
+    }
+
+    {% if role == 'Homeowner' %}
+    // Sync Personal Full Name -> Claimant Name for homeowners
+    (function(){
+        const claimantInput = document.getElementById('claimant-name');
+        const personalFull = document.getElementById('personal-full-name');
+        if(claimantInput && personalFull){
+            // initialize
+            claimantInput.value = personalFull.value || claimantInput.value || '';
+            personalFull.addEventListener('input', function(){
+                claimantInput.value = personalFull.value;
+            });
+        }
+    })();
+    {% endif %}
+
+  </script>
+    <!-- SAVE CONFIRM MODAL -->
+    <div id="save-modal" class="logout-modal">
+
+        <div class="logout-modal-box">
+
+            <div class="logout-icon">
+                ✓
+            </div>
+
+            <h3>Save Changes</h3>
+
+            <p>
+                Are you sure you want to save these profile changes?
+            </p>
+
+            <div class="logout-actions">
+
+                <button type="button"
+                        id="cancel-save"
+                        class="logout-btn cancel-btn">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        id="confirm-save"
+                        class="logout-btn confirm-btn">
+                    Save
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+</html>

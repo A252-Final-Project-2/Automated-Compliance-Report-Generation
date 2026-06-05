@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defect Entry</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .success-popup {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            width: min(460px, calc(100vw - 2rem));
+            background: #ecfdf5;
+            border: 1px solid #6ee7b7;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(6, 78, 59, 0.18);
+            z-index: 2000;
+            opacity: 0;
+            transform: translateY(-12px);
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .success-popup.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .success-popup.error {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            box-shadow: 0 12px 30px rgba(127, 29, 29, 0.16);
+        }
+
+        .success-popup-content {
+            padding: 1rem 1rem 0.85rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .success-popup-icon {
+            color: #059669;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .success-popup.error .success-popup-icon {
+            color: #dc2626;
+        }
+
+        .success-popup-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .success-popup-title {
+            margin: 0;
+            color: #065f46;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .success-popup.error .success-popup-title {
+            color: #7f1d1d;
+        }
+
+        .success-popup-text {
+            margin: 0.25rem 0 0;
+            color: #065f46;
+            font-size: 0.9rem;
+            line-height: 1.35;
+        }
+
+        .success-popup.error .success-popup-text {
+            color: #7f1d1d;
+        }
+
+        .success-popup-actions {
+            margin-top: 0.65rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .success-popup-close {
+            border: 0;
+            background: transparent;
+            color: #047857;
+            font-size: 1.25rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0.1rem 0.2rem;
+            border-radius: 6px;
+        }
+
+        .success-popup-close:hover {
+            background: rgba(4, 120, 87, 0.12);
+        }
+
+        .success-popup.error .success-popup-close {
+            color: #b91c1c;
+        }
+
+        .success-popup.error .success-popup-close:hover {
+            background: rgba(185, 28, 28, 0.12);
+        }
+
+        @media (max-width: 640px) {
+            .success-popup {
+                top: 0.75rem;
+                right: 0.75rem;
+                width: calc(100vw - 1.5rem);
+            }
+        }
+    </style>
+</head>
+<body>
+{% include 'partials/top_main.html' %}
+
+<div id="error-popup" class="success-popup error" role="alert" aria-live="assertive" aria-atomic="true" style="display:none;">
+    <div class="success-popup-content">
+        <svg class="success-popup-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <div class="success-popup-body">
+            <p class="success-popup-title">Please Check Your Form</p>
+            <p id="error-popup-text" class="success-popup-text">Fix the highlighted fields before submitting.</p>
+        </div>
+        <button type="button" class="success-popup-close" aria-label="Close" onclick="closeErrorPopup()">&times;</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card defect-entry-card" style="max-width: 900px; margin: 0 auto;">
+        <div class="card-header">
+            <h2>Submit New Defect Report</h2>
+            <p class="card-subtitle">
+                Please complete the form below to submit a new defect report.
+            </p>
+            <div class="required-note">
+                <span>*</span>
+                Required fields
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-error">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        {% if message %}
+        <div class="alert alert-success" style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" style="color: #059669; flex-shrink: 0;" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; margin-bottom: 0.5rem;">{{ message }}</div>
+                {% if submitted_at %}
+                <div style="font-size: 0.875rem; color: rgba(5, 150, 105, 0.8);">Submitted at: {{ submitted_at }}</div>
+                {% endif %}
+            </div>
+            <a href="{{ url_for('routes.dashboard') }}"
+               class="btn btn-secondary btn-large"
+               style="text-decoration:none; white-space: nowrap; flex-shrink: 0;">
+                View Dashboard
+            </a>
+        </div>
+        {% endif %}
+
+        <form id="defect-form" method="POST" action="{{ url_for('routes.defect_entry') }}" enctype="multipart/form-data" novalidate>
+            <div id="validation-errors" class="validation-errors" style="display:none;"></div>
+
+            <fieldset class="form-section">
+                <legend>Defect Information</legend>
+
+                <div class="form-row">
+                    <label class="form-label required">
+                        Unit / Location <span class="required-star">*</span>
+                        <input type="text" name="unit" id="unit" class="form-input"
+                               value="{{ form_values.unit }}" placeholder="e.g., Unit 101, Block A"
+                               maxlength="100" readonly required>
+                        <span class="error-msg" id="unit-error">{{ (field_errors or {}).get('unit') or '' }}</span>
+                    </label>
+
+                    <label class="form-label required">
+                        Urgency Level <span class="required-star">*</span>
+                        <select name="urgency" id="urgency" class="form-input" required>
+                            <option value="" hidden {% if not form_values.urgency %}selected{% endif %}>Choose urgency level</option>
+                            <option value="Low" {% if form_values.urgency == 'Low' %}selected{% endif %}>Low</option>
+                            <option value="Medium" {% if form_values.urgency == 'Medium' %}selected{% endif %}>Medium</option>
+                            <option value="High" {% if form_values.urgency == 'High' %}selected{% endif %}>High</option>
+                        </select>
+                        <span class="error-msg" id="urgency-error">{{ (field_errors or {}).get('urgency') or '' }}</span>
+                    </label>
+                </div>
+
+                <label class="form-label required full-width">
+                    Defect Description <span class="required-star">*</span>
+
+                    <textarea name="description"
+                            id="description"
+                            class="form-input textarea"
+                            rows="5"
+                            placeholder="Describe the defect in detail..."
+                            required>{{ form_values.description }}</textarea>
+
+                    <small class="field-note">
+                        <strong>Guidelines:</strong>
+                        A defect was found at [exact location] affecting the [affected area/component]. 
+                        The defect consists of [describe defect] and is approximately [measurement/size in cm, inch, or m]. 
+                        The issue was observed on [date or situation if relevant]. 
+                        Three images have been attached showing the defect from different angles for verification purposes.
+                    </small>
+
+                    <span class="char-count">
+                        <span id="desc-length">0</span>/1000
+                    </span>
+
+                    <span class="error-msg" id="description-error">
+                        {{ (field_errors or {}).get('description') or '' }}
+                    </span>
+                </label>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>Timeline</legend>
+
+                <div class="form-row">
+                    <label class="form-label required">
+                        Reported Date <span class="required-star">*</span>
+                        <small class="field-note">Date the defect was reported to the developer</small>
+                        <input type="date" name="reported_date" id="reported_date" class="form-input"
+                               value="{{ form_values.reported_date }}" required>
+                        <span class="error-msg" id="reported_date-error">{{ (field_errors or {}).get('reported_date') or '' }}</span>
+                    </label>
+
+                    <label class="form-label required">
+                        Target Completion Date
+                        <span class="required-star">*</span>
+                        <small class="field-note">Must be at least 6 months after the reported date</small>
+                        <input type="date" name="deadline" id="deadline" class="form-input"
+                               value="{{ form_values.deadline }}" required>
+                        <span class="error-msg" id="deadline-error">{{ (field_errors or {}).get('deadline') or '' }}</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>Supporting Evidence <span class="required-star">*</span></legend>
+                <p class="section-help">Upload exactly 3 images to support your defect report. Evidence is required. Allowed formats: JPG, JFIF, PNG, TIF (Max 10MB each)</p>
+
+                <div class="file-input-wrapper">
+                    <input type="file" name="evidence" id="evidence" class="file-input"
+                           accept=".jpg,.jpeg,.jfif,.png,.tif,.tiff" multiple required>
+                    <label for="evidence" class="file-input-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <span>Click to upload or drag & drop 3 images</span>
+                        <span class="file-hint">Exactly 3 images. JPG, JFIF, PNG, TIF (Max 10MB each)</span>
+                    </label>
+                    <span class="error-msg" id="evidence-error">{{ (field_errors or {}).get('evidence') or '' }}</span>
+                </div>
+
+                {% if message and last_evidence_name %}
+                <div class="auto-filled-label" style="margin-top: 0.5rem;">
+                    Last uploaded evidence: {{ last_evidence_name }}
+                </div>
+                {% endif %}
+
+                <div id="image-preview" class="image-preview" style="display:none;">
+                    <div id="preview-images" class="evidence-thumb-row"></div>
+                    <button type="button" class="btn btn-sm" onclick="clearImagePreview()">Remove</button>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>Initial Remark (Optional)</legend>
+                <p class="section-help">Add any additional notes or context about this defect report.</p>
+
+                <label class="form-label full-width">
+                    <textarea name="remarks" id="remarks" class="form-input textarea" rows="4"
+                              placeholder="Add your remarks or additional information here..."
+                              maxlength="500">{{ form_values.remarks }}</textarea>
+                    <span class="char-count"><span id="remarks-length">0</span>/500</span>
+                </label>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-large">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round" style="display:inline; margin-right: 6px;" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Submit Defect Report
+                </button>
+                <a href="{{ url_for('routes.dashboard') }}" class="btn btn-secondary btn-large">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+const form = document.getElementById('defect-form');
+const unitInput = document.getElementById('unit');
+const descriptionInput = document.getElementById('description');
+const reportedDateInput = document.getElementById('reported_date');
+const deadlineInput = document.getElementById('deadline');
+
+reportedDateInput.addEventListener('change', function() {
+    if (!reportedDateInput.value) {
+        return;
+    }
+
+    const minDate = new Date(reportedDateInput.value);
+    minDate.setMonth(minDate.getMonth() + 6);
+
+    deadlineInput.min = minDate.toISOString().split('T')[0];
+});
+
+const evidenceInput = document.getElementById('evidence');
+const remarksInput = document.getElementById('remarks');
+const validationErrorsDiv = document.getElementById('validation-errors');
+
+descriptionInput.addEventListener('input', function() {
+    document.getElementById('desc-length').textContent = this.value.length;
+});
+
+remarksInput.addEventListener('input', function() {
+    document.getElementById('remarks-length').textContent = this.value.length;
+});
+
+evidenceInput.addEventListener('change', function(e) {
+    const files = Array.from(e.target.files || []);
+    const errorMsg = document.getElementById('evidence-error');
+    const previewImages = document.getElementById('preview-images');
+    previewImages.innerHTML = '';
+
+    if (!files.length) {
+        document.getElementById('image-preview').style.display = 'none';
+        errorMsg.textContent = '';
+        return;
+    }
+
+    if (files.length !== 3) {
+        errorMsg.textContent = 'Please upload exactly 3 evidence images.';
+        evidenceInput.value = '';
+        document.getElementById('image-preview').style.display = 'none';
+        return;
+    }
+
+    const allowedExtensions = ['jpg', 'jpeg', 'jfif', 'png', 'tif', 'tiff'];
+    const maxSize = 10 * 1024 * 1024;
+    for (const file of files) {
+        const fileNameParts = file.name.split('.');
+        const fileExtension = fileNameParts.length > 1 ? fileNameParts.pop().toLowerCase() : '';
+
+        if (!allowedExtensions.includes(fileExtension)) {
+            errorMsg.textContent = 'Invalid file type. Please upload JPG, JFIF, PNG, or TIF.';
+            evidenceInput.value = '';
+            document.getElementById('image-preview').style.display = 'none';
+            return;
+        }
+
+        if (file.size > maxSize) {
+            errorMsg.textContent = 'One or more files are too large. Maximum size is 10MB each.';
+            evidenceInput.value = '';
+            document.getElementById('image-preview').style.display = 'none';
+            return;
+        }
+    }
+
+    errorMsg.textContent = '';
+    document.getElementById('image-preview').style.display = 'block';
+    files.forEach(function(file, index) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.alt = `Preview ${index + 1}`;
+            previewImages.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+const fileLabel = document.querySelector('.file-input-label');
+if (fileLabel) {
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function(eventName) {
+        fileLabel.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(function(eventName) {
+        fileLabel.addEventListener(eventName, function() {
+            fileLabel.classList.add('drag-over');
+        }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(function(eventName) {
+        fileLabel.addEventListener(eventName, function() {
+            fileLabel.classList.remove('drag-over');
+        }, false);
+    });
+
+    fileLabel.addEventListener('drop', function(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        evidenceInput.files = files;
+        evidenceInput.dispatchEvent(new Event('change'));
+    }, false);
+}
+
+function clearImagePreview() {
+    evidenceInput.value = '';
+    document.getElementById('image-preview').style.display = 'none';
+}
+
+let errorPopupTimer = null;
+
+function closeErrorPopup() {
+    const popup = document.getElementById('error-popup');
+    if (!popup) {
+        return;
+    }
+    popup.classList.remove('show');
+    if (errorPopupTimer) {
+        clearTimeout(errorPopupTimer);
+        errorPopupTimer = null;
+    }
+    setTimeout(function() {
+        popup.style.display = 'none';
+    }, 250);
+}
+
+function showErrorPopup(message) {
+    const popup = document.getElementById('error-popup');
+    const text = document.getElementById('error-popup-text');
+    if (!popup || !text) {
+        return;
+    }
+
+    text.textContent = message || 'Fix the highlighted fields before submitting.';
+    popup.style.display = 'block';
+
+    requestAnimationFrame(function() {
+        popup.classList.add('show');
+    });
+
+    if (errorPopupTimer) {
+        clearTimeout(errorPopupTimer);
+    }
+    errorPopupTimer = setTimeout(function() {
+        closeErrorPopup();
+    }, 7000);
+}
+
+// Fallback for browser-level invalid field events (accessibility and extra safety).
+form.addEventListener('invalid', function(e) {
+    e.preventDefault();
+    const target = e.target;
+    if (target && target.id) {
+        const errEl = document.getElementById(target.id + '-error');
+        if (errEl && !errEl.textContent.trim()) {
+            errEl.textContent = target.validationMessage || 'Invalid input';
+        }
+    }
+    showErrorPopup(target.validationMessage || 'Please complete all required fields.');
+}, true);
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    validationErrorsDiv.style.display = 'none';
+    validationErrorsDiv.innerHTML = '';
+    document.querySelectorAll('.error-msg').forEach(function(el) {
+        el.textContent = '';
+    });
+
+    const errors = [];
+
+    if (!unitInput.value.trim()) {
+        errors.push('Unit/Location is required.');
+        document.getElementById('unit-error').textContent = 'Required';
+    }
+
+    const urgencyInput = document.getElementById('urgency');
+    if (!urgencyInput.value) {
+        errors.push('Urgency Level is required.');
+        document.getElementById('urgency-error').textContent = 'Please choose a level';
+    }
+
+    if (!descriptionInput.value.trim()) {
+        errors.push('Defect Description is required.');
+        document.getElementById('description-error').textContent = 'Required';
+    } else if (descriptionInput.value.length < 10) {
+        errors.push('Description must be at least 10 characters.');
+        document.getElementById('description-error').textContent = 'Too short (min 10 chars)';
+    } else if (descriptionInput.value.length > 1000) {
+        errors.push('Description must not exceed 1000 characters.');
+        document.getElementById('description-error').textContent = 'Too long (max 1000 chars)';
+    }
+
+    if (!reportedDateInput.value) {
+        errors.push('Reported Date is required.');
+        document.getElementById('reported_date-error').textContent = 'Required';
+    } else {
+        const reportedDate = reportedDateInput.value;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const selectedReportedDate = new Date(reportedDate + 'T00:00:00');
+        if (selectedReportedDate > today) {
+            errors.push('Reported Date cannot be in the future.');
+            document.getElementById('reported_date-error').textContent = 'Cannot be future date';
+        }
+    }
+
+    if (!deadlineInput.value) {
+        errors.push('Target Completion Date is required.');
+        document.getElementById('deadline-error').textContent = 'Required';
+    } else {
+        try {
+            const deadline = new Date(deadlineInput.value + 'T00:00:00');
+            const reported = new Date(reportedDateInput.value + 'T00:00:00');
+            const minimumDeadline = new Date(reported);
+            minimumDeadline.setMonth(minimumDeadline.getMonth() + 6);
+
+            if (deadline < minimumDeadline) {
+                errors.push('Target Completion Date must be at least 6 months after Reported Date.');
+                document.getElementById('deadline-error').textContent = 'Minimum 6 months required';
+            }
+        } catch (err) {
+            errors.push('Invalid Target Completion Date.');
+        }
+    }
+
+    if (!evidenceInput.files || evidenceInput.files.length !== 3) {
+        errors.push('Exactly 3 supporting evidence images are required.');
+        document.getElementById('evidence-error').textContent = 'Please upload exactly 3 images';
+    }
+
+    if (errors.length > 0) {
+        validationErrorsDiv.style.display = 'block';
+        validationErrorsDiv.innerHTML = '<div class="alert alert-error"><strong>Please fix the highlighted fields.</strong></div>';
+        showErrorPopup(errors[0]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+    }
+
+    form.submit();
+});
+
+document.getElementById('desc-length').textContent = descriptionInput.value.length;
+document.getElementById('remarks-length').textContent = remarksInput.value.length;
+
+const inlineErrorBanner = document.querySelector('.alert.alert-error');
+const serverFieldMessages = Array.from(document.querySelectorAll('.error-msg'))
+    .map(function(el) {
+        return (el.textContent || '').trim();
+    })
+    .filter(function(message) {
+        return Boolean(message);
+    });
+
+if (serverFieldMessages.length > 0) {
+    validationErrorsDiv.style.display = 'block';
+    validationErrorsDiv.innerHTML = '<div class="alert alert-error"><strong>Please fix the highlighted fields.</strong></div>';
+    showErrorPopup(serverFieldMessages[0]);
+} else if (inlineErrorBanner) {
+    const bannerText = (inlineErrorBanner.textContent || '').replace('Error:', '').trim();
+    showErrorPopup(bannerText || 'An unexpected error occurred while submitting your defect.');
+}
+
+</script>
+
+</body>
+</html>

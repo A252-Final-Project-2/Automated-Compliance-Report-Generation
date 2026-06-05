@@ -1,0 +1,23 @@
+name: pcd
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - flask
+  - pip
+  - psycopg2-binary      # Postgres DB driver
+  - gunicorn             # production WSGI server
+  - flask-migrate        # DB migrations
+  - python-dotenv        # .env support
+  - pandas
+  - numpy
+  - watchdog
+  - reportlab
+  - pip:
+    - flask_sqlalchemy
+    - flask-cors
+    - requests
+    - pytest
+    - black
+    - cryptography
+    # add other pip deps here

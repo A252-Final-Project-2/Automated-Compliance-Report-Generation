@@ -1,0 +1,267 @@
+{% set guest_page =
+    request.endpoint in [
+        'routes.login',
+        'routes.signup'
+    ]
+%}
+
+{% if guest_page %}
+
+<header class="guest-topbar">
+
+    <div class="guest-language">
+        ENG <span>|</span> BM
+    </div>
+
+    <div class="guest-brand-inline">
+
+        <div class="guest-logo">
+            DLP
+        </div>
+
+        <div class="guest-inline-text">
+
+            <span class="guest-title">
+                DLP Hub:
+            </span>
+
+            <span class="guest-subtitle">
+                Compliance & Tribunal System
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+{% else %}
+<header class="topbar">
+    <div class="topbar-left">
+        <button class="button-toggle" type="button">ENG | BM</button>
+        <span>DLP Hub | Compliance & Tribunal System</span>
+    </div>
+
+    <div class="topbar-right">
+        <a class="topbar-logout"
+        id="logout-link"
+        href="{{ url_for('routes.logout') }}"
+        title="Logout"
+        aria-label="Logout">
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+
+            </svg>
+
+            <span class="logout-text">Logout</span>
+        </a>
+    </div>
+</header>
+
+<!-- LOGOUT CONFIRM MODAL -->
+<div id="logout-modal" class="logout-modal">
+
+    <div class="logout-modal-box">
+
+        <div class="logout-icon">
+            ⎋
+        </div>
+
+        <h3>Confirm Logout</h3>
+
+        <p>
+            Are you sure you want to logout from your account?
+        </p>
+
+        <div class="logout-actions">
+
+            <button id="cancel-logout"
+                    class="logout-btn cancel-btn">
+                Cancel
+            </button>
+
+            <button id="confirm-logout"
+                    class="logout-btn confirm-btn">
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+    const logoutLink =
+        document.getElementById('logout-link');
+
+    const modal =
+        document.getElementById('logout-modal');
+
+    const cancelBtn =
+        document.getElementById('cancel-logout');
+
+    const confirmBtn =
+        document.getElementById('confirm-logout');
+
+    if(logoutLink){
+
+        logoutLink.addEventListener('click', function(e){
+
+            e.preventDefault();
+
+            modal.classList.add('show');
+
+        });
+
+    }
+
+    cancelBtn.addEventListener('click', function(){
+
+        modal.classList.remove('show');
+
+    });
+
+    confirmBtn.addEventListener('click', function(){
+
+        window.location.href =
+            logoutLink.href;
+
+    });
+
+    modal.addEventListener('click', function(e){
+
+        if(e.target === modal){
+            modal.classList.remove('show');
+        }
+
+    });
+
+});
+</script>
+
+{% set current_endpoint = request.endpoint or '' %}
+{% set dashboard_active = 'active' if current_endpoint == 'routes.dashboard' else '' %}
+{% set profile_active = 'active' if current_endpoint == 'routes.profile' else '' %}
+{% set defect_entry_active = 'active' if current_endpoint == 'routes.defect_entry' else '' %}
+
+{% if role|lower != 'admin' %}
+
+<div class="secondary-nav" aria-label="Page navigation">
+
+    <a class="secondary-nav-link {{ dashboard_active }}"
+       href="{{ url_for('routes.dashboard') }}">
+        Dashboard
+    </a>
+
+    <a class="secondary-nav-link profile-pill {{ profile_active }}"
+       href="{{ url_for('routes.profile') }}">
+
+        <span class="pill-text">Profile</span>
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+
+        </svg>
+
+    </a>
+
+    {% if role|lower == 'homeowner' %}
+    <a class="secondary-nav-link defect-entry-pill {{ defect_entry_active }}"
+       href="{{ url_for('routes.defect_entry') }}">
+
+        <span class="pill-text">
+            Defect Entry
+        </span>
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="18"
+             height="18"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+
+            <path d="M12 3v18"/>
+            <path d="M3 12h18"/>
+
+        </svg>
+
+    </a>
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+{% if role|lower == 'admin' %}
+
+{% elif role|lower == 'developer' %}
+<div class="dev-nav-bar">
+
+    {% if current_endpoint == 'routes.profile' %}
+    <strong>Developer Profile</strong>
+    <span style="margin-left:12px;color:var(--muted);">Manage company account information</span>
+    {% else %}
+    <strong>Developer Dashboard</strong>
+    <span style="margin-left:12px;color:var(--muted);">Repair & reporting</span>
+    {% endif %}
+</div>
+{% elif role|lower == 'legal' %}
+<div class="legal-nav-bar">
+    {% if current_endpoint == 'routes.profile' %}
+    <strong>{{ user_info.name or legal.legal_name or session.get('username') or 'Legal Profile' }}</strong>
+    <span style="margin-left:12px;color:var(--muted);">Manage legal account information</span>
+    {% else %}
+    <strong>Legal Dashboard</strong>
+    <span style="margin-left:12px;color:var(--muted);">Tribunal & case review</span>
+    {% endif %}
+</div>
+{% elif role|lower == 'homeowner' %}
+<div class="owner-nav-bar">
+    {% if current_endpoint == 'routes.profile' %}
+    <strong>{{ personal.full_name or user_info.name or session.get('username') or 'Homeowner Profile' }}</strong>
+    <span style="margin-left:12px;color:var(--muted);">Manage account information</span>
+    {% elif current_endpoint == 'routes.defect_entry' %}
+    <strong>Defect Entry</strong>
+    <span style="margin-left:12px;color:var(--muted);">Submit a new defect report</span>
+    {% else %}
+    <strong>Homeowner Dashboard</strong>
+    <span style="margin-left:12px;color:var(--muted);">View case progress</span>
+    {% endif %}
+</div>
+{% else %}
+<div class="guest-nav-bar">
+    <strong>Welcome</strong>
+    <span style="margin-left:12px;color:var(--muted);">Please sign in or create an account</span>
+</div>
+{% endif %}
+{% endif %}

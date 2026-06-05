@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ role }} Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% include 'partials/top_main.html' %}
+
+<div class="container">
+    <div class="dashboard-grid">
+        <main class="main-panel">
+            <section class="profile-card">
+                {% if user_info.avatar_url %}
+                <div class="avatar"><img src="{{ user_info.avatar_url }}" alt="avatar" class="avatar-img"></div>
+                {% else %}
+                <div class="avatar">{{ (user_info.company_name or user_info.name).split(' ')[0][0] }}{{ (user_info.company_name or user_info.name).split(' ')[1][0] if (user_info.company_name or user_info.name).split(' ')|length > 1 else '' }}</div>
+                {% endif %}
+                <h1>Hello, {{ user_info.company_name or user_info.name }}</h1>
+                <p>Homeowner dashboard</p>
+                <div class="profile-meta">{{ user_info.unit or 'View case progress and report issues' }}</div>
+            </section>
+
+            <div class="panel-top">
+
+                <div class="heading-group">
+
+                    <h2>{{ role }} Dashboard</h2>
+
+                    <p>
+                        View case progress,
+                        generate reports,
+                        and export PDF documents.
+                    </p>
+
+                </div>
+
+                <div class="developer-report-layout">
+
+                    <!-- LANGUAGE -->
+                    <div class="report-row top-report-row">
+
+                        <div class="field-label">
+                            Language
+                        </div>
+
+                        <select
+                            id="language-select"
+                            onchange="invalidateReportExport()">
+
+                            <option value="ms">Bahasa Malaysia</option>
+                            <option value="en">English</option>
+
+                        </select>
+
+                        <div class="report-buttons">
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="generateReport('{{ role }}')">
+
+                                Generate Report
+
+                            </button>
+
+                            <form
+                                id="pdf-form"
+                                action="{{ url_for('routes.export_pdf') }}"
+                                method="POST">
+
+                                <input type="hidden" name="role" value="{{ role }}">
+                                <input type="hidden" name="language" id="pdf-language" value="ms">
+                                <input type="hidden" name="claimant_user_id" id="pdf-claimant-user-id" value="">
+                                <input type="hidden" name="ai_report" id="pdf-ai-report" value="">
+
+                                <button
+                                    id="export-btn"
+                                    class="btn btn-secondary"
+                                    disabled>
+
+                                    Export PDF
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="report-output" class="report-box" style="display:none;">
+                <h2>AI Report Preview</h2>
+                <div class="report-preview" id="report-json"></div>
+            </div>
+
+            <div id="missing-data-panel" class="missing-data-panel" style="display:none;">
+                <h2>Missing Report Data</h2>
+                <p class="panel-note">Review the missing fields before generating or exporting the report.</p>
+                <div class="missing-data-summary" id="missing-data-summary"></div>
+                <div class="missing-data-scroll" id="missing-data-scroll"></div>
+            </div>
+
+            <section class="summary-cards">
+                <div class="summary-card card-all">
+                    <span class="icon icon-all">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.total or 0 }}</span>
+                        <span class="label">Total</span>
+                    </div>
+                </div>
+                <div class="summary-card card-new">
+                    <span class="icon icon-new">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.pending or 0 }}</span>
+                        <span class="label">Pending</span>
+                    </div>
+                </div>
+                <div class="summary-card card-investigation">
+                    <span class="icon icon-investigation">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="5" stroke="currentColor" stroke-width="2"/><path d="M15 15l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.investigation or 0 }}</span>
+                        <span class="label">In Progress</span>
+                    </div>
+                </div>
+                <div class="summary-card card-onhold">
+                    <span class="icon icon-onhold">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="3" height="12" rx="1.5" fill="currentColor"/><rect x="14" y="6" width="3" height="12" rx="1.5" fill="currentColor"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.on_hold or 0 }}</span>
+                        <span class="label">Delayed</span>
+                    </div>
+                </div>
+                <div class="summary-card card-appeal">
+                    <span class="icon icon-appeal">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l6 3v5c0 4-2.5 7.5-6 8-3.5-.5-6-4-6-8V7l6-3Z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 11v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.overdue or 0 }}</span>
+                        <span class="label">Overdue</span>
+                    </div>
+                </div>
+                <div class="summary-card card-resolved">
+                    <span class="icon icon-resolved">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="2" fill="none"/><path d="M9 12.5l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.completed or 0 }}</span>
+                        <span class="label">Completed</span>
+                    </div>
+                </div>
+                <div class="summary-card card-closed">
+                    <span class="icon icon-closed">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 12-12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    <div class="summary-content">
+                        <span class="value">{{ stats.closed or 0 }}</span>
+                        <span class="label">Closed</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="card">
+                <h2>Defect List</h2>
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                        Status
+                        <select id="filter-status" onchange="applyFilters()" style="min-width: 160px;">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                        Unit
+                        <select id="filter-unit" onchange="applyFilters()" style="min-width: 160px;">
+                            <option value="">All Units</option>
+                            {% set units = homeowner_claimants | map(attribute='unit') | unique | list %}
+                            {% for unit in units %}
+                            <option value="{{ unit }}">{{ unit }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <button class="btn btn-secondary" onclick="resetFilters()" style="padding: 0.7rem 1rem;">Reset Filters</button>
+                </div>
+                <div class="table-wrapper">
+                    <table class="defect-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Unit</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Remarks</th>
+                                <th>Evidence</th>
+                                <th>Submitted At</th>
+                                <th>Actions</th>                            </tr>
+                        </thead>
+                        <tbody id="defect-table-body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div id="remark-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Add Remark</h2>
+        <p style="margin:0 0 12px; color: var(--muted);">Defect ID: <strong id="modal-defect-id"></strong></p>
+        <textarea id="remark-textarea" placeholder="Enter your note..."></textarea>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeRemarkModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveRemark()">Save</button>
+        </div>
+    </div>
+</div>
+
+        <div id="description-modal" class="modal-overlay">
+            <div class="modal-content">
+                <h2>Edit Description</h2>
+                <p style="margin:0 0 12px; color: var(--muted);">Defect ID: <strong id="desc-modal-defect-id"></strong></p>
+                <textarea id="description-textarea" placeholder="Edit defect description..."></textarea>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeDescriptionModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveDescription()">Save</button>
+                </div>
+            </div>
+        </div>
+
+<div id="evidence-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-content" style="max-width:900px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h2>Evidence Preview</h2>
+            <button class="btn btn-secondary" onclick="closeEvidenceModal()">Close</button>
+        </div>
+        <div style="text-align:center;">
+            <img id="evidence-img" src="" alt="evidence" style="max-width:100%; max-height:70vh; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.08);" />
+        </div>
+        <div class="modal-actions" style="margin-top:16px; justify-content:center;">
+            <button type="button" class="btn btn-secondary" onclick="openEvidenceReplacePicker()">
+                Replace Evidence Image
+            </button>
+            <input
+                type="file"
+                id="modal-evidence-upload"
+                accept=".jpg,.jpeg,.jfif,.png,.tif,.tiff"
+                multiple
+                style="display:none"
+                onchange="uploadEvidenceFromModal()">
+        </div>
+    </div>
+</div>
+<div id="defects-data" data-json='{{ defects | tojson }}' style="display:none;"></div>
+<div id="current-user-id" data-user-id="{{ current_user_id }}" style="display:none;"></div>
+<div id="delete-modal" class="delete-modal-overlay">
+
+    <div class="delete-modal-box">
+
+        <div class="delete-modal-icon">
+            🗑️
+        </div>
+
+        <h2>
+            Delete Defect Report?
+        </h2>
+
+        <p>
+            This action cannot be undone.
+            The selected defect report will be permanently removed.
+        </p>
+
+        <div class="delete-modal-actions">
+
+            <button
+                type="button"
+                class="delete-cancel-btn"
+                onclick="closeDeleteModal()">
+
+                Cancel
+
+            </button>
+
+            <button
+                type="button"
+                class="delete-confirm-btn"
+                onclick="deleteDefectConfirmed()">
+
+                Delete Report
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+// Diagnostic: verify functions exist
+if (typeof window !== 'undefined') {
+    window.addEventListener('load', function() {
+        const fns = ['confirmDelete', 'deleteDefectConfirmed', 'closeDeleteModal'];
+        fns.forEach(fn => {
+            if (typeof window[fn] !== 'function') {
+                console.warn('[Diagnostic] Function ' + fn + ' NOT found on window');
+            } else {
+                console.log('[Diagnostic] Function ' + fn + ' OK');
+            }
+        });
+    });
+}
+
+// Defect data from backend
+const defectsDataEl = document.getElementById('defects-data');
+const allDefects = defectsDataEl ? JSON.parse(defectsDataEl.dataset.json || '[]') : [];
+
+let currentDefectId = null;
+let currentEvidenceDefectId = null;
+let currentEvidenceImageIndex = 1;
+const currentUserId = Number(document.getElementById('current-user-id')?.dataset.userId || '0');
+let descriptionDefectId = null;
+
+// Populate initial table
+function populateTable(data) {
+    const tbody = document.getElementById('defect-table-body');
+    tbody.innerHTML = '';
+    
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color: var(--muted); padding: 2rem;">No defects match the selected filters.</td></tr>';
+    } else {
+        data.forEach(defect => {
+            const statusClass = defect.closed ? 'status-closed-badge' : (defect.display_status === 'Completed' ? 'status-completed' : 'status-pending');
+            const row = `
+                <tr>
+                    <td class="id-cell">#${defect.id}</td>
+                    <td class="unit-cell">${defect.unit}</td>
+                    <td class="description-cell wide-text-cell">
+                        ${defect.desc || '-'}
+                        ${ Number(defect.owner_id) === Number(currentUserId)
+                            ? `
+                                <button
+                                    class="table-action-btn"
+                                    onclick="openDescriptionModal(${defect.id})"
+                                    title="Edit Description">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.586-9.414a2 2 0 112.828 2.828L12 14l-4 1 1-4 8.414-8.414z" />
+                                    </svg>
+                                </button>
+                            `
+                            : ''
+                        }
+                    </td>
+                    <td class="status-cell">
+                        <span class="badge ${statusClass}">
+                            ${defect.display_status}
+                        </span>
+                    </td>
+                    <td class="remarks-cell wide-text-cell">
+                        <div class="remarks-box">
+                            <div class="remark-text">
+                                ${defect.remarks || '-'}
+                            </div>
+                            <div class="evidence-actions">
+                                <!-- Edit Icon -->
+                                <button
+                                    class="table-action-btn"
+                                    onclick="openRemarkModal(${defect.id})"
+                                    title="Edit Remark">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.586-9.414a2 2 0 112.828 2.828L12 14l-4 1 1-4 8.414-8.414z"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="evidence-cell">
+                        <div class="evidence-wrapper">
+                            ${renderEvidenceImages(defect)}
+                            <input
+                                type="file"
+                                id="file-${defect.id}"
+                                accept=".jpg,.jpeg,.jfif,.png,.tif,.tiff"
+                                multiple
+                                style="display:none"
+                                onchange="uploadEvidence(${defect.id})"
+                            >
+                            ${
+                                defect.evidence_uploaded
+                                ? `
+                                <div class="evidence-status">
+                                    ✓ Uploaded
+                                    ${
+                                        defect.evidence_uploaded_at
+                                        ? `
+                                        <br>
+                                        ${defect.evidence_uploaded_at}
+                                        `
+                                        : ''
+                                    }
+                                </div>
+                                `
+                                : ''
+                            }
+                        </div>
+                    </td>
+                    <td class="timestamp-cell compact-time">
+                        ${
+                            defect.created_at
+                            ? `
+                                <div class="submitted-date">
+                                    ${new Date(defect.created_at).toLocaleDateString('en-GB')}
+                                </div>
+                                <div class="submitted-time">
+                                    ${new Date(defect.created_at).toLocaleTimeString('en-GB')}
+                                </div>
+                            `
+                            : '-'
+                        }
+
+                    </td>
+
+                    <td>
+                        <button
+                            class="delete-btn"
+                            data-defect-id="${defect.id}"
+                            onclick="confirmDelete(${defect.id});">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+    }
+    
+    // Update summary cards with filtered data
+    updateSummaryCards(data);
+}
+
+function renderEvidenceImages(defect) {
+    const files = Array.isArray(defect.evidence_files) ? defect.evidence_files : [];
+    if (!files.length) return '-';
+    return files.map((file, index) => `
+        <img
+            src="/evidence_image/${defect.id}?index=${index + 1}&v=${encodeURIComponent(file.uploaded_at || '')}"
+            alt="evidence-${defect.id}-${index + 1}"
+            class="evidence-preview"
+            onclick="openEvidenceModal(${defect.id}, ${index + 1})"
+        >
+    `).join('');
+}
+
+function openEvidenceModal(defectId, imageIndex = 1) {
+    currentEvidenceDefectId = defectId;
+    currentEvidenceImageIndex = imageIndex;
+    const modal = document.getElementById('evidence-modal');
+    const img = document.getElementById('evidence-img');
+    img.src = `/evidence_image/${defectId}?index=${imageIndex}&v=${Date.now()}`;
+    modal.style.display = 'flex';
+}
+
+function closeEvidenceModal() {
+    const modal = document.getElementById('evidence-modal');
+    const img = document.getElementById('evidence-img');
+    img.src = '';
+    currentEvidenceDefectId = null;
+    currentEvidenceImageIndex = 1;
+    const uploadInput = document.getElementById('modal-evidence-upload');
+    if (uploadInput) uploadInput.value = '';
+    modal.style.display = 'none';
+}
+
+function openRemarkModal(id) {
+    currentDefectId = Number(id);
+    document.getElementById('modal-defect-id').innerText = currentDefectId;
+    const current = allDefects.find(d => Number(d.id) === currentDefectId);
+    document.getElementById('remark-textarea').value = current?.remarks || '';
+    document.getElementById('remark-modal').classList.add('show');
+}
+
+function openDescriptionModal(id) {
+    descriptionDefectId = id;
+    document.getElementById('desc-modal-defect-id').innerText = id;
+    const current = allDefects.find(d => Number(d.id) === Number(id));
+    document.getElementById('description-textarea').value = current?.desc || '';
+    document.getElementById('description-modal').classList.add('show');
+}
+
+function closeDescriptionModal() {
+    document.getElementById('description-modal').classList.remove('show');
+}
+
+function saveDescription(defectId, newDescription) {
+    // Support modal flow: if no args, use modal state
+    if (typeof defectId === 'undefined' || defectId === null) {
+        defectId = descriptionDefectId;
+        newDescription = document.getElementById('description-textarea').value;
+    }
+    newDescription = (newDescription || '').trim();
+    if (!defectId) return;
+    if (newDescription.length < 5) { showToast('Description is too short.', 'warning'); return; }
+
+    fetch('/update_description', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: defectId, description: newDescription })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data && data.success) {
+            const current = allDefects.find(d => Number(d.id) === Number(defectId));
+            if (current) current.desc = newDescription;
+            applyFilters();
+            if (typeof invalidateReportExport === 'function') invalidateReportExport();
+            showToast('Description saved.', 'success');
+            // close modal if used
+            if (document.getElementById('description-modal').classList.contains('show')) {
+                closeDescriptionModal();
+            }
+        } else {
+            showToast(data && data.error ? data.error : 'Save failed.', 'error');
+        }
+    })
+    .catch(() => showToast('Save failed.', 'error'));
+}
+
+// Event delegation for delete buttons - fallback
+if (document.getElementById('defect-table-body')) {
+    document.getElementById('defect-table-body').addEventListener('click', function (ev) {
+        if (ev.target.classList && ev.target.classList.contains('delete-btn')) {
+            const id = ev.target.getAttribute('data-defect-id');
+            if (id) confirmDelete(Number(id));
+        }
+    });
+}
+function closeRemarkModal() {
+    document.getElementById('remark-modal').classList.remove('show');
+}
+function saveRemark() {
+    const remark = document.getElementById('remark-textarea').value.trim();
+    if (!remark) { showToast('Please enter a remark.', 'warning'); return; }
+    const defectId = Number(currentDefectId);
+    fetch('/add_remark', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: defectId, remark, role: 'Homeowner' })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            const current = allDefects.find(d => Number(d.id) === defectId);
+            if (current) {
+                current.remarks = remark;
+            }
+            applyFilters();
+            if (typeof invalidateReportExport === 'function') invalidateReportExport();
+            showToast('Remark saved.', 'success');
+            closeRemarkModal();
+        } else {
+            showToast(data.error || 'Save failed.', 'error');
+        }
+    })
+    .catch(() => showToast('Save failed.', 'error'));
+}
+function uploadEvidenceFromModal() {
+    if (!currentEvidenceDefectId) {
+        showToast('Choose an evidence image first.', 'warning');
+        return;
+    }
+    uploadEvidence(currentEvidenceDefectId, document.getElementById('modal-evidence-upload'), {
+        replaceIndex: currentEvidenceImageIndex
+    });
+}
+
+function openEvidenceReplacePicker() {
+    const input = document.getElementById('modal-evidence-upload');
+    if (!input) return;
+    input.value = '';
+    input.click();
+}
+
+function uploadEvidence(defectId, sourceInput = null, options = {}) {
+    const fileInput = sourceInput || document.getElementById(`file-${defectId}`);
+    const files = Array.from(fileInput.files || []);
+    if (!files.length) return;
+    fileInput.value = '';
+    const replaceIndex = Number(options.replaceIndex || 0);
+    if (replaceIndex && files.length > 3) {
+        showToast('Please choose up to 3 replacement images.', 'error');
+        return;
+    }
+    if (!replaceIndex && files.length !== 3) {
+        showToast('Please upload exactly 3 evidence images.', 'error');
+        return;
+    }
+    
+    const allowedTypes = ['jpg', 'jpeg', 'jfif', 'png', 'tif', 'tiff'];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    for (const file of files) {
+        const fileExt = file.name.split('.').pop().toLowerCase();
+        if (!allowedTypes.includes(fileExt)) {
+            showToast(`Invalid file type. Allowed: ${allowedTypes.join(', ').toUpperCase()}`, 'error');
+            return;
+        }
+        if (file.size > maxSize) {
+            showToast('Each file must be 10MB or smaller.', 'error');
+            return;
+        }
+    }
+    
+    const formData = new FormData();
+    files.forEach((file) => formData.append('file', file));
+    formData.append('defect_id', defectId);
+    if (replaceIndex) {
+        formData.append('replace_index', replaceIndex);
+    }
+    fetch('/upload_evidence', { method: 'POST', body: formData })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) { 
+            showToast('✓ Evidence uploaded successfully!', 'success');
+            const current = allDefects.find(d => Number(d.id) === Number(defectId));
+            if (current) {
+                current.evidence_uploaded = true;
+                current.evidence_filename = data.filename || current.evidence_filename || '';
+                current.evidence_files = data.files || current.evidence_files || [];
+                current.evidence_count = current.evidence_files.length;
+                current.evidence_uploaded_at = data.uploaded_at || current.evidence_uploaded_at || '';
+            }
+            if (currentEvidenceDefectId === Number(defectId)) {
+                const modalImg = document.getElementById('evidence-img');
+                if (modalImg) {
+                    modalImg.src = `/evidence_image/${defectId}?index=${currentEvidenceImageIndex}&v=${Date.now()}`;
+                }
+            }
+            applyFilters();
+            if (typeof invalidateReportExport === 'function') invalidateReportExport();
+        }
+        else { showToast(data.error || 'Upload failed.', 'error'); }
+    })
+    .catch(() => showToast('Upload failed.', 'error'));
+}
+let deleteDefectId = null;
+
+function confirmDelete(defectId){
+    console.log('[Delete] confirmDelete() called with', defectId);
+    if (!defectId) {
+        console.error('[Delete] defectId is empty');
+        return;
+    }
+    
+    deleteDefectId = defectId;
+    const modal = document.getElementById('delete-modal');
+    
+    if (!modal) {
+        console.error('[Delete] Modal #delete-modal not found');
+        showToast('Error: Delete modal not found', 'error');
+        return;
+    }
+    
+    console.log('[Delete] Opening modal for defect', defectId);
+    modal.classList.add('show');
+}
+
+function closeDeleteModal(){
+    console.log('[Delete] closeDeleteModal() called');
+    const modal = document.getElementById('delete-modal');
+    if (modal) {
+        modal.classList.remove('show');
+    } else {
+        console.error('[Delete] Modal #delete-modal not found');
+    }
+}
+
+function deleteDefectConfirmed(){
+
+    console.log('[Delete] deleteDefectConfirmed() called for', deleteDefectId);
+
+    if(!deleteDefectId) return;
+
+    const defectId = Number(deleteDefectId);
+    const confirmBtn = document.querySelector('#delete-modal .delete-confirm-btn');
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Deleting...';
+    }
+
+    // Perform delete in background
+    const apiUrl = `/api/delete_defect/${defectId}`;
+    console.log('[Delete] Calling', apiUrl);
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(async res => {
+        console.log('[Delete] Response status:', res.status);
+        let data = null;
+        try {
+            data = await res.json();
+            console.log('[Delete] Response JSON:', data);
+        } catch (err) {
+            const text = await res.text().catch(() => null);
+            console.warn('Delete response not JSON', err, text);
+            if (res.ok) return; // treat as success
+            throw new Error('Non-JSON error');
+        }
+
+        if (!(res.ok && (data && data.success))) {
+            throw new Error(data && data.error ? data.error : 'Delete failed');
+        }
+
+        const index = allDefects.findIndex(d => Number(d.id) === defectId);
+        if (index !== -1) {
+            allDefects.splice(index, 1);
+        }
+        applyFilters();
+        if (typeof invalidateReportExport === 'function') invalidateReportExport();
+        closeDeleteModal();
+        deleteDefectId = null;
+        showToast('Defect deleted successfully.', 'success');
+    })
+    .catch(err => {
+        console.error('[Delete] Background delete failed', err);
+        showToast(err.message || 'Delete failed.', 'error');
+    })
+    .finally(() => {
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = 'Delete Report';
+        }
+    });
+}
+
+// Make sure functions are globally accessible
+window.confirmDelete = confirmDelete;
+window.deleteDefectConfirmed = deleteDefectConfirmed;
+window.closeDeleteModal = closeDeleteModal;
+</script>
+<script src="{{ url_for('static', filename='dashboard.js') }}?v=report-timeout-fix-1" defer></script>
+<div id="toast"></div>
+<footer class="page-footer">Copyright ©2026 DLP Compliance Report Generator. All Rights Reserved.</footer>
+</body>
+</html>
