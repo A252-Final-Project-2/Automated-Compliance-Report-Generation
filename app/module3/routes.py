@@ -3703,16 +3703,20 @@ def calculate_stats(defects):
     def _status_value(defect):
         return str(defect.get("status", "")).strip().lower()
 
-    def _is_completed(defect):
+    def _is_closed(defect):
         return defect.get("closed") or _status_value(defect) in {
-            "completed",
             "closed",
+            "ditutup",
             "archived",
+            "diarkib",
+        }
+
+    def _is_completed(defect):
+        return not _is_closed(defect) and _status_value(defect) in {
+            "completed",
             "telah diselesaikan",
             "telah selesai",
             "selesai",
-            "ditutup",
-            "diarkib",
         }
 
     def _is_pending(defect):
@@ -3731,7 +3735,7 @@ def calculate_stats(defects):
         "investigation": sum(1 for d in defects if _is_in_progress(d)),
         "on_hold": sum(1 for d in defects if _is_delayed(d)),
         "appeal": 0,
-        "closed": sum(1 for d in defects if str(d.get("status", "")).strip().lower() in {"closed", "ditutup", "archived", "diarkib"} or d.get("closed")),
+        "closed": sum(1 for d in defects if _is_closed(d)),
         "overdue": sum(1 for d in defects if d.get("is_overdue") is True),
         "hda_non_compliant": sum(1 for d in defects if d.get("hda_compliant") is False),
         "critical": sum(1 for d in defects if d.get("urgency") == "High"),
@@ -3802,6 +3806,22 @@ def build_case_key(role, user_id, defects):
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, ensure_ascii=False).encode("utf-8")
     ).hexdigest()
+
+
+def build_public_report_id(report_data):
+    case_info = (report_data or {}).get("case_info", {})
+    claim_reference = str(
+        case_info.get("claim_number") or case_info.get("claim_id") or ""
+    ).strip()
+
+    if claim_reference and claim_reference.upper() not in {"N/A", "-"}:
+        return claim_reference
+
+    try:
+        timestamp = _now_app_timezone().strftime("%Y%m%d-%H%M%S")
+    except Exception:
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    return f"RPT/{timestamp}"
 
 
 def auto_close_completed_cases(trigger_role=None):
@@ -4691,6 +4711,8 @@ def get_closed_evidence_appendix(role, claimant_unit=None):
         status = status_store.get(defect_id, d.get("status"))
         completed_date = completion_store.get(defect_id, d.get("completed_date"))
         evidence = evidence_store.get(defect_id) or {}
+        evidence_files = _evidence_items_from_meta(evidence)
+        first_evidence = evidence_files[0] if evidence_files else {}
 
         if not is_auto_closed(status, completed_date):
             continue
@@ -4703,8 +4725,9 @@ def get_closed_evidence_appendix(role, claimant_unit=None):
                 "reported_date": d.get("reported_date") or "-",
                 "completed_date": completed_date or "-",
                 "hda_compliant": calculate_hda_compliance(d.get("reported_date"), completed_date, status),
-                "filename": evidence.get("filename", "-"),
-                "uploaded_at": evidence.get("uploaded_at", "-"),
+                "filename": first_evidence.get("filename") or evidence.get("filename", "-"),
+                "evidence_files": evidence_files,
+                "uploaded_at": evidence.get("uploaded_at") or first_evidence.get("uploaded_at", "-"),
             }
         )
 
@@ -4712,16 +4735,50 @@ def get_closed_evidence_appendix(role, claimant_unit=None):
     return appendix_rows
 
 
+def _closed_appendix_field(label, value, width=24):
+    return f"{label:<{width}}: {value}"
+
+
+def _hda_compliance_display(value, language, status=None):
+    normalized = str(value).strip().lower()
+    is_compliant = normalized in {"yes", "ya", "true", "1", "mematuhi", "compliant"}
+    if language == "en":
+        return "Compliant" if is_compliant else "Non-Compliant"
+    return "Mematuhi" if is_compliant else "Tidak Mematuhi"
+
+
+def _append_closed_case_summary_lines(appendix_lines, item, language):
+    closed_days = calculate_days_to_complete(item.get("reported_date"), item.get("completed_date"))
+
+    if language == "ms":
+        appendix_lines.append(_closed_appendix_field("Unit", item.get("unit", "-")))
+        appendix_lines.append(_closed_appendix_field("Tarikh Dilaporkan", _format_display_date(item.get("reported_date"), language)))
+        appendix_lines.append(_closed_appendix_field("Tarikh Siap", _format_display_date(item.get("completed_date"), language)))
+        appendix_lines.append(_closed_appendix_field("Tempoh Siap (Hari)", closed_days if closed_days is not None else "-"))
+        appendix_lines.append(_closed_appendix_field("Status Pematuhan HDA", _hda_compliance_display(item.get("hda_compliant"), language)))
+        appendix_lines.append(_closed_appendix_field("Peraturan Ditutup", f"Ditutup selepas {AUTO_CLOSE_DAYS} hari dari tarikh siap"))
+        appendix_lines.append("Gambar Kecacatan:")
+    else:
+        appendix_lines.append(_closed_appendix_field("Unit", item.get("unit", "-")))
+        appendix_lines.append(_closed_appendix_field("Reported Date", _format_display_date(item.get("reported_date"), language)))
+        appendix_lines.append(_closed_appendix_field("Completed", _format_display_date(item.get("completed_date"), language)))
+        appendix_lines.append(_closed_appendix_field("Days to Complete", closed_days if closed_days is not None else "-"))
+        appendix_lines.append(_closed_appendix_field("HDA Compliance Status", _hda_compliance_display(item.get("hda_compliant"), language)))
+        appendix_lines.append(_closed_appendix_field("Closed Rule", f"Closed after {AUTO_CLOSE_DAYS} days from completion"))
+        appendix_lines.append("Defect Image:")
+
+
 def build_closed_appendix_lines(closed_evidence_appendix, language):
     """Build a consistent closed-case appendix text block for all roles."""
+    detail_indent = "   "
     if language == "ms":
         appendix_lines = [
             "",
             "LAMPIRAN A: BUTIRAN KES DITUTUP",
             "Kes ditutup dikecualikan daripada badan laporan utama dan disenaraikan di sini untuk rujukan sahaja.",
             "",
-            "Maklumat Pemilik Menuntut:",
-            f"Unit Pemilik Menuntut: {closed_evidence_appendix.get('claimant_unit', '') if isinstance(closed_evidence_appendix, dict) else '' or 'Tiada unit pemilik menuntut direkodkan.'}",
+            "Rekod Kes Ditutup Pemilik Menuntut:",
+            f"{detail_indent}Unit Pemilik Menuntut: {closed_evidence_appendix.get('claimant_unit', '') if isinstance(closed_evidence_appendix, dict) else '' or 'Tiada unit pemilik menuntut direkodkan.'}",
             "",
             "Senarai Kecacatan Pemilik Menuntut:",
         ]
@@ -4731,44 +4788,33 @@ def build_closed_appendix_lines(closed_evidence_appendix, language):
             "APPENDIX A: CLOSED CASE DETAILS",
             "Closed cases are excluded from the main report body and listed here for reference only.",
             "",
-            "Claimant Owner Details:",
-            f"Claimant Owner Unit: {closed_evidence_appendix.get('claimant_unit', '') if isinstance(closed_evidence_appendix, dict) else '' or 'No claimant owner unit recorded.'}",
+            "Claimant Owner Closed Case Records:",
+            f"{detail_indent}Claimant Owner Unit: {closed_evidence_appendix.get('claimant_unit', '') if isinstance(closed_evidence_appendix, dict) else '' or 'No claimant owner unit recorded.'}",
             "",
             "Claimant Owner Defect List:",
         ]
 
     if not closed_evidence_appendix:
         appendix_lines.append(
-            "Tiada rekod kes ditutup buat masa ini."
-            if language == "ms"
-            else "No closed-case records are currently available."
+            detail_indent
+            + (
+                "Tiada rekod kes ditutup yang tersedia pada masa ini."
+                if language == "ms"
+                else "No closed case records are currently available."
+            )
         )
         return appendix_lines
 
     for idx, item in enumerate(closed_evidence_appendix, 1):
+        if idx > 1:
+            appendix_lines.append("")
         header_prefix = f"{chr(64 + idx)}." if idx <= 26 else f"{idx}."
-        closed_days = calculate_days_to_complete(item.get("reported_date"), item.get("completed_date"))
 
         if language == "ms":
             appendix_lines.append(f"{header_prefix} Kecacatan ID {item.get('id', '-')}:")
-            appendix_lines.append(f"Unit: {item.get('unit', '-')}")
-            appendix_lines.append(f"Tarikh Dilaporkan: {item.get('reported_date', '-')}")
-            appendix_lines.append(f"Tarikh Siap: {item.get('completed_date', '-')}")
-            appendix_lines.append(f"Tempoh Siap (Hari): {closed_days if closed_days is not None else '-'}")
-            appendix_lines.append(f"Pematuhan HDA (30 Hari): {'Ya' if item.get('hda_compliant') else 'Tidak'}")
-            appendix_lines.append(f"Peraturan Ditutup: Ditutup selepas {AUTO_CLOSE_DAYS} hari dari tarikh siap")
-            appendix_lines.append(f"Muat Naik: {item.get('uploaded_at', '-')}")
-            appendix_lines.append("Gambar Kecacatan: gambar")
         else:
             appendix_lines.append(f"{header_prefix} Defect ID {item.get('id', '-')}:")
-            appendix_lines.append(f"Unit: {item.get('unit', '-')}")
-            appendix_lines.append(f"Reported Date: {item.get('reported_date', '-')}")
-            appendix_lines.append(f"Completed: {item.get('completed_date', '-')}")
-            appendix_lines.append(f"Days to Complete: {closed_days if closed_days is not None else '-'}")
-            appendix_lines.append(f"HDA Compliance (30 Days): {'Yes' if item.get('hda_compliant') else 'No'}")
-            appendix_lines.append(f"Closed Rule: Closed after {AUTO_CLOSE_DAYS} days from completion")
-            appendix_lines.append(f"Uploaded: {item.get('uploaded_at', '-')}")
-            appendix_lines.append("Defect Image: image")
+        _append_closed_case_summary_lines(appendix_lines, item, language)
 
         appendix_lines.append("")
 
@@ -4864,6 +4910,16 @@ def _closed_appendix_snapshot_rows(closed_evidence_appendix):
     return [item for item in rows if isinstance(item, dict)]
 
 
+def _closed_appendix_evidence_items(item):
+    if not isinstance(item, dict):
+        return []
+    return _evidence_items_from_meta({
+        "files": item.get("evidence_files") or item.get("files") or [],
+        "filename": item.get("filename"),
+        "uploaded_at": item.get("uploaded_at"),
+    })
+
+
 def _format_generated_datetime(language):
     now = _now_app_timezone()
     if language == "ms":
@@ -4876,15 +4932,52 @@ def _format_generated_datetime(language):
     return now.strftime("%d %B %Y, %H:%M")
 
 
+def _format_display_date(raw_date, language):
+    value = str(raw_date or "").strip()
+    if not value or value in {"-", "N/A", "None"}:
+        return "-"
+
+    date_part = value[:10]
+    parsed = None
+    for date_format in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%Y/%m/%d"):
+        try:
+            parsed = datetime.strptime(date_part, date_format)
+            break
+        except Exception:
+            continue
+
+    if not parsed:
+        return value
+
+    if language == "ms":
+        bulan_bm = {
+            1: "Januari", 2: "Februari", 3: "Mac", 4: "April",
+            5: "Mei", 6: "Jun", 7: "Julai", 8: "Ogos",
+            9: "September", 10: "Oktober", 11: "November", 12: "Disember",
+        }
+        return f"{parsed.day:02d} {bulan_bm[parsed.month]} {parsed.year}"
+
+    return parsed.strftime("%d %B %Y")
+
+
 def _format_display_timestamp(raw_timestamp, language):
     value = str(raw_timestamp or "").strip()
     if not value or value == "N/A":
         return "N/A"
 
-    try:
-        parsed = datetime.fromisoformat(value)
-    except ValueError:
-        return value
+    parsed = None
+    for date_format in ("%Y-%m-%d %H:%M:%S", "%d/%m/%Y %H:%M:%S", "%Y-%m-%dT%H:%M:%S"):
+        try:
+            parsed = datetime.strptime(value[:19], date_format)
+            break
+        except Exception:
+            continue
+
+    if not parsed:
+        try:
+            parsed = datetime.fromisoformat(value)
+        except ValueError:
+            return value
 
     if language == "ms":
         bulan_bm = {
@@ -4910,11 +5003,187 @@ def normalize_report_section_spacing(report_text):
     if not report_text:
         return report_text
 
+    expanded_gap_headers = (
+        r"1\.\s+Tujuan\s+Laporan",
+        r"1\.\s+Purpose\s+of\s+the\s+Report",
+        r"1\.\s+Latar\s+Belakang\s+Kes",
+        r"1\.\s+Case\s+Background",
+        r"5\.\s+Pemerhatian\s+Berkaitan\s+Pematuhan\s+Tempoh",
+        r"5\.\s+Observations\s+on\s+Timeframe\s+Compliance",
+        r"4\.\s+Pemerhatian\s+Berkaitan\s+Pematuhan\s+dan\s+Tarikh\s+Akhir",
+        r"3\.\s+Pemerhatian\s+Berkaitan\s+Status\s+dan\s+Tempoh",
+        r"3\.\s+Recorded\s+Status\s+and\s+Timeframe\s+Observations",
+    )
+    expanded_gap_header_pattern = "|".join(expanded_gap_headers)
+
     text = report_text.replace("\r\n", "\n").replace("\r", "\n").strip()
     text = re.sub(r"\n{3,}", "\n\n", text)
     text = re.sub(r"(?<!\n)\n(?=\s*\d+\.\s+)", "\n\n", text)
+    text = re.sub(r"(?<!\n)\n(?=\s*(?:AI\s+DISCLAIMER|PENAFIAN\s+AI)\s*:)", "\n\n", text, flags=re.IGNORECASE)
     text = re.sub(r"(?m)^(\d+\.\s+[^\n]+)\n(?!\n)", r"\1\n\n", text)
+    text = re.sub(r"(?im)^((?:AI\s+DISCLAIMER|PENAFIAN\s+AI)\s*:)\n(?!\n)", r"\1\n\n", text)
+    text = re.sub(
+        rf"(?im)\n+\s*(?=({expanded_gap_header_pattern})\s*$)",
+        "\n\n\n",
+        text,
+    )
     return text
+
+
+def normalize_report_date_values(report_text, language):
+    if not report_text:
+        return report_text
+
+    date_labels = (
+        "Tarikh Jana",
+        "Generated Date",
+        "Tarikh Dilaporkan",
+        "Reported Date",
+        "Tarikh Siap Dijadualkan",
+        "Scheduled Completion Date",
+        "Tarikh Siap Sebenar",
+        "Actual Completion Date",
+        "Tarikh Siap",
+        "Completed",
+        "Tarikh Pembelian/ Transaksi",
+        "Date of Purchase/Transaction",
+    )
+    label_pattern = "|".join(re.escape(label) for label in date_labels)
+
+    def replace_match(match):
+        label = match.group("label")
+        value = match.group("value").strip()
+        if re.search(r"\d{1,2}:\d{2}", value):
+            formatted_value = _format_display_timestamp(value, language)
+        else:
+            formatted_value = _format_display_date(value, language)
+        return f"{match.group('indent')}{label}: {formatted_value}"
+
+    return re.sub(
+        rf"^(?P<indent>\s*)(?P<label>{label_pattern})\s*:\s*(?P<value>[^\n]+)$",
+        replace_match,
+        report_text,
+        flags=re.IGNORECASE | re.MULTILINE,
+    )
+
+
+def normalize_legal_statistics_section(report_text):
+    if not report_text:
+        return report_text
+
+    text = str(report_text)
+
+    def replace_ms(match):
+        closed = match.group(4)
+        pending = match.group(5)
+        overdue = match.group(6)
+        hda_non_compliant = match.group(7)
+        return (
+            f"{match.group(1)}"
+            f"Jumlah keseluruhan kecacatan: {match.group(2)}\n"
+            f"Telah diselesaikan: {match.group(3)}\n"
+            f"Kes Ditutup: {closed or 0}\n"
+            f"Masih belum diselesaikan: {pending}\n"
+            f"Direkodkan sebagai tertunggak: {overdue}\n"
+            f"Tidak mematuhi tempoh 30 hari HDA: {hda_non_compliant}\n"
+        )
+
+    def replace_en(match):
+        closed = match.group(4)
+        pending = match.group(5)
+        overdue = match.group(6)
+        hda_non_compliant = match.group(7)
+        return (
+            f"{match.group(1)}"
+            f"Total recorded defects: {match.group(2)}\n"
+            f"Completed: {match.group(3)}\n"
+            f"Closed Cases: {closed or 0}\n"
+            f"Still unresolved: {pending}\n"
+            f"Recorded as overdue: {overdue}\n"
+            f"Non-compliant with 30-day HDA requirement: {hda_non_compliant}\n"
+        )
+
+    text = re.sub(
+        r"(?is)(2\.\s*Kedudukan Statistik Rekod Kecacatan\s*\n+)\s*"
+        r"Jumlah keseluruhan kecacatan:\s*(\d+)\.?\s*"
+        r"Telah diselesaikan:\s*(\d+)\.?\s*"
+        r"(?:Kes Ditutup:\s*(\d+)\.?\s*)?"
+        r"Masih belum diselesaikan:\s*(\d+)\.?\s*"
+        r"Direkodkan sebagai\s+tertunggak:\s*(\d+)\.?\s*"
+        r"Tidak mematuhi tempoh 30 hari HDA:\s*(\d+)\.?",
+        replace_ms,
+        text,
+    )
+
+    text = re.sub(
+        r"(?is)(2\.\s*Statistical Position of Defect Records\s*\n+)\s*"
+        r"Total recorded defects:\s*(\d+)\.?\s*"
+        r"Completed:\s*(\d+)\.?\s*"
+        r"(?:Closed Cases:\s*(\d+)\.?\s*)?"
+        r"Still unresolved:\s*(\d+)\.?\s*"
+        r"Recorded as overdue:\s*(\d+)\.?\s*"
+        r"Non-compliant with 30-day HDA requirement:\s*(\d+)\.?",
+        replace_en,
+        text,
+    )
+
+    return text
+
+
+def enforce_legal_statistics_section_counts(report_text, language, summary_stats):
+    if not report_text or not summary_stats:
+        return report_text
+
+    total = int(summary_stats.get("total_defects", summary_stats.get("total", 0)) or 0)
+    completed = int(summary_stats.get("completed_defects", summary_stats.get("completed", 0)) or 0)
+    closed = int(summary_stats.get("closed_defects", summary_stats.get("closed", 0)) or 0)
+    pending = int(summary_stats.get("pending_defects", summary_stats.get("pending", 0)) or 0)
+    overdue = int(summary_stats.get("overdue_defects", summary_stats.get("overdue", 0)) or 0)
+    hda_non_compliant = int(summary_stats.get("hda_non_compliant_defects", summary_stats.get("hda_non_compliant", 0)) or 0)
+
+    if language == "ms":
+        section_body = (
+            f"Jumlah keseluruhan kecacatan: {total}\n"
+            f"Telah diselesaikan: {completed}\n"
+            f"Kes Ditutup: {closed}\n"
+            f"Masih belum diselesaikan: {pending}\n"
+            f"Direkodkan sebagai tertunggak: {overdue}\n"
+            f"Tidak mematuhi tempoh 30 hari HDA: {hda_non_compliant}\n\n"
+        )
+        pattern = r"(2\.\s*Kedudukan Statistik Rekod Kecacatan\s*\n+)(.*?)(?=\n\s*3\.\s|\Z)"
+    else:
+        section_body = (
+            f"Total recorded defects: {total}\n"
+            f"Completed: {completed}\n"
+            f"Closed Cases: {closed}\n"
+            f"Still unresolved: {pending}\n"
+            f"Recorded as overdue: {overdue}\n"
+            f"Non-compliant with 30-day HDA requirement: {hda_non_compliant}\n\n"
+        )
+        pattern = r"(2\.\s*Statistical Position of Defect Records\s*\n+)(.*?)(?=\n\s*3\.\s|\Z)"
+
+    updated, count = re.subn(
+        pattern,
+        r"\1" + section_body,
+        report_text,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if not count:
+        return report_text
+
+    updated = re.sub(
+        r"(Tidak mematuhi tempoh 30 hari HDA:\s*\d+)\s*\n+\s*(?=3\.\s)",
+        r"\1\n\n",
+        updated,
+        flags=re.IGNORECASE,
+    )
+    updated = re.sub(
+        r"(Non-compliant with 30-day HDA requirement:\s*\d+)\s*\n+\s*(?=3\.\s)",
+        r"\1\n\n",
+        updated,
+        flags=re.IGNORECASE,
+    )
+    return updated
 
 
 def remove_english_tribunal_title_after_subtitle(report_text, language):
@@ -4994,6 +5263,23 @@ def normalize_defect_detail_indentation(report_text):
     if not report_text:
         return report_text
 
+    report_text = re.sub(
+        r"(?im)(?<!\n)\n(?=[ \t]*(?:[a-z]|[A-Z])\.\s+(?:Defect ID|Kecacatan ID)\b)",
+        "\n\n",
+        report_text,
+    )
+
+    report_text = re.sub(
+        r"(?im)^[ \t]*(Peraturan Ditutup\s*:)\s*\n[ \t]*(Ditutup selepas[^\n]*)$",
+        r"\1 \2",
+        report_text,
+    )
+    report_text = re.sub(
+        r"(?im)^[ \t]*(Closed Rule\s*:)\s*\n[ \t]*(Closed after[^\n]*)$",
+        r"\1 \2",
+        report_text,
+    )
+
     detail_labels = (
         "Description",
         "Keterangan",
@@ -5003,6 +5289,7 @@ def normalize_defect_detail_indentation(report_text):
         "Scheduled Completion Date",
         "Tarikh Siap Dijadualkan",
         "Actual Completion Date",
+        "Completed",
         "Tarikh Siap Sebenar",
         "Tarikh Siap",
         "Days to Complete",
@@ -5013,11 +5300,17 @@ def normalize_defect_detail_indentation(report_text):
         "Overdue Status",
         "Status Tertunggak",
         "HDA Compliance (30 Days)",
+        "HDA Compliance Status",
         "Pematuhan HDA (30 Hari)",
+        "Status Pematuhan HDA",
         "Priority",
         "Keutamaan",
         "Remarks",
         "Ulasan",
+        "Closed Rule",
+        "Peraturan Ditutup",
+        "Defect Image",
+        "Gambar Kecacatan",
     )
     label_pattern = "|".join(re.escape(label) for label in detail_labels)
     return re.sub(
@@ -5025,6 +5318,38 @@ def normalize_defect_detail_indentation(report_text):
         r"   \1",
         report_text,
         flags=re.IGNORECASE,
+    )
+
+
+def normalize_priority_values_for_language(report_text, language):
+    if not report_text:
+        return report_text
+
+    if language == "ms":
+        replacements = {
+            "high": "Tinggi",
+            "medium": "Sederhana",
+            "low": "Rendah",
+        }
+        label_pattern = r"(Keutamaan\s*:\s*)"
+    else:
+        replacements = {
+            "tinggi": "High",
+            "sederhana": "Medium",
+            "rendah": "Low",
+        }
+        label_pattern = r"(Priority\s*:\s*)"
+
+    def replace_priority(match):
+        label = match.group(1)
+        value = match.group(2)
+        normalized = replacements.get(value.strip().lower(), value.strip())
+        return f"{label.rstrip()} {normalized}"
+
+    return re.sub(
+        rf"(?im)^\s*{label_pattern}(high|medium|low|tinggi|sederhana|rendah)\s*$",
+        replace_priority,
+        report_text,
     )
 
 
@@ -6069,6 +6394,8 @@ def get_closed_evidence_appendix(role, claimant_unit=None, project_name=None):
         status = status_store.get(defect_id, d.get("status"))
         completed_date = completion_store.get(defect_id, d.get("completed_date"))
         evidence = evidence_store.get(defect_id) or {}
+        evidence_files = _evidence_items_from_meta(evidence)
+        first_evidence = evidence_files[0] if evidence_files else {}
 
         if not is_auto_closed(status, completed_date):
             continue
@@ -6085,8 +6412,9 @@ def get_closed_evidence_appendix(role, claimant_unit=None, project_name=None):
                 "reported_date": d.get("reported_date") or "-",
                 "completed_date": completed_date or "-",
                 "hda_compliant": calculate_hda_compliance(d.get("reported_date"), completed_date, status),
-                "filename": evidence.get("filename", "-"),
-                "uploaded_at": evidence.get("uploaded_at", "-"),
+                "filename": first_evidence.get("filename") or evidence.get("filename", "-"),
+                "evidence_files": evidence_files,
+                "uploaded_at": evidence.get("uploaded_at") or first_evidence.get("uploaded_at", "-"),
             }
         )
 
@@ -6143,6 +6471,7 @@ def get_closed_evidence_appendix(role, claimant_unit=None, project_name=None):
 
 def build_closed_appendix_lines(closed_evidence_appendix, language):
     """Build a consistent closed-case appendix text block for all roles."""
+    detail_indent = "   "
     claimant_unit = closed_evidence_appendix.get("claimant_unit", "") if isinstance(closed_evidence_appendix, dict) else ""
     claimant_rows = closed_evidence_appendix.get("claimant_rows", []) if isinstance(closed_evidence_appendix, dict) else []
     other_rows = closed_evidence_appendix.get("other_rows", []) if isinstance(closed_evidence_appendix, dict) else []
@@ -6156,12 +6485,13 @@ def build_closed_appendix_lines(closed_evidence_appendix, language):
             "LAMPIRAN A: BUTIRAN KES DITUTUP",
             "Kes ditutup dikecualikan daripada badan laporan utama dan disenaraikan di sini untuk rujukan sahaja.",
             "",
-            "Maklumat Pemilik Menuntut:",
-            f"Unit Pemilik Menuntut: {claimant_unit or 'Tiada unit pemilik menuntut direkodkan.'}",
+            "Rekod Kes Ditutup Pemilik Menuntut:",
+            f"{detail_indent}Unit Pemilik Menuntut: {claimant_unit or 'Tiada unit pemilik menuntut direkodkan.'}",
+            "",
             "Senarai Kecacatan Pemilik Menuntut:",
         ]
-        no_records = "Tiada rekod kes ditutup buat masa ini."
-        other_details = "Maklumat Pemilik Lain"
+        no_records = f"{detail_indent}Tiada rekod kes ditutup yang tersedia pada masa ini."
+        other_details = "Rekod Kes Ditutup Pemilik Lain"
         other_unit_label = "Unit Pemilik Lain"
         other_section = "Senarai Kecacatan Pemilik Lain"
     else:
@@ -6170,12 +6500,13 @@ def build_closed_appendix_lines(closed_evidence_appendix, language):
             "APPENDIX A: CLOSED CASE DETAILS",
             "Closed cases are excluded from the main report body and listed here for reference only.",
             "",
-            "Claimant Owner Details:",
-            f"Claimant Owner Unit: {claimant_unit or 'No claimant owner unit recorded.'}",
+            "Claimant Owner Closed Case Records:",
+            f"{detail_indent}Claimant Owner Unit: {claimant_unit or 'No claimant owner unit recorded.'}",
+            "",
             "Claimant Owner Defect List:",
         ]
-        no_records = "No closed-case records are currently available."
-        other_details = "Other Owner Details"
+        no_records = f"{detail_indent}No closed case records are currently available."
+        other_details = "Other Owner Closed Case Records"
         other_unit_label = "Other Owner Unit"
         other_section = "Other Owner Defect List"
 
@@ -6186,14 +6517,14 @@ def build_closed_appendix_lines(closed_evidence_appendix, language):
             if other_owner_units:
                 for owner_unit in other_owner_units:
                     appendix_lines.extend([
-                        f"{other_unit_label}: {owner_unit}",
+                        f"{detail_indent}{other_unit_label}: {owner_unit}",
                         f"{other_section}:",
                         no_records,
                         "",
                     ])
             else:
                 appendix_lines.extend([
-                    f"{other_unit_label}: {'Tiada unit pemilik lain direkodkan.' if language == 'ms' else 'No other owner unit recorded.'}",
+                    f"{detail_indent}{other_unit_label}: {'Tiada unit pemilik lain direkodkan.' if language == 'ms' else 'No other owner unit recorded.'}",
                     f"{other_section}:",
                     no_records,
                 ])
@@ -6202,29 +6533,15 @@ def build_closed_appendix_lines(closed_evidence_appendix, language):
     if claimant_rows:
         appendix_lines.append("")
         for idx, item in enumerate(claimant_rows, 1):
+            if idx > 1:
+                appendix_lines.append("")
             header_prefix = f"{chr(64 + idx)}." if idx <= 26 else f"{idx}."
-            closed_days = calculate_days_to_complete(item.get("reported_date"), item.get("completed_date"))
 
             if language == "ms":
                 appendix_lines.append(f"{header_prefix} Kecacatan ID {item.get('id', '-')}:" )
-                appendix_lines.append(f"Unit: {item.get('unit', '-')}")
-                appendix_lines.append(f"Tarikh Dilaporkan: {item.get('reported_date', '-')}")
-                appendix_lines.append(f"Tarikh Siap: {item.get('completed_date', '-')}")
-                appendix_lines.append(f"Tempoh Siap (Hari): {closed_days if closed_days is not None else '-'}")
-                appendix_lines.append(f"Pematuhan HDA (30 Hari): {'Ya' if item.get('hda_compliant') else 'Tidak'}")
-                appendix_lines.append(f"Peraturan Ditutup: Ditutup selepas {AUTO_CLOSE_DAYS} hari dari tarikh siap")
-                appendix_lines.append("Gambar Kecacatan: gambar")
-                appendix_lines.append(f"Muat Naik: {item.get('uploaded_at', '-')}")
             else:
                 appendix_lines.append(f"{header_prefix} Defect ID {item.get('id', '-')}:" )
-                appendix_lines.append(f"Unit: {item.get('unit', '-')}")
-                appendix_lines.append(f"Reported Date: {item.get('reported_date', '-')}")
-                appendix_lines.append(f"Completed: {item.get('completed_date', '-')}")
-                appendix_lines.append(f"Days to Complete: {closed_days if closed_days is not None else '-'}")
-                appendix_lines.append(f"HDA Compliance (30 Days): {'Yes' if item.get('hda_compliant') else 'No'}")
-                appendix_lines.append(f"Closed Rule: Closed after {AUTO_CLOSE_DAYS} days from completion")
-                appendix_lines.append("Defect Image: image")
-                appendix_lines.append(f"Uploaded: {item.get('uploaded_at', '-')}")
+            _append_closed_case_summary_lines(appendix_lines, item, language)
 
             appendix_lines.append("")
     else:
@@ -6251,7 +6568,8 @@ def build_closed_appendix_lines(closed_evidence_appendix, language):
             owner_unit_norm = _normalise_unit_for_grouping(owner_unit) or str(owner_unit or "").strip()
             unit_rows = rows_by_unit.get(owner_unit_norm, [])
             appendix_lines.extend([
-                f"{other_unit_label}: {owner_unit}",
+                f"{detail_indent}{other_unit_label}: {owner_unit}",
+                "",
                 f"{other_section}:",
             ])
 
@@ -6260,29 +6578,15 @@ def build_closed_appendix_lines(closed_evidence_appendix, language):
                 continue
 
             for idx, item in enumerate(unit_rows, 1):
+                if idx > 1:
+                    appendix_lines.append("")
                 header_prefix = f"{chr(64 + idx)}." if idx <= 26 else f"{idx}."
-                closed_days = calculate_days_to_complete(item.get("reported_date"), item.get("completed_date"))
 
                 if language == "ms":
                     appendix_lines.append(f"{header_prefix} Kecacatan ID {item.get('id', '-')}:" )
-                    appendix_lines.append(f"Unit: {item.get('unit', '-')}")
-                    appendix_lines.append(f"Tarikh Dilaporkan: {item.get('reported_date', '-')}")
-                    appendix_lines.append(f"Tarikh Siap: {item.get('completed_date', '-')}")
-                    appendix_lines.append(f"Tempoh Siap (Hari): {closed_days if closed_days is not None else '-'}")
-                    appendix_lines.append(f"Pematuhan HDA (30 Hari): {'Ya' if item.get('hda_compliant') else 'Tidak'}")
-                    appendix_lines.append(f"Peraturan Ditutup: Ditutup selepas {AUTO_CLOSE_DAYS} hari dari tarikh siap")
-                    appendix_lines.append("Gambar Kecacatan: gambar")
-                    appendix_lines.append(f"Muat Naik: {item.get('uploaded_at', '-')}")
                 else:
                     appendix_lines.append(f"{header_prefix} Defect ID {item.get('id', '-')}:" )
-                    appendix_lines.append(f"Unit: {item.get('unit', '-')}")
-                    appendix_lines.append(f"Reported Date: {item.get('reported_date', '-')}")
-                    appendix_lines.append(f"Completed: {item.get('completed_date', '-')}")
-                    appendix_lines.append(f"Days to Complete: {closed_days if closed_days is not None else '-'}")
-                    appendix_lines.append(f"HDA Compliance (30 Days): {'Yes' if item.get('hda_compliant') else 'No'}")
-                    appendix_lines.append(f"Closed Rule: Closed after {AUTO_CLOSE_DAYS} days from completion")
-                    appendix_lines.append("Defect Image: image")
-                    appendix_lines.append(f"Uploaded: {item.get('uploaded_at', '-')}")
+                _append_closed_case_summary_lines(appendix_lines, item, language)
 
                 appendix_lines.append("")
 
@@ -6547,7 +6851,7 @@ def generate_ai_report_api():
 
         # Reuse previously generated report when the source defect snapshot is unchanged.
         snapshot_payload = {
-            "report_format_version": 7,
+            "report_format_version": 8,
             "role": role,
             "language": language,
             "project_name": project_name,
@@ -6565,7 +6869,7 @@ def generate_ai_report_api():
                 "claimant": profile_snapshot_data.get("claimant", {}),
                 "respondent": profile_snapshot_data.get("respondent", {}),
             },
-            "appendix_schema_version": 2 if role in ["Homeowner", "Developer", "Legal", "Admin"] else 1,
+            "appendix_schema_version": 4 if role in ["Homeowner", "Developer", "Legal", "Admin"] else 1,
             "defects": [
                 {
                     "id": d.get("id"),
@@ -6584,6 +6888,7 @@ def generate_ai_report_api():
                 {
                     "id": item.get("id"),
                     "filename": item.get("filename"),
+                    "evidence_files": _closed_appendix_evidence_items(item),
                     "uploaded_at": item.get("uploaded_at"),
                     "completed_date": item.get("completed_date"),
                 }
@@ -6660,7 +6965,17 @@ def generate_ai_report_api():
                         report_text = _strip_opposite_language_report(report_text, language)
                         report_text = refresh_generated_datetime_line(report_text, language)
                         report_text = normalize_report_section_spacing(report_text)
+                        report_text = normalize_legal_statistics_section(report_text)
+                        if role == "Legal":
+                            report_text = enforce_legal_statistics_section_counts(
+                                report_text,
+                                language,
+                                cached_report_data.get("summary_stats", {}),
+                            )
                         report_text = remove_english_tribunal_title_after_subtitle(report_text, language)
+                        report_text = normalize_priority_values_for_language(report_text, language)
+                        report_text = normalize_report_date_values(report_text, language)
+                        report_text = normalize_defect_detail_indentation(report_text)
                         report_text = _sanitize_encrypted_fragments(report_text)
                         # Ensure AI disclaimer heading uses the requested language for cached reports
                         try:
@@ -6673,11 +6988,12 @@ def generate_ai_report_api():
                             # Match 'AI DISCLAIMER' with any number of trailing colons/spaces and replace
                             report_text = re.sub(r"AI\s*DISCLAIMER[:\s]*", localized_disclaimer, report_text, flags=re.IGNORECASE)
                             report_text = re.sub(r"AI\s*Disclaimer[:\s]*", localized_disclaimer, report_text, flags=re.IGNORECASE)
+                            report_text = normalize_report_section_spacing(report_text)
                         except Exception:
                             pass
 
                         return jsonify({
-                            "generated_at": _now_app_timezone().strftime("%d/%m/%Y %H:%M:%S"),
+                            "generated_at": _format_display_timestamp(_now_app_timezone().strftime("%Y-%m-%d %H:%M:%S"), language),
                             "role": role,
                             "language": language,
                             "report": report_text
@@ -6704,11 +7020,19 @@ def generate_ai_report_api():
             hda_value = str(item.get("hda_compliance_30_days", "")).strip().lower()
 
             if language == "ms":
-                item["overdue"] = "Ya" if overdue_value in {"yes", "ya"} else "Tidak"
-                item["hda_compliance_30_days"] = "Ya" if hda_value in {"yes", "ya"} else "Tidak"
+                item["overdue"] = "Tertunggak" if overdue_value in {"yes", "ya", "overdue", "tertunggak"} else "Tidak Tertunggak"
+                item["hda_compliance_30_days"] = (
+                    "Mematuhi"
+                    if hda_value in {"yes", "ya", "mematuhi", "compliant"}
+                    else "Tidak Mematuhi"
+                )
             else:
-                item["overdue"] = "Yes" if overdue_value in {"yes", "ya"} else "No"
-                item["hda_compliance_30_days"] = "Yes" if hda_value in {"yes", "ya"} else "No"
+                item["overdue"] = "Overdue" if overdue_value in {"yes", "ya", "overdue", "tertunggak"} else "Not Overdue"
+                item["hda_compliance_30_days"] = (
+                    "Compliant"
+                    if hda_value in {"yes", "ya", "mematuhi", "compliant"}
+                    else "Non-Compliant"
+                )
 
         report_data.setdefault("case_info", {})["item_service"] = _item_service_for_language(
             report_data.get("case_info", {}).get("item_service"),
@@ -6725,8 +7049,8 @@ def generate_ai_report_api():
             generated_label = lang_conf.get("generated_label") or ("Generated Date" if language == "en" else "Tarikh Jana")
             subtitle = _report_subtitle_for_role(pdf_labels, role)
 
-            header_dt = _now_app_timezone().strftime('%d/%m/%Y %H:%M:%S')
-            header = f"{ai_title}\n{report_title}\n{generated_label}: {header_dt}\n\n{subtitle}\n\n"
+            header_dt = _format_display_timestamp(_now_app_timezone().strftime("%Y-%m-%d %H:%M:%S"), language)
+            header = f"{ai_title}\n\n{report_title}\n{generated_label}: {header_dt}\n\n{subtitle}\n\n"
 
             # Only insert header for English outputs or when missing
             if language == 'en' and not report.lstrip().lower().startswith(ai_title.lower()):
@@ -6767,52 +7091,64 @@ def generate_ai_report_api():
 
             # Force overdue + HDA boolean wording to Bahasa Malaysia.
             report = re.sub(
-                r"^\s*(Overdue Status|Status Tertunggak)\s*:\s*Yes\s*$",
-                "Status Tertunggak: Ya",
+                r"^\s*(Overdue Status|Status Tertunggak)\s*:\s*(Yes|Ya|Overdue|Tertunggak)\s*$",
+                "Status Tertunggak: Tertunggak",
                 report,
                 flags=re.IGNORECASE | re.MULTILINE,
             )
             report = re.sub(
-                r"^\s*(Overdue Status|Status Tertunggak)\s*:\s*No\s*$",
-                "Status Tertunggak: Tidak",
+                r"^\s*(Overdue Status|Status Tertunggak)\s*:\s*(No|Tidak|Not Overdue|Tidak Tertunggak)\s*$",
+                "Status Tertunggak: Tidak Tertunggak",
                 report,
                 flags=re.IGNORECASE | re.MULTILINE,
             )
             report = re.sub(
-                r"^\s*(HDA Compliance \(30 Days\)|Pematuhan HDA \(30 Hari\))\s*:\s*Yes\s*$",
-                "Pematuhan HDA (30 Hari): Ya",
+                r"^\s*(HDA Compliance \(30 Days\)|HDA Compliance Status|Pematuhan HDA \(30 Hari\)|Status Pematuhan HDA)\s*:\s*(Yes|Ya|Compliant|Mematuhi)\s*$",
+                "   Status Pematuhan HDA: Mematuhi",
                 report,
                 flags=re.IGNORECASE | re.MULTILINE,
             )
             report = re.sub(
-                r"^\s*(HDA Compliance \(30 Days\)|Pematuhan HDA \(30 Hari\))\s*:\s*No\s*$",
-                "Pematuhan HDA (30 Hari): Tidak",
+                r"^\s*(HDA Compliance \(30 Days\)|HDA Compliance Status|Pematuhan HDA \(30 Hari\)|Status Pematuhan HDA)\s*:\s*(Tidak Mematuhi|Non-Compliant|No|Tidak)\s*$",
+                "   Status Pematuhan HDA: Tidak Mematuhi",
+                report,
+                flags=re.IGNORECASE | re.MULTILINE,
+            )
+            report = re.sub(
+                r"^\s*(HDA Compliance \(30 Days\)|HDA Compliance Status|Pematuhan HDA \(30 Hari\)|Status Pematuhan HDA)\s*:\s*(Under Review|Dalam Semakan)\s*$",
+                "   Status Pematuhan HDA: Tidak Mematuhi",
                 report,
                 flags=re.IGNORECASE | re.MULTILINE,
             )
         else:
             # Force overdue + HDA boolean wording to English.
             report = re.sub(
-                r"^\s*(Overdue Status|Status Tertunggak)\s*:\s*Ya\s*$",
-                "   Overdue Status: Yes",
+                r"^\s*(Overdue Status|Status Tertunggak)\s*:\s*(Ya|Yes|Tertunggak|Overdue)\s*$",
+                "   Overdue Status: Overdue",
                 report,
                 flags=re.IGNORECASE | re.MULTILINE,
             )
             report = re.sub(
-                r"^\s*(Overdue Status|Status Tertunggak)\s*:\s*(Tidak|No)\s*$",
-                "   Overdue Status: No",
+                r"^\s*(Overdue Status|Status Tertunggak)\s*:\s*(Tidak|No|Tidak Tertunggak|Not Overdue)\s*$",
+                "   Overdue Status: Not Overdue",
                 report,
                 flags=re.IGNORECASE | re.MULTILINE,
             )
             report = re.sub(
-                r"^\s*(HDA Compliance \(30 Days\)|Pematuhan HDA \(30 Hari\))\s*:\s*Ya\s*$",
-                "   HDA Compliance (30 Days): Yes",
+                r"^\s*(HDA Compliance \(30 Days\)|HDA Compliance Status|Pematuhan HDA \(30 Hari\)|Status Pematuhan HDA)\s*:\s*(Ya|Yes|Mematuhi|Compliant)\s*$",
+                "   HDA Compliance Status: Compliant",
                 report,
                 flags=re.IGNORECASE | re.MULTILINE,
             )
             report = re.sub(
-                r"^\s*(HDA Compliance \(30 Days\)|Pematuhan HDA \(30 Hari\))\s*:\s*(Tidak|No)\s*$",
-                "   HDA Compliance (30 Days): No",
+                r"^\s*(HDA Compliance \(30 Days\)|HDA Compliance Status|Pematuhan HDA \(30 Hari\)|Status Pematuhan HDA)\s*:\s*(Tidak Mematuhi|Non-Compliant|Tidak|No)\s*$",
+                "   HDA Compliance Status: Non-Compliant",
+                report,
+                flags=re.IGNORECASE | re.MULTILINE,
+            )
+            report = re.sub(
+                r"^\s*(HDA Compliance \(30 Days\)|HDA Compliance Status|Pematuhan HDA \(30 Hari\)|Status Pematuhan HDA)\s*:\s*(Dalam Semakan|Under Review)\s*$",
+                "   HDA Compliance Status: Non-Compliant",
                 report,
                 flags=re.IGNORECASE | re.MULTILINE,
             )
@@ -6871,7 +7207,16 @@ def generate_ai_report_api():
         report = _strip_opposite_language_report(report, language)
         report = refresh_generated_datetime_line(report, language)
         report = normalize_report_section_spacing(report)
+        report = normalize_legal_statistics_section(report)
+        if role == "Legal":
+            report = enforce_legal_statistics_section_counts(
+                report,
+                language,
+                report_data.get("summary_stats", {}),
+            )
         report = remove_english_tribunal_title_after_subtitle(report, language)
+        report = normalize_priority_values_for_language(report, language)
+        report = normalize_report_date_values(report, language)
         report = normalize_defect_detail_indentation(report)
         report = _sanitize_encrypted_fragments(report)
 
@@ -6886,6 +7231,7 @@ def generate_ai_report_api():
             # Match 'AI DISCLAIMER' with any number of trailing colons/spaces and replace
             report = re.sub(r"AI\s*DISCLAIMER[:\s]*", localized_disclaimer, report, flags=re.IGNORECASE)
             report = re.sub(r"AI\s*Disclaimer[:\s]*", localized_disclaimer, report, flags=re.IGNORECASE)
+            report = normalize_report_section_spacing(report)
         except Exception:
             pass
 
@@ -6950,7 +7296,7 @@ def generate_ai_report_api():
             generated_label = lang_conf.get("generated_label") or ("Generated Date" if language == "en" else "Tarikh Jana")
             subtitle = _report_subtitle_for_role(pdf_labels, role)
 
-            header = f"{ai_title}\n{report_title}\n{generated_label}: {now_local.strftime('%d/%m/%Y %H:%M:%S')}\n\n{subtitle}\n\n"
+            header = f"{ai_title}\n\n{report_title}\n{generated_label}: {_format_display_timestamp(now_local.strftime('%Y-%m-%d %H:%M:%S'), language)}\n\n{subtitle}\n\n"
 
             report = _strip_known_report_header_lines(report, language)
 
@@ -6960,7 +7306,7 @@ def generate_ai_report_api():
             pass
 
         return jsonify({
-            "generated_at": now_local.strftime("%d/%m/%Y %H:%M:%S"),
+            "generated_at": _format_display_timestamp(now_local.strftime("%Y-%m-%d %H:%M:%S"), language),
             "role": role,
             "language": language,
             "report": _sanitize_encrypted_fragments(report)
@@ -7181,6 +7527,20 @@ def export_pdf():
         report_data.get("case_info", {}).get("item_service"),
         language,
     )
+    project_name_display = (
+        project_name
+        or report_data.get("case_info", {}).get("project_name")
+        or next(
+            (
+                str(d.get("project_name") or "").strip()
+                for d in defects
+                if str(d.get("project_name") or "").strip()
+                and str(d.get("project_name") or "").strip().lower() not in {"-", "others / unrelated", "others / unassigned", "__others__"}
+            ),
+            "",
+        )
+    )
+    report_data.setdefault("case_info", {})["project_name"] = project_name_display or "-"
 
     claimant_unit_for_grouping = _get_user_unit(claimant_user_id or _current_user_id())
     claimant_unit_normalized = _normalise_unit_for_grouping(claimant_unit_for_grouping)
@@ -7214,7 +7574,7 @@ def export_pdf():
     # =============================================
     # GENERATE LEGAL METADATA & DIGITAL SIGNATURES
     # =============================================
-    report_id = str(uuid.uuid4())
+    report_id = build_public_report_id(report_data)
     legal_metadata = add_legal_metadata(
         report_content=ai_report_text,
         report_id=report_id,
@@ -7359,6 +7719,7 @@ def export_pdf():
     lokasi = report_data["case_info"]["tribunal_location"]
     negeri = report_data["case_info"]["state_name"]
     no_tuntutan = report_data["case_info"]["claim_number"]
+    project_name_for_header = str(report_data["case_info"].get("project_name") or "-").upper()
 
     if language == "en":
         draw_centered_fitted_string(pdf, width/2, y, f"AT {lokasi}".upper(), width - 100, "Times-Roman", FONT_BODY)
@@ -7368,6 +7729,8 @@ def export_pdf():
         y -= LINE_SPACING_LARGE
 
         draw_fitted_string(pdf, 50, y, f"CLAIM NO.: {no_tuntutan}", width - 100, "Times-Roman", FONT_BODY)
+        y -= LINE_SPACING_MEDIUM
+        draw_fitted_string(pdf, 50, y, f"PROJECT NAME: {project_name_for_header}", width - 100, "Times-Roman", FONT_BODY)
     else:
         draw_centered_fitted_string(pdf, width/2, y, f"DI {lokasi}".upper(), width - 100, "Times-Roman", FONT_BODY)
         y -= LINE_SPACING_MEDIUM
@@ -7376,9 +7739,12 @@ def export_pdf():
         y -= LINE_SPACING_LARGE
 
         draw_fitted_string(pdf, 50, y, f"TUNTUTAN NO.: {no_tuntutan}", width - 100, "Times-Roman", FONT_BODY)
+        y -= LINE_SPACING_MEDIUM
+        draw_fitted_string(pdf, 50, y, f"NAMA PROJEK: {project_name_for_header}", width - 100, "Times-Roman", FONT_BODY)
 
     # --- PIHAK YANG MENUNTUT (Claimant) ---
-    y -= 20
+    PARTY_HEADING_TOP_GAP = 32
+    y -= PARTY_HEADING_TOP_GAP
     pdf.setFont("Times-Bold", FONT_H2)
     if language == "en":
         pdf.drawString(50, y, "CLAIMANT")
@@ -7564,7 +7930,13 @@ def export_pdf():
         y = draw_form_value(pdf, report_data['case_info'].get('item_service', 'Defect Repairs During DLP Period'), value_x, y, form_value_width)
         y -= 4
         pdf.drawString(label_x, y, "Date of Purchase/Transaction")
-        y = draw_form_value(pdf, report_data['case_info'].get('transaction_date', report_data['case_info']['generated_date']), value_x, y, form_value_width)
+        y = draw_form_value(
+            pdf,
+            _format_display_date(report_data['case_info'].get('transaction_date', report_data['case_info']['generated_date']), language),
+            value_x,
+            y,
+            form_value_width,
+        )
         y -= 4
         pdf.drawString(label_x, y, "Amount Paid")
         y = draw_form_value(pdf, report_data['case_info']['claim_amount'], value_x, y, form_value_width)
@@ -7573,7 +7945,13 @@ def export_pdf():
         y = draw_form_value(pdf, report_data['case_info'].get('item_service', 'Pembaikan Kecacatan Dalam Tempoh DLP'), value_x, y, form_value_width)
         y -= 4
         pdf.drawString(label_x, y, "Tarikh Pembelian/ Transaksi")
-        y = draw_form_value(pdf, report_data['case_info'].get('transaction_date', report_data['case_info']['generated_date']), value_x, y, form_value_width)
+        y = draw_form_value(
+            pdf,
+            _format_display_date(report_data['case_info'].get('transaction_date', report_data['case_info']['generated_date']), language),
+            value_x,
+            y,
+            form_value_width,
+        )
         y -= 4
         pdf.drawString(label_x, y, "Jumlah yang dibayar")
         y = draw_form_value(pdf, report_data['case_info']['claim_amount'], value_x, y, form_value_width)
@@ -7629,7 +8007,7 @@ def export_pdf():
         y -= 15
         pdf.drawString(60, y, f"Telah Diselesaikan: {summary['completed_defects']}")
         y -= 15
-        pdf.drawString(60, y, f"Telah Melebihi Tarikh Siap: {summary.get('overdue_defects', 0)}")
+        pdf.drawString(60, y, f"Tertunggak: {summary.get('overdue_defects', 0)}")
         y -= 15
         pdf.drawString(60, y, f"Tidak Mematuhi Tempoh 30 Hari: {summary.get('hda_non_compliant_defects', 0)}")
         y -= 15
@@ -7743,15 +8121,7 @@ def export_pdf():
         if role == "Homeowner" and defect.get("remarks"):
             remarks_lines = _estimate_wrapped_lines_with_font(pdf, f": {defect.get('remarks', '')}", "Times-Roman", FONT_BODY, TEXT_WIDTH)
 
-        hda_message = (
-            "Rectified within thirty (30) days from date of notification pursuant to HDA"
-            if language == "en" and defect.get("hda_compliant")
-            else "Failed to Comply with 30-Day Requirement under HDA"
-            if language == "en"
-            else "Diselesaikan dalam tempoh tiga puluh (30) hari dari tarikh notifikasi menurut HDA"
-            if defect.get("hda_compliant")
-            else "Tidak diselesaikan dalam tempoh tiga puluh (30) hari dari tarikh notifikasi menurut HDA"
-        )
+        hda_message = _hda_compliance_display(defect.get("hda_compliant"), language, defect.get("status"))
         hda_lines = _estimate_wrapped_lines_with_font(pdf, f": {hda_message}", "Times-Roman", FONT_BODY, TEXT_WIDTH)
 
         evidence_items_for_height = _evidence_items_from_meta({
@@ -7776,7 +8146,7 @@ def export_pdf():
         if remarks_lines > 0:
             estimated_height += remarks_lines * 16
         if image_paths_for_height:
-            estimated_height += 138                        # evidence label + side-by-side images + dates
+            estimated_height += 144                        # evidence label + side-by-side images + dates
         estimated_height += 25                             # space between defects
 
         # Ensure enough space for ONE full defect block
@@ -7822,16 +8192,24 @@ def export_pdf():
         y = draw_defect_field(labels["status"], status_text, y)
 
         # ---- Reported Date ----
-        y = draw_defect_field(labels.get("reported_date", "Reported Date"), defect.get("reported_date", "-"), y)
+        y = draw_defect_field(
+            labels.get("reported_date", "Reported Date"),
+            _format_display_date(defect.get("reported_date"), language),
+            y,
+        )
 
 
         # ---- Scheduled Completion Date ----
-        y = draw_defect_field(labels.get("deadline", "Scheduled Completion Date"), defect.get("deadline", "-"), y)
+        y = draw_defect_field(
+            labels.get("deadline", "Scheduled Completion Date"),
+            _format_display_date(defect.get("deadline"), language),
+            y,
+        )
 
         # ---- Actual Completion Date ----
         y = draw_defect_field(
             labels.get("actual_completion_date", "Actual Completion Date"),
-            defect.get("completed_date") if defect.get("completed_date") else "-",
+            _format_display_date(defect.get("completed_date"), language),
             y,
         )
 
@@ -7849,17 +8227,10 @@ def export_pdf():
         pdf.setFont("Times-Roman", FONT_BODY)
 
         if language == "en":
-            hda_label = "HDA Compliance (30 Days)"
-            if defect.get("hda_compliant"):
-                message = "Rectified within thirty (30) days from date of notification pursuant to HDA"
-            else:
-                message = "Failed to Comply with 30-Day Requirement under HDA"
+            hda_label = "HDA Compliance Status"
         else:
-            hda_label = "Pematuhan HDA (30 Hari)"
-            if defect.get("hda_compliant"):
-                message = "Diselesaikan dalam tempoh tiga puluh (30) hari dari tarikh notifikasi menurut HDA"
-            else:
-                message = "Tidak diselesaikan dalam tempoh tiga puluh (30) hari dari tarikh notifikasi menurut HDA"
+            hda_label = "Status Pematuhan HDA"
+        message = _hda_compliance_display(defect.get("hda_compliant"), language, defect.get("status"))
 
         y = draw_defect_field(hda_label, message, y)
 
@@ -7869,9 +8240,9 @@ def export_pdf():
         is_overdue = defect.get("is_overdue", False)
 
         if language == "en":
-            y = draw_defect_field("Overdue", "Yes" if is_overdue else "No", y)
+            y = draw_defect_field("Overdue Status", "Overdue" if is_overdue else "Not Overdue", y)
         else:
-            y = draw_defect_field("Melebihi Tarikh", "Ya" if is_overdue else "Tidak", y)
+            y = draw_defect_field("Status Tertunggak", "Tertunggak" if is_overdue else "Tidak Tertunggak", y)
 
         # ---- Keutamaan (jika ada) ----
         if defect.get("priority"):
@@ -7905,9 +8276,9 @@ def export_pdf():
                 pdf.showPage()
                 y = height - 50
 
-            pdf.setFont("Times-Italic", FONT_CAPTION)
+            pdf.setFont("Times-Roman", FONT_BODY)
             pdf.drawString(LABEL_X, y, f"{labels['evidence']}:")
-            y -= 10
+            y -= 16
 
             thumb_width = 150
             thumb_height = 88
@@ -7924,7 +8295,7 @@ def export_pdf():
                     height=thumb_height
                 )
                 date_label = "Uploaded" if language == "en" else "Muat Naik"
-                pdf.drawString(image_x, image_y - 10, f"{date_label}: {upload_time}")
+                pdf.drawString(image_x, image_y - 10, f"{date_label}: {_format_display_timestamp(upload_time, language)}")
 
             y = image_y - 24
 
@@ -7953,7 +8324,7 @@ def export_pdf():
         )
         report_title = _report_title_for_role(labels, role)
         generated_label = labels.get("generated_at", "Generated Date" if language == "en" else "Tarikh Jana")
-        generated_value = _now_app_timezone().strftime("%d/%m/%Y %H:%M:%S")
+        generated_value = _format_display_timestamp(_now_app_timezone().strftime("%Y-%m-%d %H:%M:%S"), language)
         role_key = (role or "").strip().lower()
         default_role_subtitles = {
             "ms": {
@@ -8012,15 +8383,17 @@ def export_pdf():
 
         # Draw header: for English include AI title + tribunal title; for Malay skip those
         page_width = width
+        role_header_font_size = FONT_H2
+        role_header_leading = 14
         if language == 'en':
             draw_centered_fitted_string(pdf, page_width / 2, y, ai_title, width - 100, "Times-Bold", FONT_H2)
-            y -= 16
-            y = draw_wrapped_text(pdf, report_title, LEFT_MARGIN, y, width - 100, "Times-Bold", FONT_H2, 14)
+            y -= 24
+            y = draw_wrapped_text(pdf, report_title, LEFT_MARGIN, y, width - 100, "Times-Bold", role_header_font_size, role_header_leading)
         else:
             draw_centered_fitted_string(pdf, page_width / 2, y, ai_title, width - 100, "Times-Bold", FONT_H2)
-            y -= 16
+            y -= 24
 
-            y = draw_wrapped_text(pdf, report_title, LEFT_MARGIN, y, width - 100, "Times-Bold", FONT_H2, 14)
+            y = draw_wrapped_text(pdf, report_title, LEFT_MARGIN, y, width - 100, "Times-Bold", role_header_font_size, role_header_leading)
 
         # Generated date (left-aligned) with extra spacing afterwards
         pdf.setFont("Times-Roman", FONT_BODY)
@@ -8033,12 +8406,12 @@ def export_pdf():
         if subtitle and language == 'en':
             # Role subtitle: left-aligned at LEFT_MARGIN, bold, same size as other header lines
             subtitle_x = LEFT_MARGIN
-            y = draw_wrapped_text(pdf, subtitle, subtitle_x, y, width - 100, "Times-Bold", FONT_H2, 14)
+            y = draw_wrapped_text(pdf, subtitle, subtitle_x, y, width - 100, "Times-Bold", role_header_font_size, role_header_leading)
             # Extra space after subtitle
             y -= 4
         elif subtitle and language != 'en':
             subtitle_x = LEFT_MARGIN
-            y = draw_wrapped_text(pdf, subtitle, subtitle_x, y, width - 100, "Times-Bold", FONT_H2, 14)
+            y = draw_wrapped_text(pdf, subtitle, subtitle_x, y, width - 100, "Times-Bold", role_header_font_size, role_header_leading)
             y -= 4
 
         # Clean AI report text
@@ -8079,7 +8452,13 @@ def export_pdf():
         clean_text = clean_text.replace('\r', '\n')
         clean_text = clean_text.encode("utf-8", "ignore").decode("utf-8")
         clean_text = normalize_report_section_spacing(clean_text)
-        clean_text = normalize_defect_detail_indentation(clean_text)
+        clean_text = normalize_legal_statistics_section(clean_text)
+        if role == "Legal":
+            clean_text = enforce_legal_statistics_section_counts(
+                clean_text,
+                language,
+                report_data.get("summary_stats", {}),
+            )
         for subtitle_variant in role_subtitles:
             clean_text = re.sub(
                 rf"^\s*{re.escape(subtitle_variant)}\s*$\n?",
@@ -8109,71 +8488,85 @@ def export_pdf():
         if language == "en":
             clean_text = clean_text.replace("Status: Telah Diselesaikan", "Status: Completed")
             clean_text = clean_text.replace("Status: Belum Diselesaikan", "Status: Pending")
+            clean_text = clean_text.replace("Status: Dalam Semakan", "Status: Pending")
             clean_text = clean_text.replace("Status: Dalam Tindakan", "Status: In Progress")
+            clean_text = clean_text.replace("Status: Dalam Proses Pematuhan", "Status: In Progress")
             clean_text = clean_text.replace("Status: Tertangguh", "Status: Delayed")
 
             clean_text = clean_text.replace("Unit Pihak Yang Menuntut:", "Claimant Unit:")
             clean_text = clean_text.replace("Kecacatan Berkaitan Pihak Yang Menuntut:", "Defects Related to Claimant:")
             clean_text = clean_text.replace("Kecacatan Lain Dalam Kes:", "Other Defects in Case:")
-            clean_text = clean_text.replace("Maklumat Pemilik Menuntut:", "Claimant Owner Details:")
+            clean_text = clean_text.replace("Maklumat Pemilik Menuntut:", "Claimant Owner Closed Case Records:")
+            clean_text = clean_text.replace("Rekod Kes Ditutup Pemilik Menuntut:", "Claimant Owner Closed Case Records:")
             clean_text = clean_text.replace("Unit Pemilik Menuntut:", "Claimant Owner Unit:")
             clean_text = clean_text.replace("Senarai Kecacatan Pemilik Lain Dalam Kes:", "Other Owner Defect List in Case:")
             clean_text = clean_text.replace("Senarai Kecacatan Pemilik Menuntut:", "Claimant Owner Defect List:")
-            clean_text = clean_text.replace("Maklumat Pemilik Lain:", "Other Owner Details:")
+            clean_text = clean_text.replace("Maklumat Pemilik Lain:", "Other Owner Closed Case Records:")
+            clean_text = clean_text.replace("Rekod Kes Ditutup Pemilik Lain Lain:", "Other Owner Closed Case Records:")
+            clean_text = clean_text.replace("Rekod Kes Ditutup Pemilik Lain:", "Other Owner Closed Case Records:")
             clean_text = clean_text.replace("Unit Pemilik Lain:", "Other Owner Unit:")
             clean_text = clean_text.replace("Senarai Kecacatan Pemilik Lain:", "Other Owner Defect List:")
 
             clean_text = clean_text.replace("Status Tertunggak:", "Overdue Status:")
-            clean_text = clean_text.replace("Pematuhan HDA (30 Hari):", "HDA Compliance (30 Days):")
+            clean_text = clean_text.replace("Pematuhan HDA (30 Hari):", "HDA Compliance Status:")
+            clean_text = clean_text.replace("Status Pematuhan HDA:", "HDA Compliance Status:")
 
-            clean_text = re.sub(r"^\s*Overdue\s*Status\s*:\s*Ya\s*$", "   Overdue Status: Yes", clean_text, flags=re.IGNORECASE | re.MULTILINE)
-            clean_text = re.sub(r"^\s*Overdue\s*Status\s*:\s*(Tidak|No)\s*$", "   Overdue Status: No", clean_text, flags=re.IGNORECASE | re.MULTILINE)
-            clean_text = re.sub(r"^\s*HDA\s*Compliance\s*\(30\s*Days\)\s*:\s*Ya\s*$", "   HDA Compliance (30 Days): Yes", clean_text, flags=re.IGNORECASE | re.MULTILINE)
-            clean_text = re.sub(r"^\s*HDA\s*Compliance\s*\(30\s*Days\)\s*:\s*(Tidak|No)\s*$", "   HDA Compliance (30 Days): No", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*Overdue\s*Status\s*:\s*(Ya|Yes|Tertunggak|Overdue)\s*$", "   Overdue Status: Overdue", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*Overdue\s*Status\s*:\s*(Tidak|No|Tidak Tertunggak|Not Overdue)\s*$", "   Overdue Status: Not Overdue", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*HDA\s*Compliance(?:\s*\(30\s*Days\)|\s*Status)?\s*:\s*(Ya|Yes|Mematuhi|Compliant)\s*$", "   HDA Compliance Status: Compliant", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*HDA\s*Compliance(?:\s*\(30\s*Days\)|\s*Status)?\s*:\s*(Tidak Mematuhi|Non-Compliant|Tidak|No)\s*$", "   HDA Compliance Status: Non-Compliant", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*HDA\s*Compliance(?:\s*\(30\s*Days\)|\s*Status)?\s*:\s*(Dalam Semakan|Under Review)\s*$", "   HDA Compliance Status: Non-Compliant", clean_text, flags=re.IGNORECASE | re.MULTILINE)
 
             clean_text = clean_text.replace("Keutamaan:", "Priority:")
-            clean_text = clean_text.replace("Priority: Tinggi", "Priority: High")
-            clean_text = clean_text.replace("Priority: Sederhana", "Priority: Medium")
-            clean_text = clean_text.replace("Priority: Rendah", "Priority: Low")
         else:
             clean_text = clean_text.replace("Status: Completed", "Status: Telah Diselesaikan")
             clean_text = clean_text.replace("Status: Pending", "Status: Belum Diselesaikan")
+            clean_text = clean_text.replace("Status: Under Review", "Status: Belum Diselesaikan")
             clean_text = clean_text.replace("Status: In Progress", "Status: Dalam Tindakan")
+            clean_text = clean_text.replace("Status: Compliance In Progress", "Status: Dalam Tindakan")
             clean_text = clean_text.replace("Status: Delayed", "Status: Tertangguh")
 
             clean_text = clean_text.replace("Status Semasa: Completed", "Status Semasa: Telah Diselesaikan")
             clean_text = clean_text.replace("Status Semasa: Pending", "Status Semasa: Belum Diselesaikan")
+            clean_text = clean_text.replace("Status Semasa: Under Review", "Status Semasa: Belum Diselesaikan")
             clean_text = clean_text.replace("Status Semasa: In Progress", "Status Semasa: Dalam Tindakan")
+            clean_text = clean_text.replace("Status Semasa: Compliance In Progress", "Status Semasa: Dalam Tindakan")
             clean_text = clean_text.replace("Status Semasa: Delayed", "Status Semasa: Tertangguh")
 
             clean_text = clean_text.replace("Current Status: Completed", "Status Semasa: Telah Diselesaikan")
             clean_text = clean_text.replace("Current Status: Pending", "Status Semasa: Belum Diselesaikan")
+            clean_text = clean_text.replace("Current Status: Under Review", "Status Semasa: Belum Diselesaikan")
             clean_text = clean_text.replace("Current Status: In Progress", "Status Semasa: Dalam Tindakan")
+            clean_text = clean_text.replace("Current Status: Compliance In Progress", "Status Semasa: Dalam Tindakan")
             clean_text = clean_text.replace("Current Status: Delayed", "Status Semasa: Tertangguh")
 
             clean_text = clean_text.replace("Claimant Unit:", "Unit Pihak Yang Menuntut:")
             clean_text = clean_text.replace("Defects Related to Claimant:", "Kecacatan Berkaitan Pihak Yang Menuntut:")
             clean_text = clean_text.replace("Other Defects in Case:", "Kecacatan Lain Dalam Kes:")
-            clean_text = clean_text.replace("Claimant Owner Details:", "Maklumat Pemilik Menuntut:")
+            clean_text = clean_text.replace("Claimant Owner Details:", "Rekod Kes Ditutup Pemilik Menuntut:")
+            clean_text = clean_text.replace("Claimant Owner Closed Case Records:", "Rekod Kes Ditutup Pemilik Menuntut:")
             clean_text = clean_text.replace("Claimant Owner Unit:", "Unit Pemilik Menuntut:")
             clean_text = clean_text.replace("Other Owner Defect List in Case:", "Senarai Kecacatan Pemilik Lain Dalam Kes:")
             clean_text = clean_text.replace("Claimant Owner Defect List:", "Senarai Kecacatan Pemilik Menuntut:")
-            clean_text = clean_text.replace("Other Owner Details:", "Maklumat Pemilik Lain:")
+            clean_text = clean_text.replace("Other Owner Details:", "Rekod Kes Ditutup Pemilik Lain:")
+            clean_text = clean_text.replace("Other Owner Closed Case Records:", "Rekod Kes Ditutup Pemilik Lain:")
             clean_text = clean_text.replace("Other Owner Unit:", "Unit Pemilik Lain:")
             clean_text = clean_text.replace("Other Owner Defect List:", "Senarai Kecacatan Pemilik Lain:")
 
             clean_text = clean_text.replace("Overdue Status:", "Status Tertunggak:")
-            clean_text = clean_text.replace("HDA Compliance (30 Days):", "Pematuhan HDA (30 Hari):")
+            clean_text = clean_text.replace("HDA Compliance (30 Days):", "Status Pematuhan HDA:")
+            clean_text = clean_text.replace("HDA Compliance Status:", "Status Pematuhan HDA:")
 
-            clean_text = re.sub(r"^\s*Status\s*Tertunggak\s*:\s*Yes\s*$", "   Status Tertunggak: Ya", clean_text, flags=re.IGNORECASE | re.MULTILINE)
-            clean_text = re.sub(r"^\s*Status\s*Tertunggak\s*:\s*No\s*$", "   Status Tertunggak: Tidak", clean_text, flags=re.IGNORECASE | re.MULTILINE)
-            clean_text = re.sub(r"^\s*Pematuhan\s*HDA\s*\(30\s*Hari\)\s*:\s*Yes\s*$", "   Pematuhan HDA (30 Hari): Ya", clean_text, flags=re.IGNORECASE | re.MULTILINE)
-            clean_text = re.sub(r"^\s*Pematuhan\s*HDA\s*\(30\s*Hari\)\s*:\s*No\s*$", "   Pematuhan HDA (30 Hari): Tidak", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*Status\s*Tertunggak\s*:\s*(Yes|Ya|Overdue|Tertunggak)\s*$", "   Status Tertunggak: Tertunggak", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*Status\s*Tertunggak\s*:\s*(No|Tidak|Not Overdue|Tidak Tertunggak)\s*$", "   Status Tertunggak: Tidak Tertunggak", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*(?:Pematuhan\s*HDA\s*\(30\s*Hari\)|Status\s*Pematuhan\s*HDA)\s*:\s*(Yes|Ya|Compliant|Mematuhi)\s*$", "   Status Pematuhan HDA: Mematuhi", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*(?:Pematuhan\s*HDA\s*\(30\s*Hari\)|Status\s*Pematuhan\s*HDA)\s*:\s*(Tidak Mematuhi|Non-Compliant|No|Tidak)\s*$", "   Status Pematuhan HDA: Tidak Mematuhi", clean_text, flags=re.IGNORECASE | re.MULTILINE)
+            clean_text = re.sub(r"^\s*(?:Pematuhan\s*HDA\s*\(30\s*Hari\)|Status\s*Pematuhan\s*HDA)\s*:\s*(Under Review|Dalam Semakan)\s*$", "   Status Pematuhan HDA: Tidak Mematuhi", clean_text, flags=re.IGNORECASE | re.MULTILINE)
 
             clean_text = clean_text.replace("Priority:", "Keutamaan:")
-            clean_text = clean_text.replace("Keutamaan: High", "Keutamaan: Tinggi")
-            clean_text = clean_text.replace("Keutamaan: Medium", "Keutamaan: Sederhana")
-            clean_text = clean_text.replace("Keutamaan: Low", "Keutamaan: Rendah")
+        clean_text = normalize_priority_values_for_language(clean_text, language)
+        clean_text = normalize_report_date_values(clean_text, language)
+        clean_text = normalize_defect_detail_indentation(clean_text)
 
         # =================================================
         # FIX REMARKS LANGUAGE USING DEFECT DATA (AUTHORITATIVE)
@@ -8208,10 +8601,13 @@ def export_pdf():
             'Claimant Unit',
             'Unit Pihak Yang Menuntut',
             'Claimant Owner Details',
+            'Claimant Owner Closed Case Records',
             'Claimant Owner Unit',
             'Claimant Owner Defect List',
             'Other Owner Defect List',
             'Maklumat Pemilik Menuntut',
+            'Rekod Kes Ditutup Pemilik Menuntut',
+            'Rekod Kes Ditutup Pemilik Lain',
             'Unit Pemilik Menuntut',
             'Senarai Kecacatan Pemilik Menuntut',
             'Senarai Kecacatan Pemilik Lain',
@@ -8262,6 +8658,25 @@ def export_pdf():
 
             return text.startswith(MAIN_SECTION_HEADER_PREFIXES)
 
+        def _uses_expanded_section_gap(text):
+            if not text:
+                return False
+            return bool(re.match(
+                r"^(?:"
+                r"1\.\s+Tujuan\s+Laporan|"
+                r"1\.\s+Purpose\s+of\s+the\s+Report|"
+                r"1\.\s+Latar\s+Belakang\s+Kes|"
+                r"1\.\s+Case\s+Background|"
+                r"5\.\s+Pemerhatian\s+Berkaitan\s+Pematuhan\s+Tempoh|"
+                r"5\.\s+Observations\s+on\s+Timeframe\s+Compliance|"
+                r"4\.\s+Pemerhatian\s+Berkaitan\s+Pematuhan\s+dan\s+Tarikh\s+Akhir|"
+                r"3\.\s+Pemerhatian\s+Berkaitan\s+Status\s+dan\s+Tempoh|"
+                r"3\.\s+Recorded\s+Status\s+and\s+Timeframe\s+Observations"
+                r")$",
+                text,
+                flags=re.IGNORECASE,
+            ))
+
         def _is_subtopic_header(text):
             if not text:
                 return False
@@ -8269,6 +8684,59 @@ def export_pdf():
 
         def _is_keep_together_header(text):
             return _is_main_section_header(text) or _is_subtopic_header(text)
+
+        def _required_keep_with_next_height(start_idx):
+            current = lines[start_idx].strip()
+            current_is_main = _is_main_section_header(current)
+            seen_first_subtopic = False
+
+            block_end = len(lines)
+            for j in range(start_idx + 1, len(lines)):
+                nxt = lines[j].strip()
+                if current_is_main:
+                    if _is_main_section_header(nxt):
+                        block_end = j
+                        break
+                    if _is_subtopic_header(nxt):
+                        if seen_first_subtopic:
+                            block_end = j
+                            break
+                        seen_first_subtopic = True
+                elif _is_keep_together_header(nxt):
+                    block_end = j
+                    break
+
+            required_height = 0
+            for j in range(start_idx, block_end):
+                candidate = lines[j].strip()
+                if not candidate:
+                    required_height += 8
+                else:
+                    wrapped_count = _estimate_wrapped_lines(candidate, TEXT_WIDTH)
+                    required_height += wrapped_count * LINE_HEIGHT
+
+            return required_height
+
+        def _minimum_keep_with_next_height(start_idx):
+            current = lines[start_idx].strip()
+            keep_lines = 1
+            non_empty_after = 0
+            max_following_lines = 4 if _is_main_section_header(current) else 3
+
+            for j in range(start_idx + 1, len(lines)):
+                candidate = lines[j].strip()
+                if not candidate:
+                    keep_lines += 1
+                    continue
+                if _is_main_section_header(candidate):
+                    break
+
+                keep_lines += _estimate_wrapped_lines(candidate, TEXT_WIDTH)
+                non_empty_after += 1
+                if non_empty_after >= max_following_lines:
+                    break
+
+            return max(keep_lines * LINE_HEIGHT, LINE_HEIGHT)
 
         prev_line_is_sub_item = False
 
@@ -8289,24 +8757,14 @@ def export_pdf():
 
             # Keep each header/subtopic block together when possible.
             if _is_keep_together_header(stripped):
-                block_end = len(lines)
-                for j in range(idx + 1, len(lines)):
-                    nxt = lines[j].strip()
-                    if _is_keep_together_header(nxt):
-                        block_end = j
-                        break
-
-                required_height = 0
-                for j in range(idx, block_end):
-                    candidate = lines[j].strip()
-                    if not candidate:
-                        required_height += 8
-                    else:
-                        wrapped_count = _estimate_wrapped_lines(candidate, TEXT_WIDTH)
-                        required_height += wrapped_count * LINE_HEIGHT
+                required_height = _required_keep_with_next_height(idx)
+                minimum_height = _minimum_keep_with_next_height(idx)
 
                 page_usable_height = (height - 50) - 80
-                if required_height <= page_usable_height and y - required_height < 80:
+                if (
+                    (required_height <= page_usable_height and y - required_height < 80)
+                    or y - minimum_height < 80
+                ):
                     draw_footer(pdf, width, labels)
                     pdf.showPage()
                     y = height - 50
@@ -8318,6 +8776,10 @@ def export_pdf():
             # Extra space before main sections (numbered or named like PENAFIAN AI)
             if _is_main_section_header(stripped):
                 y -= 12   # space before new main section
+                if _uses_expanded_section_gap(stripped):
+                    y -= 8
+                if re.match(r"^(AI\s+DISCLAIMER|PENAFIAN\s+AI)\s*:", stripped, flags=re.IGNORECASE):
+                    y -= 4
 
             # Extra space before lettered items (A., B., C.)
             if stripped[:2] in ["A.", "B.", "C.", "D.", "E.", "F."]:
@@ -8352,6 +8814,7 @@ def export_pdf():
                 "status tertunggak:",
                 "status semasa:",
                 "pematuhan hda (30 hari):",
+                "status pematuhan hda:",
             )
 
             EN_FIELDS = (
@@ -8365,10 +8828,25 @@ def export_pdf():
                 "current status:",
                 "overdue status:",
                 "hda compliance (30 days):",
+                "hda compliance status:",
             )
 
             DEFECT_FIELD_PREFIXES = BASE_FIELDS + MS_FIELDS + EN_FIELDS
             is_defect_field = stripped.lower().startswith(DEFECT_FIELD_PREFIXES)
+            LEGAL_STAT_FIELDS = {
+                "jumlah keseluruhan kecacatan",
+                "telah diselesaikan",
+                "kes ditutup",
+                "masih belum diselesaikan",
+                "direkodkan sebagai tertunggak",
+                "tidak mematuhi tempoh 30 hari hda",
+                "total recorded defects",
+                "completed",
+                "closed cases",
+                "still unresolved",
+                "recorded as overdue",
+                "non-compliant with 30-day hda requirement",
+            }
 
             # Font & indent
             if is_role_subtitle:
@@ -8399,14 +8877,29 @@ def export_pdf():
             effective_text_width = RIGHT_MARGIN - x_pos
 
             if not (is_numbered_header or is_role_subtitle or is_sub_item):
-                colon_match = re.match(r"^([^:]{1,90}:\s+)(.+)$", stripped)
+                colon_match = re.match(r"^([^:]{1,90})\s*:\s+(.+)$", stripped)
                 if colon_match:
+                    label_text = colon_match.group(1).strip()
+                    value_text = colon_match.group(2).strip()
+                    is_legal_stat_field = label_text.lower() in LEGAL_STAT_FIELDS
+                    colon_x = 335 if is_legal_stat_field else 230
+                    value_x = colon_x + 14
+                    if not is_legal_stat_field and pdf.stringWidth(label_text, wrap_font_name, wrap_font_size) > (colon_x - x_pos - 6):
+                        colon_x = min(
+                            x_pos + pdf.stringWidth(label_text, wrap_font_name, wrap_font_size) + 8,
+                            RIGHT_MARGIN - 120,
+                        )
+                        value_x = colon_x + 14
+
+                    pdf.setFont(wrap_font_name, wrap_font_size)
+                    pdf.drawString(x_pos, y, label_text)
+                    pdf.drawString(colon_x, y, ":")
                     y = draw_wrapped_text(
                         pdf,
-                        stripped,
-                        x_pos,
+                        value_text,
+                        value_x,
                         y,
-                        effective_text_width,
+                        RIGHT_MARGIN - value_x,
                         wrap_font_name,
                         wrap_font_size,
                         LINE_HEIGHT,
@@ -8466,7 +8959,7 @@ def export_pdf():
         appendix_lines = build_closed_appendix_lines(closed_evidence_appendix, language)
         current_appendix_item = None
         appendix_font_size = FONT_BODY
-        appendix_line_height = 15
+        appendix_line_height = 16
 
         def _is_appendix_header(text):
             return bool(
@@ -8476,14 +8969,18 @@ def export_pdf():
                 or text.startswith("LAMPIRAN A:")
                 or text.startswith("Maklumat Pemilik Menuntut:")
                 or text.startswith("Maklumat Pemilik Lain:")
+                or text.startswith("Rekod Kes Ditutup Pemilik Menuntut:")
+                or text.startswith("Rekod Kes Ditutup Pemilik Lain:")
                 or text.startswith("Unit Pemilik Lain:")
                 or text.startswith("Senarai Kecacatan Pemilik Menuntut:")
                 or text.startswith("Senarai Kecacatan Pemilik Lain:")
                 or text.startswith("Senarai Kecacatan Pemilik Lain Dalam Kes:")
                 or text.startswith("Claimant Owner Details:")
+                or text.startswith("Claimant Owner Closed Case Records:")
                 or text.startswith("Claimant Owner Unit:")
                 or text.startswith("Claimant Owner Defect List:")
                 or text.startswith("Other Owner Details:")
+                or text.startswith("Other Owner Closed Case Records:")
                 or text.startswith("Other Owner Unit:")
                 or text.startswith("Other Owner Defect List:")
                 or text.startswith("Other Owner Defect List in Case:")
@@ -8491,6 +8988,7 @@ def export_pdf():
 
         def _appendix_line_style(text):
             stripped_text = (text or "").strip()
+            field_label = stripped_text.split(":", 1)[0].strip() if ":" in stripped_text else stripped_text
             if not stripped_text:
                 return "Times-Roman", appendix_font_size, 50
 
@@ -8500,19 +8998,56 @@ def export_pdf():
             if stripped_text.startswith((
                 "Maklumat Pemilik Menuntut:",
                 "Maklumat Pemilik Lain:",
+                "Rekod Kes Ditutup Pemilik Menuntut:",
+                "Rekod Kes Ditutup Pemilik Lain:",
                 "Senarai Kecacatan Pemilik Menuntut:",
                 "Senarai Kecacatan Pemilik Lain:",
                 "Senarai Kecacatan Pemilik Lain Dalam Kes:",
                 "Claimant Owner Details:",
+                "Claimant Owner Closed Case Records:",
                 "Claimant Owner Defect List:",
                 "Other Owner Details:",
+                "Other Owner Closed Case Records:",
                 "Other Owner Defect List:",
                 "Other Owner Defect List in Case:",
             )):
                 return "Times-Bold", appendix_font_size, 50
 
+            if stripped_text.startswith((
+                "Claimant Owner Unit:",
+                "Other Owner Unit:",
+                "Unit Pemilik Menuntut:",
+                "Unit Pemilik Lain:",
+            )):
+                return "Times-Roman", appendix_font_size, 70
+
+            if stripped_text in (
+                "Tiada rekod kes ditutup yang tersedia pada masa ini.",
+                "No closed case records are currently available.",
+            ):
+                return "Times-Roman", appendix_font_size, 70
+
             if re.match(r"^[A-Z]\.|^\d+\.", stripped_text):
                 return "Times-Bold", appendix_font_size, 50
+
+            if field_label in (
+                "Unit",
+                "Tarikh Dilaporkan",
+                "Tarikh Siap",
+                "Tempoh Siap (Hari)",
+                "Pematuhan HDA (30 Hari)",
+                "Status Pematuhan HDA",
+                "Peraturan Ditutup",
+                "Muat Naik",
+                "Reported Date",
+                "Completed",
+                "Days to Complete",
+                "HDA Compliance (30 Days)",
+                "HDA Compliance Status",
+                "Closed Rule",
+                "Uploaded",
+            ):
+                return "Times-Roman", FONT_BODY, 70
 
             if stripped_text.startswith((
                 "Unit:",
@@ -8520,6 +9055,7 @@ def export_pdf():
                 "Tarikh Siap:",
                 "Tempoh Siap (Hari):",
                 "Pematuhan HDA (30 Hari):",
+                "Status Pematuhan HDA:",
                 "Peraturan Ditutup:",
                 "Muat Naik:",
                 "Gambar Kecacatan:",
@@ -8528,13 +9064,66 @@ def export_pdf():
                 "Completed:",
                 "Days to Complete:",
                 "HDA Compliance (30 Days):",
+                "HDA Compliance Status:",
                 "Closed Rule:",
                 "Uploaded:",
                 "Defect Image:",
             )):
-                return "Times-Roman", FONT_BODY, 50
+                return "Times-Roman", FONT_BODY, 70
 
             return "Times-Roman", appendix_font_size, 50
+
+        appendix_field_labels = {
+            "Unit",
+            "Tarikh Dilaporkan",
+            "Tarikh Siap",
+            "Tempoh Siap (Hari)",
+            "Pematuhan HDA (30 Hari)",
+            "Status Pematuhan HDA",
+            "Peraturan Ditutup",
+            "Muat Naik",
+            "Reported Date",
+            "Completed",
+            "Days to Complete",
+            "HDA Compliance (30 Days)",
+            "HDA Compliance Status",
+            "Closed Rule",
+            "Uploaded",
+        }
+
+        def _appendix_field_parts(text):
+            stripped_text = (text or "").strip()
+            if stripped_text.startswith(("Defect Image:", "Gambar Kecacatan:")):
+                return None
+            match = re.match(r"^(.{1,80}?)\s*:\s*(.*)$", stripped_text)
+            if not match:
+                return None
+            label = match.group(1).strip()
+            if label not in appendix_field_labels:
+                return None
+            return label, match.group(2).strip()
+
+        def _draw_appendix_field(text, y_position):
+            parts = _appendix_field_parts(text)
+            if not parts:
+                return None
+            label, value = parts
+            label_x = 70
+            colon_x = 230 if language == "ms" else 220
+            value_x = colon_x + 14
+            pdf.setFont("Times-Roman", FONT_BODY)
+            pdf.drawString(label_x, y_position, label)
+            pdf.drawString(colon_x, y_position, ":")
+            return draw_wrapped_text(
+                pdf,
+                value or "-",
+                value_x,
+                y_position,
+                width - value_x - 50,
+                "Times-Roman",
+                FONT_BODY,
+                appendix_line_height,
+            )
 
         for idx, raw_line in enumerate(appendix_lines):
             line = (raw_line or "").rstrip()
@@ -8545,10 +9134,39 @@ def export_pdf():
                 y = height - 50
 
             if not line:
-                y -= 6
+                y -= 9
                 continue
 
             is_header = _is_appendix_header(line)
+            is_owner_block_header = line.startswith((
+                "Maklumat Pemilik Menuntut:",
+                "Maklumat Pemilik Lain:",
+                "Rekod Kes Ditutup Pemilik Menuntut:",
+                "Rekod Kes Ditutup Pemilik Lain:",
+                "Claimant Owner Details:",
+                "Claimant Owner Closed Case Records:",
+                "Other Owner Details:",
+                "Other Owner Closed Case Records:",
+            ))
+            is_defect_list_header = line.startswith((
+                "Senarai Kecacatan Pemilik Menuntut:",
+                "Senarai Kecacatan Pemilik Lain:",
+                "Senarai Kecacatan Pemilik Lain Dalam Kes:",
+                "Claimant Owner Defect List:",
+                "Other Owner Defect List:",
+                "Other Owner Defect List in Case:",
+            ))
+            is_defect_header = bool(re.match(r"^(?:[A-Z]|\d+)\.\s+(?:Defect ID|Kecacatan ID)\s+[^:]+:", line))
+            is_image_label = line.startswith(("Defect Image:", "Gambar Kecacatan:"))
+
+            if is_owner_block_header:
+                y -= 8
+            elif is_defect_list_header:
+                y -= 4
+            elif is_defect_header:
+                y -= 7
+            elif is_image_label:
+                y -= 5
 
             header_match = re.match(r"^(?:[A-Z]|\d+)\.\s+(?:Defect ID|Kecacatan ID)\s+([^:]+):", line)
             if header_match:
@@ -8563,13 +9181,16 @@ def export_pdf():
                 )
 
                 # Keep one full appendix item together when there is enough space on a fresh page.
-                appendix_image_path = None
+                appendix_images = []
                 if current_appendix_item:
-                    appendix_image_path = _resolve_evidence_image_path(
-                        evidence_dir,
-                        current_appendix_item.get("id"),
-                        current_appendix_item.get("filename"),
-                    )
+                    for evidence_item in _closed_appendix_evidence_items(current_appendix_item):
+                        appendix_image_path = _resolve_evidence_image_path(
+                            evidence_dir,
+                            current_appendix_item.get("id"),
+                            evidence_item.get("filename"),
+                        )
+                        if appendix_image_path:
+                            appendix_images.append((appendix_image_path, evidence_item.get("uploaded_at", "-")))
 
                 block_end = len(appendix_lines)
                 for j in range(idx + 1, len(appendix_lines)):
@@ -8587,8 +9208,8 @@ def export_pdf():
                         wrapped_count = _estimate_wrapped_lines(candidate, width - 100, appendix_font_size)
                         required_height += wrapped_count * appendix_line_height
 
-                if appendix_image_path:
-                    required_height += 110
+                if appendix_images:
+                    required_height += 142
 
                 if current_appendix_item and idx + 1 < len(appendix_lines):
                     next_line = (appendix_lines[idx + 1] or "").strip()
@@ -8605,37 +9226,79 @@ def export_pdf():
 
             if line.startswith(":"):
                 x = 70
-            y = draw_wrapped_text(pdf, line, x, y, width - 100, font_name, font_size, appendix_line_height)
+            if line.startswith(("APPENDIX A:", "LAMPIRAN A:")):
+                draw_centered_fitted_string(pdf, width / 2, y, line, width - 100, font_name, FONT_H2)
+                y -= appendix_line_height + 3
+                continue
+
+            rendered_line = line.lstrip() if line.startswith(" ") else line
+            field_y = _draw_appendix_field(rendered_line, y)
+            if field_y is not None:
+                y = field_y
+                continue
+
+            y = draw_wrapped_text(pdf, rendered_line, x, y, width - 100, font_name, font_size, appendix_line_height)
 
             if line.startswith("Defect Image:") or line.startswith("Gambar Kecacatan:"):
-                appendix_image_path = None
+                appendix_images = []
                 if current_appendix_item:
-                    appendix_image_path = _resolve_evidence_image_path(
-                        evidence_dir,
-                        current_appendix_item.get("id"),
-                        current_appendix_item.get("filename"),
-                    )
+                    for evidence_item in _closed_appendix_evidence_items(current_appendix_item):
+                        appendix_image_path = _resolve_evidence_image_path(
+                            evidence_dir,
+                            current_appendix_item.get("id"),
+                            evidence_item.get("filename"),
+                        )
+                        if appendix_image_path:
+                            appendix_images.append((appendix_image_path, evidence_item.get("uploaded_at", "-")))
 
-                if appendix_image_path:
-                    if y < 170:
+                if appendix_images:
+                    if y < 205:
                         draw_footer(pdf, width, labels)
                         pdf.showPage()
                         y = height - 50
-                    pdf.drawImage(ImageReader(appendix_image_path), 70, y - 95, width=180, height=95)
-                    y -= 110
+
+                    thumb_width = 150
+                    thumb_height = 88
+                    thumb_gap = 10
+                    y -= 8
+                    image_y = y - thumb_height
+                    pdf.setFont("Times-Roman", FONT_CAPTION)
+                    date_label = "Uploaded" if language == "en" else "Muat Naik"
+                    for image_index, (appendix_image_path, upload_time) in enumerate(
+                        appendix_images[:REQUIRED_EVIDENCE_IMAGE_COUNT]
+                    ):
+                        image_x = 70 + image_index * (thumb_width + thumb_gap)
+                        pdf.drawImage(
+                            ImageReader(appendix_image_path),
+                            image_x,
+                            image_y,
+                            width=thumb_width,
+                            height=thumb_height,
+                        )
+                        pdf.drawString(image_x, image_y - 10, f"{date_label}: {_format_display_timestamp(upload_time, language)}")
+
+                    y = image_y - 30
 
             if line.startswith(("Uploaded:", "Muat Naik:")):
                 y -= 4
 
             if line.startswith((
                 "Maklumat Pemilik Menuntut:",
+                "Maklumat Pemilik Lain:",
+                "Rekod Kes Ditutup Pemilik Menuntut:",
+                "Rekod Kes Ditutup Pemilik Lain:",
                 "Senarai Kecacatan Pemilik Menuntut:",
+                "Senarai Kecacatan Pemilik Lain:",
                 "Senarai Kecacatan Pemilik Lain Dalam Kes:",
                 "Claimant Owner Details:",
+                "Claimant Owner Closed Case Records:",
                 "Claimant Owner Defect List:",
+                "Other Owner Details:",
+                "Other Owner Closed Case Records:",
+                "Other Owner Defect List:",
                 "Other Owner Defect List in Case:",
             )):
-                y -= 2
+                y -= 4
 
     # =============================================
     # APPEND LEGAL METADATA PAGE
@@ -8673,19 +9336,22 @@ def export_pdf():
             "timestamp": "Tarikh & Masa",
             "status": "Status",
             "status_values": {
-                "COMPLIANT": "PATUH",
-                "PENDING_REVIEW": "DALAM SEMAKAN",
-                "PENDING": "MENUNGGU",
+                "COMPLIANT": "Mematuhi",
+                "PENDING_REVIEW": "Tidak Mematuhi",
+                "PENDING": "Tidak Mematuhi",
+                "NON_COMPLIANT": "Tidak Mematuhi",
             },
             "total_defects": "Jumlah Kecacatan",
             "completed": "Bilangan Kecacatan Diselesaikan",
             "completion_rate": "Kadar Penyelesaian",
-            "integrity_hash": "Nilai Cincang SHA-256 bagi Integriti Data",
+            "integrity_hash": "Cincang Pengesahan Dokumen (SHA-256):",
+            "integrity_note": "Sijil ini dijana secara digital. Nilai cincang di atas digunakan untuk mengesahkan ketulenan dan integriti dokumen ini.",
             "timeline_completed": "Telah Siap",
-            "timeline_pending": "Belum Siap",
+            "timeline_pending": "Belum Selesai / Dalam Proses",
             "initial_report": "Laporan Awal",
             "last_update": "Kemas Kini Terakhir",
             "footer_note": "Sijil ini hendaklah dibaca bersama halaman pengesahan dan tandatangan.",
+            "certificate_no": "No. Sijil",
         },
         "en": {
             "subtitle": "",
@@ -8699,43 +9365,165 @@ def export_pdf():
             "timestamp": "Timestamp",
             "status": "Status",
             "status_values": {
-                "COMPLIANT": "COMPLIANT",
-                "PENDING_REVIEW": "PENDING REVIEW",
-                "PENDING": "PENDING",
+                "COMPLIANT": "Compliant",
+                "PENDING_REVIEW": "Non-Compliant",
+                "PENDING": "Non-Compliant",
+                "NON_COMPLIANT": "Non-Compliant",
             },
             "total_defects": "Total Defects",
-            "completed": "Resolved Defect Count",
+            "completed": "Completed Defects",
             "completion_rate": "Resolution Rate",
-            "integrity_hash": "SHA-256 Hash Value for Data Integrity Verification",
+            "integrity_hash": "Document Verification Hash (SHA-256)",
+            "integrity_note": "This certificate has been digitally generated. The hash value above is used to verify the authenticity and integrity of this document.",
             "timeline_completed": "Completed",
-            "timeline_pending": "Pending",
+            "timeline_pending": "Pending / In Progress",
             "initial_report": "Initial Report",
             "last_update": "Last Update",
             "footer_note": "This certificate shall be read together with the verification and signature page.",
+            "certificate_no": "Certificate No.",
         },
     }
     page = page_labels.get(language, page_labels["ms"])
-    LABEL_X = LEFT_MARGIN + 28
+    BOX_LEFT = 50
+    BOX_WIDTH = width - (BOX_LEFT * 2)
+    BOX_PADDING_X = 14
+    BOX_PADDING_TOP = 17
+    ROW_HEIGHT = 16
+    LABEL_X = BOX_LEFT + BOX_PADDING_X
+    COLON_X = BOX_LEFT + 215
+    VALUE_X = COLON_X + 14
+    VALUE_WIDTH = BOX_LEFT + BOX_WIDTH - VALUE_X - BOX_PADDING_X
 
-    def draw_label_value(label, value, current_y, font_name="Times-Roman", font_size=12, bold_label=False):
-        pdf.setFont("Times-Bold" if bold_label else "Times-Roman", font_size)
-        pdf.drawString(LABEL_X, current_y, f"{label}: {value}")
-        return current_y - LINE_SPACING
+    def _fit_certificate_value(value, max_width, font_name="Times-Roman", font_size=FONT_BODY):
+        text = str(value or "")
+        if pdf.stringWidth(text, font_name, font_size) <= max_width:
+            return text
 
-    def draw_section_header(title, current_y):
+        ellipsis = "..."
+        available_width = max_width - pdf.stringWidth(ellipsis, font_name, font_size)
+        if available_width <= 0:
+            return ellipsis
+
+        fitted = ""
+        for char in text:
+            if pdf.stringWidth(fitted + char, font_name, font_size) > available_width:
+                break
+            fitted += char
+        return fitted.rstrip() + ellipsis
+
+    def draw_certificate_section(title, rows, current_y, box_height=None):
+        row_count = max(len(rows), 1)
+        box_height = box_height or (BOX_PADDING_TOP + 13 + (row_count * ROW_HEIGHT) + 11)
+        bottom_y = current_y - box_height
+
+        pdf.saveState()
+        pdf.setLineWidth(0.85)
+        pdf.rect(BOX_LEFT, bottom_y, BOX_WIDTH, box_height, stroke=1, fill=0)
+        pdf.restoreState()
+
+        title_y = current_y - BOX_PADDING_TOP
         pdf.setFont("Times-Bold", FONT_H2)
-        pdf.drawString(LEFT_MARGIN, current_y, title)
-        return current_y - (LINE_SPACING - 2)
+        pdf.drawString(LABEL_X, title_y, title)
+
+        row_y = title_y - 20
+        for label, value in rows:
+            pdf.setFont("Times-Roman", FONT_BODY)
+            pdf.drawString(LABEL_X, row_y, str(label))
+            pdf.drawString(COLON_X, row_y, ":")
+            value_text = _fit_certificate_value(value, VALUE_WIDTH)
+            pdf.setFont("Times-Roman", FONT_BODY)
+            pdf.drawString(VALUE_X, row_y, value_text)
+            row_y -= ROW_HEIGHT
+
+        return bottom_y - 34
+
+    def _wrap_certificate_text(text, max_width, font_name="Times-Roman", font_size=FONT_BODY):
+        words = str(text or "").split()
+        lines = []
+        current = ""
+
+        for word in words:
+            candidate = f"{current} {word}".strip()
+            if pdf.stringWidth(candidate, font_name, font_size) <= max_width:
+                current = candidate
+                continue
+            if current:
+                lines.append(current)
+            if pdf.stringWidth(word, font_name, font_size) <= max_width:
+                current = word
+                continue
+
+            chunk = ""
+            for char in word:
+                if pdf.stringWidth(chunk + char, font_name, font_size) <= max_width:
+                    chunk += char
+                else:
+                    if chunk:
+                        lines.append(chunk)
+                    chunk = char
+            current = chunk
+
+        if current:
+            lines.append(current)
+        return lines or [""]
+
+    def draw_data_integrity_section(current_y, hash_value):
+        label_lines = _wrap_certificate_text(page["integrity_hash"], BOX_WIDTH - (BOX_PADDING_X * 2))
+        hash_lines = _wrap_certificate_text(hash_value, BOX_WIDTH - (BOX_PADDING_X * 2), "Times-Roman", FONT_BODY)
+        note_lines = _wrap_certificate_text(page["integrity_note"], BOX_WIDTH - (BOX_PADDING_X * 2), "Times-Roman", FONT_CAPTION)
+        box_height = (
+            BOX_PADDING_TOP
+            + 16
+            + (len(label_lines) * ROW_HEIGHT)
+            + 4
+            + (len(hash_lines) * ROW_HEIGHT)
+            + 8
+            + (len(note_lines) * ROW_HEIGHT)
+            + 12
+        )
+        bottom_y = current_y - box_height
+
+        pdf.saveState()
+        pdf.setLineWidth(0.85)
+        pdf.rect(BOX_LEFT, bottom_y, BOX_WIDTH, box_height, stroke=1, fill=0)
+        pdf.restoreState()
+
+        row_y = current_y - BOX_PADDING_TOP
+        pdf.setFont("Times-Bold", FONT_H2)
+        pdf.drawString(LABEL_X, row_y, page["data_integrity"])
+        row_y -= 20
+
+        pdf.setFont("Times-Roman", FONT_BODY)
+        for line in label_lines:
+            pdf.drawString(LABEL_X, row_y, line)
+            row_y -= ROW_HEIGHT
+
+        row_y -= 2
+        for line in hash_lines:
+            pdf.drawString(LABEL_X, row_y, line)
+            row_y -= ROW_HEIGHT
+
+        row_y -= 6
+        pdf.setFont("Times-Italic", FONT_CAPTION)
+        for line in note_lines:
+            pdf.drawString(LABEL_X, row_y, line)
+            row_y -= ROW_HEIGHT
+
+        return bottom_y - 28
 
     # =========================
     # TITLE
     # =========================
-    pdf.line(LEFT_MARGIN, y, width - LEFT_MARGIN, y)
-    y -= 18
-
     pdf.setFont("Times-Bold", FONT_H1)
     pdf.drawCentredString(width / 2, y, legal_title)
-    y -= 22
+    y -= 24
+
+    pdf.saveState()
+    pdf.setLineWidth(0.75)
+    pdf.setDash(1.2, 2.0)
+    pdf.line((width - 250) / 2, y, (width + 250) / 2, y)
+    pdf.restoreState()
+    y -= 32
 
     subtitle = page["subtitle"].strip()
     if subtitle:
@@ -8743,75 +9531,60 @@ def export_pdf():
         pdf.drawString(LEFT_MARGIN, y, subtitle)
         y -= 18
 
-    y -= SECTION_GAP
-
     # =========================
     # REPORT INFO
     # =========================
-    y = draw_section_header(page["report_information"], y)
-    y = draw_label_value(page["report_id"], legal_metadata.get("report_id", "N/A"), y)
-    y = draw_label_value(page["signature_id"], signature.get("signature_id", "N/A"), y)
-    y = draw_label_value(page["timestamp"], _format_display_timestamp(signature.get("timestamp", "N/A"), language), y)
-    y -= SECTION_GAP
+    y = draw_certificate_section(page["report_information"], [
+        (page["report_id"], legal_metadata.get("report_id", "N/A")),
+        (page["certificate_no"], certificate.get("certificate_no", certificate.get("certificate_id", "N/A"))),
+        (page["signature_id"], signature.get("signature_id", "N/A")),
+        (page["timestamp"], _format_display_timestamp(signature.get("timestamp", "N/A"), language)),
+    ], y, box_height=102)
 
     # =========================
     # COMPLIANCE STATUS
     # =========================
     compliance_status = certificate.get("compliance_status", "PENDING")
     compliance_status_display = page.get("status_values", {}).get(compliance_status, compliance_status)
-    y = draw_section_header(page["compliance_status"], y)
-    pdf.setFont("Times-Roman", FONT_BODY)
-    pdf.drawString(LABEL_X, y, f"{page['status']}: {compliance_status_display}")
-    y -= (SECTION_GAP - 2)
+    y = draw_certificate_section(page["compliance_status"], [
+        (page["status"], compliance_status_display),
+    ], y, box_height=72)
 
     # =========================
     # DEFECT SUMMARY
     # =========================
     stats = certificate.get("statistics", {})
-    y = draw_section_header(page["defect_summary"], y)
-    y = draw_label_value(page["total_defects"], str(stats.get("total_defects", 0)), y)
-    y = draw_label_value(page["completed"], str(stats.get("completed", 0)), y)
-    y = draw_label_value(page["completion_rate"], str(stats.get("completion_rate", "0%")), y)
-    y -= SECTION_GAP
-
-    # =========================
-    # DATA INTEGRITY
-    # =========================
-    y = draw_section_header(page["data_integrity"], y)
-    pdf.setFont("Times-Roman", FONT_BODY)
-    pdf.drawString(LABEL_X, y, f"{page['integrity_hash']}:")
-    y -= LINE_SPACING
-
-    pdf.setFont("Courier", 8)
-    integrity_hash = signature.get("content_hash", "N/A")
-    for i in range(0, len(integrity_hash), 64):
-        pdf.drawString(LABEL_X, y, integrity_hash[i:i+64])
-        y -= LINE_SPACING
-
-    y -= SECTION_GAP
+    y = draw_certificate_section(page["defect_summary"], [
+        (page["total_defects"], str(stats.get("total_defects", 0))),
+        (page["completed"], str(stats.get("completed", 0))),
+        (page["completion_rate"], str(stats.get("completion_rate", "0%"))),
+    ], y, box_height=92)
 
     # =========================
     # TIMELINE
     # =========================
-    y = draw_section_header(page["timeline_summary"], y)
     timeline_data = {
         page["timeline_completed"]: str(certificate.get("statistics", {}).get("completed", 0)),
         page["timeline_pending"]: str(certificate.get("statistics", {}).get("pending", 0)),
         page["initial_report"]: _format_display_timestamp(legal_metadata.get("created_at", signature.get("timestamp", "N/A")), language),
         page["last_update"]: _format_display_timestamp(timeline.get("timeline_generated", signature.get("timestamp", "N/A")), language),
     }
-    y = draw_label_value(page["timeline_completed"], timeline_data[page["timeline_completed"]], y)
-    y = draw_label_value(page["timeline_pending"], timeline_data[page["timeline_pending"]], y)
-    y = draw_label_value(page["initial_report"], timeline_data[page["initial_report"]], y)
-    y = draw_label_value(page["last_update"], timeline_data[page["last_update"]], y)
-    y -= SECTION_GAP
+    y = draw_certificate_section(page["timeline_summary"], [
+        (page["timeline_completed"], timeline_data[page["timeline_completed"]]),
+        (page["timeline_pending"], timeline_data[page["timeline_pending"]]),
+        (page["initial_report"], timeline_data[page["initial_report"]]),
+        (page["last_update"], timeline_data[page["last_update"]]),
+    ], y, box_height=108)
 
-    pdf.line(LEFT_MARGIN, y, width - LEFT_MARGIN, y)
-    y -= SECTION_GAP
+    # =========================
+    # DATA INTEGRITY
+    # =========================
+    integrity_hash = signature.get("content_hash", "N/A")
+    y = draw_data_integrity_section(y, integrity_hash)
 
     pdf.setFont("Times-Italic", FONT_CAPTION)
     footer_note = page["footer_note"]
-    pdf.drawString(LEFT_MARGIN, y, footer_note)
+    pdf.drawCentredString(width / 2, y + 4, footer_note)
 
     # ============================================
     # SIGNATURE & METERAI (HALAMAN BERASINGAN)
@@ -8820,12 +9593,9 @@ def export_pdf():
     pdf.showPage()
     y = height - 50
 
-    pdf.setFont("Times-Bold", FONT_H3)
-    if language == "en":
-        pdf.drawCentredString(width / 2, y, "Verification and Signature")
-    else:
-        pdf.drawCentredString(width / 2, y, "Pengesahan dan Tandatangan")
-
+    signature_title = "Verification and Signature" if language == "en" else "Pengesahan dan Tandatangan"
+    pdf.setFont("Times-Bold", FONT_H1)
+    pdf.drawCentredString(width / 2, y, signature_title)
     y -= 110
 
     pdf.setFont("Times-Roman", FONT_BODY)
@@ -8893,9 +9663,6 @@ def export_pdf():
 
     report_string = json.dumps(report_data, sort_keys=True)
     digital_hash = hashlib.sha256(report_string.encode()).hexdigest()
-
-    pdf.setFont("Times-Italic", 9)
-    pdf.drawString(50, 30, f"Digital Validation Hash: {digital_hash}")
 
     draw_footer(pdf, width, labels)
 
@@ -9056,13 +9823,22 @@ def update_status():
         # Normalize status
         if new_status in STATUS_NORMALISE:
             new_status = STATUS_NORMALISE[new_status]
+
+        allowed_statuses = {"Pending", "In Progress", "Completed", "Delayed"}
+        if new_status not in allowed_statuses:
+            return jsonify({"success": False, "error": "Invalid status value"}), 400
+
+        if new_status == "Completed" and not completed_date:
+            return jsonify({"success": False, "error": "Completion date is required when status is Completed"}), 400
         
         # Validate date format if provided (YYYY-MM-DD)
         if completed_date:
             try:
-                datetime.strptime(completed_date, "%Y-%m-%d")
+                completed_date_obj = datetime.strptime(completed_date, "%Y-%m-%d").date()
             except ValueError:
                 return jsonify({"success": False, "error": "Invalid date format. Use YYYY-MM-DD"}), 400
+            if completed_date_obj > _now_app_timezone().date():
+                return jsonify({"success": False, "error": "Completion date cannot be in the future"}), 400
         
         # Save status using the existing function
         save_status({str(defect_id): new_status})
@@ -9073,6 +9849,29 @@ def update_status():
         elif new_status != "Completed":
             # Clear completion date if status is not Completed
             save_completion_dates({str(defect_id): None})
+            completed_date = ""
+
+        cur_completed_date = completed_date if new_status == "Completed" else None
+        cur = None
+        conn = None
+        reported_date = None
+        deadline = None
+        try:
+            conn = get_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT reported_date, deadline FROM defects WHERE id = %s", (defect_id,))
+            row = cur.fetchone()
+            if row:
+                reported_date, deadline = row[0], row[1]
+        finally:
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
+
+        closed = is_auto_closed(new_status, cur_completed_date)
+        is_overdue = calculate_overdue(deadline, cur_completed_date, new_status)
+        hda_compliant = calculate_hda_compliance(reported_date, cur_completed_date, new_status)
         
         _append_audit_event(
             action="Status Updated",
@@ -9086,7 +9885,16 @@ def update_status():
             },
         )
         
-        return jsonify({"success": True, "message": "Status updated successfully", "new_status": new_status, "completed_date": completed_date})
+        return jsonify({
+            "success": True,
+            "message": "Status updated successfully",
+            "new_status": new_status,
+            "display_status": "Closed" if closed else new_status,
+            "completed_date": completed_date,
+            "closed": closed,
+            "is_overdue": is_overdue,
+            "hda_compliant": hda_compliant,
+        })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 

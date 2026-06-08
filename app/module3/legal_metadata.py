@@ -10,6 +10,7 @@ import json
 import hashlib
 import hmac
 import uuid
+import re
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 from typing import Dict, List, Optional, Any
@@ -37,6 +38,46 @@ class LegalMetadataManager:
                 return datetime.now(timezone.utc) + timedelta(hours=8)
             return datetime.now(timezone.utc)
 
+    def _is_internal_identifier(self, value: str) -> bool:
+        text = str(value or "").strip()
+        if re.fullmatch(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}", text):
+            return True
+        return bool(re.fullmatch(r"[0-9a-fA-F]{32}|[0-9a-fA-F]{64}", text))
+
+    def build_public_report_id(self, report_id: str, timestamp: Optional[datetime] = None) -> str:
+        report_ref = str(report_id or "").strip()
+        if timestamp is None:
+            timestamp = self._now_app_timezone()
+
+        if report_ref and report_ref.upper() not in {"N/A", "-"} and not self._is_internal_identifier(report_ref):
+            return re.sub(r"[^A-Za-z0-9/-]+", "-", report_ref).strip("-")
+
+        return f"RPT/{timestamp.strftime('%Y%m%d-%H%M%S')}"
+
+    def _build_public_signature_id(self, report_id: str, timestamp: datetime) -> str:
+        report_ref = self.build_public_report_id(report_id, timestamp)
+        timestamp_ref = timestamp.strftime("%Y%m%d-%H%M%S")
+
+        return f"SIG/{report_ref}/{timestamp_ref}"
+
+    def build_public_certificate_no(self, report_id: str, timestamp: Optional[datetime] = None) -> str:
+        report_ref = self.build_public_report_id(report_id, timestamp)
+        if timestamp is None:
+            timestamp = self._now_app_timezone()
+
+        match = re.fullmatch(r"TTPM/[A-Za-z0-9]+/(\d{4})/(\d+)", report_ref)
+        if match:
+            year, running_no = match.groups()
+            return f"CERT-DLP-{year}-{int(running_no):06d}"
+
+        match = re.search(r"(\d{4})(\d{2})(\d{2})-(\d{6})", report_ref)
+        if match:
+            year = match.group(1)
+            compact_ref = f"{match.group(2)}{match.group(3)}{match.group(4)}"
+            return f"CERT-DLP-{year}-{compact_ref}"
+
+        return f"CERT-DLP-{timestamp.strftime('%Y')}-{timestamp.strftime('%m%d%H%M%S')}"
+
     def generate_digital_signature(
         self,
         report_id: str,
@@ -61,6 +102,7 @@ class LegalMetadataManager:
         if timestamp is None:
             timestamp = self._now_app_timezone()
         
+        report_id = self.build_public_report_id(report_id, timestamp)
         timestamp_iso = timestamp.isoformat()
         
         # Create signing data
@@ -77,7 +119,7 @@ class LegalMetadataManager:
         content_hash = hashlib.sha256(report_content.encode()).hexdigest()
         
         return {
-            "signature_id": str(uuid.uuid4()),
+            "signature_id": self._build_public_signature_id(report_id, timestamp),
             "signature": signature,
             "content_hash": content_hash,
             "timestamp": timestamp_iso,
@@ -274,6 +316,13 @@ class LegalMetadataManager:
             details: Optional additional details
         """
         try:
+            event_timestamp = self._now_app_timezone()
+            report_id = self.build_public_report_id(report_id, event_timestamp)
+            details = details.copy() if isinstance(details, dict) else {}
+            signature_id = str(details.get("signature_id") or "").strip()
+            if signature_id and self._is_internal_identifier(signature_id):
+                details["signature_id"] = self._build_public_signature_id(report_id, event_timestamp)
+
             # Ensure directory exists
             os.makedirs(os.path.dirname(self.event_log_path), exist_ok=True)
             
@@ -289,13 +338,13 @@ class LegalMetadataManager:
             # Append new event
             event = {
                 "event_id": str(uuid.uuid4()),
-                "timestamp": self._now_app_timezone().isoformat(),
+                "timestamp": event_timestamp.isoformat(),
                 "action": action,
                 "report_id": report_id,
                 "user_id": user_id,
                 "role": role,
                 "defect_id": defect_id,
-                "details": details or {}
+                "details": details,
             }
             
             events.append(event)
@@ -388,13 +437,16 @@ class LegalMetadataManager:
         def _is_pending(defect):
             return _status_value(defect) in {"pending", "belum diselesaikan", "belum selesai"}
 
+        report_id = self.build_public_report_id(report_id, now)
+
         # Calculate defect statistics
         total_defects = len(defects)
         completed = len([d for d in defects if _is_completed(d)])
         pending = len([d for d in defects if _is_pending(d)])
         
         return {
-            "certificate_id": str(uuid.uuid4()),
+            "certificate_id": self.build_public_certificate_no(report_id, now),
+            "certificate_no": self.build_public_certificate_no(report_id, now),
             "certificate_title": lang_labels["title"],
             "report_id": report_id,
             "issued_date": now.isoformat(),

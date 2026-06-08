@@ -500,10 +500,12 @@ function confirmUpdate() {
             const defect = allDefects.find(d => Number(d.id) === defectId);
             if (defect) {
                 defect.status = data.new_status || status;
-                defect.display_status = data.new_status || status;
+                defect.display_status = data.display_status || data.new_status || status;
                 defect.original_status = data.new_status || status;
                 defect.completed_date = data.completed_date || '';
-                defect.closed = false;
+                defect.closed = Boolean(data.closed);
+                defect.is_overdue = Boolean(data.is_overdue);
+                defect.hda_compliant = data.hda_compliant;
             }
 
             // Prevent stale AI text from being exported after status changes.

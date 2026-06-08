@@ -31,7 +31,7 @@ FAST_REPORT_LABELS = {
         "status": "Status",
         "current_status": "Status Semasa",
         "overdue_status": "Status Tertunggak",
-        "hda_compliance": "Pematuhan HDA (30 Hari)",
+        "hda_compliance": "Status Pematuhan HDA",
         "priority": "Keutamaan",
         "remarks": "Ulasan",
         "homeowner_report_subtitle": "Laporan Sokongan Bagi Tuntutan Tribunal Tuntutan Pengguna Malaysia (TTPM)",
@@ -70,10 +70,11 @@ FAST_REPORT_LABELS = {
         "legal_summary_text": "Laporan rujukan ini disediakan bagi merumuskan kedudukan semasa pematuhan Tempoh Liabiliti Kecacatan (DLP) berdasarkan sepenuhnya kepada rekod dan maklumat yang dikemukakan. Laporan ini menghimpunkan maklumat berkaitan status kecacatan, tempoh pelaksanaan, serta pematuhan terhadap garis masa yang ditetapkan untuk tujuan rujukan dan pertimbangan Tribunal. Laporan ini disediakan secara berkecuali dan tidak mengandungi sebarang penentuan kesalahan, liabiliti, atau keputusan undang-undang terhadap mana-mana pihak.",
         "legal_ai_disclaimer_text": "Laporan rujukan ini dijana dengan bantuan sistem kecerdasan buatan (AI) bagi tujuan penyusunan dan ringkasan maklumat berdasarkan rekod yang dikemukakan. Laporan ini disediakan semata-mata untuk tujuan rujukan Tribunal dan tidak boleh dianggap sebagai nasihat undang-undang. Laporan ini tidak menggantikan penentuan atau keputusan Tribunal Tuntutan Pengguna Malaysia.",
         "remarks_placeholder": "Tiada ulasan dikemukakan",
-        "overdue_yes": "Ya",
-        "overdue_no": "Tidak",
-        "hda_yes": "Ya",
-        "hda_no": "Tidak",
+        "overdue_yes": "Tertunggak",
+        "overdue_no": "Tidak Tertunggak",
+        "hda_yes": "Mematuhi",
+        "hda_no": "Tidak Mematuhi",
+        "hda_pending": "Tidak Mematuhi",
         "completed": "Telah Diselesaikan",
         "pending": "Belum Diselesaikan",
         "in_progress": "Dalam Tindakan",
@@ -103,7 +104,7 @@ FAST_REPORT_LABELS = {
         "status": "Status",
         "current_status": "Current Status",
         "overdue_status": "Overdue Status",
-        "hda_compliance": "HDA Compliance (30 Days)",
+        "hda_compliance": "HDA Compliance Status",
         "priority": "Priority",
         "remarks": "Remarks",
         "homeowner_report_subtitle": "Support Report for Claim before the Malaysia Consumer Claims Tribunal (TTPM)",
@@ -145,10 +146,11 @@ FAST_REPORT_LABELS = {
         "legal_ai_disclaimer_text": "This reference report is generated with the assistance of an artificial intelligence (AI) system for the purpose of organising and summarising information based on submitted records. This report is provided solely for Tribunal reference purposes and should not be construed as legal advice. This report does not replace the determination or decision of the Malaysia Consumer Claims Tribunal.",
         "legal_ai_disclaimer_text_old": "This reference report was generated with the assistance of an artificial intelligence (AI) system for the purpose of organising and summarising information based on submitted records. This report is provided solely for Tribunal reference and informational purposes and does not constitute legal advice. This report does not replace or affect the determination or decision of the Malaysia Consumer Claims Tribunal.",
         "remarks_placeholder": "No remarks recorded",
-        "overdue_yes": "Yes",
-        "overdue_no": "No",
-        "hda_yes": "Yes",
-        "hda_no": "No",
+        "overdue_yes": "Overdue",
+        "overdue_no": "Not Overdue",
+        "hda_yes": "Compliant",
+        "hda_no": "Non-Compliant",
+        "hda_pending": "Non-Compliant",
         "completed": "Completed",
         "pending": "Pending",
         "in_progress": "In Progress",
@@ -187,6 +189,34 @@ def _format_generated_datetime(language):
         }
         return f"{now.day:02d} {month_names[now.month]} {now.year}, {now.strftime('%H:%M')}"
     return now.strftime("%d %B %Y, %H:%M")
+
+
+def _format_display_date(value, language):
+    text = _fast_text(value, "-").strip()
+    if not text or text in {"-", "N/A", "None"}:
+        return "-"
+
+    date_part = text[:10]
+    parsed = None
+    for date_format in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%Y/%m/%d"):
+        try:
+            parsed = datetime.strptime(date_part, date_format)
+            break
+        except Exception:
+            continue
+
+    if not parsed:
+        return text
+
+    if language == "ms":
+        month_names = {
+            1: "Januari", 2: "Februari", 3: "Mac", 4: "April",
+            5: "Mei", 6: "Jun", 7: "Julai", 8: "Ogos",
+            9: "September", 10: "Oktober", 11: "November", 12: "Disember",
+        }
+        return f"{parsed.day:02d} {month_names[parsed.month]} {parsed.year}"
+
+    return parsed.strftime("%d %B %Y")
 
 
 def refresh_generated_datetime_line(report_text, language):
@@ -300,6 +330,13 @@ def _bool_label(value, language):
     return labels["overdue_yes"] if truthy else labels["overdue_no"]
 
 
+def _hda_compliance_label(value, language, status=None):
+    normalized = str(value).strip().lower()
+    truthy = normalized in {"yes", "ya", "true", "1", "mematuhi", "compliant"}
+    labels = FAST_REPORT_LABELS.get(language, FAST_REPORT_LABELS["ms"])
+    return labels["hda_yes"] if truthy else labels["hda_no"]
+
+
 # Hardcoded remarks translations (Malay -> English)
 HARDCODED_REMARKS = {
     "belum siap dibaiki": "Not repaired yet",
@@ -351,7 +388,7 @@ def _format_defect_block(defect, index, language, role):
     actual_label = "Tarikh Siap Sebenar" if language == "ms" else "Actual Completion Date"
     status_label = "Status" if language == "ms" else "Status"
     overdue_label = "Status Tertunggak" if language == "ms" else "Overdue Status"
-    hda_label = "Pematuhan HDA (30 Hari)" if language == "ms" else "HDA Compliance (30 Days)"
+    hda_label = "Status Pematuhan HDA" if language == "ms" else "HDA Compliance Status"
     priority_label = "Keutamaan" if language == "ms" else "Priority"
     remarks_label = "Ulasan" if language == "ms" else "Remarks"
 
@@ -359,9 +396,9 @@ def _format_defect_block(defect, index, language, role):
     description = _translate(_fast_text(defect.get('description')), language, role, "defect_description")
     lines.append(f"   {description_label}: {description}")
     lines.append(f"   Unit: {_fast_text(defect.get('unit'))}")
-    lines.append(f"   {reported_label}: {_fast_text(defect.get('reported_date'))}")
-    lines.append(f"   {scheduled_label}: {_fast_text(defect.get('deadline'))}")
-    lines.append(f"   {actual_label}: {_fast_text(defect.get('actual_completion_date'))}")
+    lines.append(f"   {reported_label}: {_format_display_date(defect.get('reported_date'), language)}")
+    lines.append(f"   {scheduled_label}: {_format_display_date(defect.get('deadline'), language)}")
+    lines.append(f"   {actual_label}: {_format_display_date(defect.get('actual_completion_date'), language)}")
 
     status_value = _status_label(_fast_text(defect.get("status"), ""), language)
     if status_value == _fast_label(language, "completed"):
@@ -370,7 +407,7 @@ def _format_defect_block(defect, index, language, role):
 
     lines.append(f"   {status_label}: {status_value}")
     lines.append(f"   {overdue_label}: {_bool_label(defect.get('overdue'), language)}")
-    lines.append(f"   {hda_label}: {_bool_label(defect.get('hda_compliance_30_days'), language)}")
+    lines.append(f"   {hda_label}: {_hda_compliance_label(defect.get('hda_compliance_30_days'), language, defect.get('status'))}")
     lines.append(f"   {priority_label}: {_fast_text(defect.get('priority'), 'Normal')}")
 
     if role == "Homeowner":
@@ -409,6 +446,7 @@ def generate_fast_report(role, report_data, language="ms"):
         except Exception:
             ai_title = 'AI-GENERATED CLAIM SUMMARY REPORT'
         lines.append(ai_title)
+        lines.append("")
         lines.append(report_title_line)
         lines.append(f"{generated_label}: {_fast_text(gen_dt)}")
         lines.append("")
@@ -426,6 +464,7 @@ def generate_fast_report(role, report_data, language="ms"):
     critical = int(stats.get("critical_defects", 0) or 0)
     overdue_count = int(stats.get("overdue_defects", 0) or 0)
     hda_non_compliant_count = int(stats.get("hda_non_compliant_defects", 0) or 0)
+    closed_count = int(stats.get("closed_defects", 0) or 0)
 
     def add_defect_list(section_defects):
         if not section_defects:
@@ -450,7 +489,7 @@ def generate_fast_report(role, report_data, language="ms"):
                 labels["homeowner_request_text"].format(
                     claim_amount=_fast_text(case_info.get("claim_amount")),
                     item_service=_fast_text(case_info.get("item_service")),
-                    transaction_date=_fast_text(case_info.get("transaction_date")),
+                    transaction_date=_format_display_date(case_info.get("transaction_date"), language),
                 ),
                 "",
                 f"6. {labels['conclusion']}",
@@ -492,7 +531,12 @@ def generate_fast_report(role, report_data, language="ms"):
                 labels["legal_case_background_text"].format(claim_id=_fast_text(case_info.get("claim_id")), claim_amount=_fast_text(case_info.get("claim_amount")), total_defects=total),
                 "",
                 "2. Kedudukan Statistik Rekod Kecacatan",
-                labels["legal_stats_position_text"].format(total=total, completed=completed, pending=pending, overdue=overdue_count, hda_non_compliant=hda_non_compliant_count),
+                f"Jumlah keseluruhan kecacatan: {total}",
+                f"Telah diselesaikan: {completed}",
+                f"Kes Ditutup: {closed_count}",
+                f"Masih belum diselesaikan: {pending}",
+                f"Direkodkan sebagai tertunggak: {overdue_count}",
+                f"Tidak mematuhi tempoh 30 hari HDA: {hda_non_compliant_count}",
                 "",
                 "3. Pemerhatian Berkaitan Status dan Tempoh",
                 labels["legal_status_observations_text"].format(total=total, completed=completed, pending=pending, overdue=overdue_count, hda_non_compliant=hda_non_compliant_count),
@@ -528,7 +572,7 @@ def generate_fast_report(role, report_data, language="ms"):
             labels["homeowner_request_text"].format(
                 claim_amount=_fast_text(case_info.get("claim_amount")),
                 item_service=_fast_text(case_info.get("item_service")),
-                transaction_date=_fast_text(case_info.get("transaction_date")),
+                transaction_date=_format_display_date(case_info.get("transaction_date"), language),
             ),
             "",
             f"6. {labels['conclusion']}",
@@ -569,7 +613,12 @@ def generate_fast_report(role, report_data, language="ms"):
             labels["legal_case_background_text"].format(claim_id=_fast_text(case_info.get("claim_id")), claim_amount=_fast_text(case_info.get("claim_amount")), total_defects=total),
             "",
             "2. Statistical Position of Defect Records",
-            labels["legal_stats_position_text"].format(total=total, completed=completed, pending=pending, overdue=overdue_count, hda_non_compliant=hda_non_compliant_count),
+            f"Total recorded defects: {total}",
+            f"Completed: {completed}",
+            f"Closed Cases: {closed_count}",
+            f"Still unresolved: {pending}",
+            f"Recorded as overdue: {overdue_count}",
+            f"Non-compliant with 30-day HDA requirement: {hda_non_compliant_count}",
             "",
             "3. Recorded Status and Timeframe Observations",
             labels["legal_status_observations_text"].format(total=total, completed=completed, pending=pending, overdue=overdue_count, hda_non_compliant=hda_non_compliant_count),
@@ -608,9 +657,9 @@ def generate_fast_report(role, report_data, language="ms"):
                 description = _translate(_fast_text(defect.get("description")), language, role, "defect_description")
                 defect_lines.append(f"   {labels['description']}: {description}")
                 defect_lines.append(f"   {labels['unit']}: {_fast_text(defect.get('unit'))}")
-                defect_lines.append(f"   {labels['reported_date']}: {_fast_text(defect.get('reported_date'))}")
-                defect_lines.append(f"   {labels['scheduled_completion_date']}: {_fast_text(defect.get('deadline'))}")
-                defect_lines.append(f"   {labels['actual_completion_date']}: {_fast_text(defect.get('actual_completion_date'))}")
+                defect_lines.append(f"   {labels['reported_date']}: {_format_display_date(defect.get('reported_date'), language)}")
+                defect_lines.append(f"   {labels['scheduled_completion_date']}: {_format_display_date(defect.get('deadline'), language)}")
+                defect_lines.append(f"   {labels['actual_completion_date']}: {_format_display_date(defect.get('actual_completion_date'), language)}")
 
                 status_value = _status_label(_fast_text(defect.get("status"), ""), language)
                 if status_value == labels["completed"]:
@@ -618,7 +667,7 @@ def generate_fast_report(role, report_data, language="ms"):
 
                 defect_lines.append(f"   {labels['status']}: {status_value}")
                 defect_lines.append(f"   {labels['overdue_status']}: {_bool_label(defect.get('overdue'), language)}")
-                defect_lines.append(f"   {labels['hda_compliance']}: {_bool_label(defect.get('hda_compliance_30_days'), language)}")
+                defect_lines.append(f"   {labels['hda_compliance']}: {_hda_compliance_label(defect.get('hda_compliance_30_days'), language, defect.get('status'))}")
                 defect_lines.append(f"   {labels['priority']}: {_fast_text(defect.get('priority'), 'Normal')}")
 
                 remarks_text = _fast_text(defect.get("remarks"), "")
@@ -675,9 +724,9 @@ def generate_fast_report(role, report_data, language="ms"):
                     description = _translate(_fast_text(defect.get('description')), language, role, "defect_description")
                     lines.append(f"   Keterangan: {description}")
                     lines.append(f"   Unit: {_fast_text(defect.get('unit'))}")
-                    lines.append(f"   Tarikh Dilaporkan: {_fast_text(defect.get('reported_date'))}")
-                    lines.append(f"   Tarikh Siap Dijadualkan: {_fast_text(defect.get('deadline'))}")
-                    lines.append(f"   Tarikh Siap Sebenar: {_fast_text(defect.get('actual_completion_date'))}")
+                    lines.append(f"   Tarikh Dilaporkan: {_format_display_date(defect.get('reported_date'), language)}")
+                    lines.append(f"   Tarikh Siap Dijadualkan: {_format_display_date(defect.get('deadline'), language)}")
+                    lines.append(f"   Tarikh Siap Sebenar: {_format_display_date(defect.get('actual_completion_date'), language)}")
                     
                     status_value = _status_label(_fast_text(defect.get("status"), ""), language)
                     if status_value == _fast_label(language, "completed"):
@@ -685,7 +734,7 @@ def generate_fast_report(role, report_data, language="ms"):
                     
                     lines.append(f"   Status: {status_value}")
                     lines.append(f"   Status Tertunggak: {_bool_label(defect.get('overdue'), language)}")
-                    lines.append(f"   Pematuhan HDA (30 Hari): {_bool_label(defect.get('hda_compliance_30_days'), language)}")
+                    lines.append(f"   Status Pematuhan HDA: {_hda_compliance_label(defect.get('hda_compliance_30_days'), language, defect.get('status'))}")
                     lines.append(f"   Keutamaan: {_fast_text(defect.get('priority'), 'Normal')}")
                     remarks_text = _fast_text(defect.get("remarks"), "")
                     if remarks_text:
@@ -712,7 +761,7 @@ def generate_fast_report(role, report_data, language="ms"):
             lines.extend([
                 "",
                 "5. Permohonan Rasmi Pihak Yang Menuntut",
-                f"Pihak Yang Menuntut telah mengemukakan tuntutan kepada Tribunal Tuntutan Pengguna Malaysia dengan jumlah tuntutan sebanyak {_fast_text(case_info.get('claim_amount'))}, berhubung dengan {_fast_text(case_info.get('item_service'))} yang dilakukan pada tarikh {_fast_text(case_info.get('transaction_date'))}.",
+                f"Pihak Yang Menuntut telah mengemukakan tuntutan kepada Tribunal Tuntutan Pengguna Malaysia dengan jumlah tuntutan sebanyak {_fast_text(case_info.get('claim_amount'))}, berhubung dengan {_fast_text(case_info.get('item_service'))} yang dilakukan pada tarikh {_format_display_date(case_info.get('transaction_date'), language)}.",
                 "",
                 "6. Penutup",
                 "Laporan sokongan ini disediakan semata-mata untuk merumuskan dan mempersembahkan maklumat berkaitan kecacatan yang telah dilaporkan sepanjang Tempoh Liabiliti Kecacatan (Defect Liability Period), berdasarkan rekod yang dikemukakan oleh Pihak Yang Menuntut, untuk tujuan rujukan dan pertimbangan Tribunal Tuntutan Pengguna Malaysia, tanpa membuat sebarang penentuan kesalahan, liabiliti, atau keputusan undang-undang.",
@@ -758,11 +807,11 @@ def generate_fast_report(role, report_data, language="ms"):
                     description = _translate(_fast_text(defect.get('description')), language, role, "defect_description")
                     lines.append(f"   Keterangan: {description}")
                     lines.append(f"   Unit: {_fast_text(defect.get('unit'))}")
-                    lines.append(f"   Tarikh Dilaporkan: {_fast_text(defect.get('reported_date'))}")
-                    lines.append(f"   Tarikh Siap Dijadualkan: {_fast_text(defect.get('deadline'))}")
-                    lines.append(f"   Tarikh Siap Sebenar: {_fast_text(defect.get('actual_completion_date'))}")
+                    lines.append(f"   Tarikh Dilaporkan: {_format_display_date(defect.get('reported_date'), language)}")
+                    lines.append(f"   Tarikh Siap Dijadualkan: {_format_display_date(defect.get('deadline'), language)}")
+                    lines.append(f"   Tarikh Siap Sebenar: {_format_display_date(defect.get('actual_completion_date'), language)}")
                     lines.append(f"   Tempoh Siap (Hari): {_fast_text(defect.get('days_to_complete'))}")
-                    lines.append(f"   Pematuhan HDA (30 Hari): {_bool_label(defect.get('hda_compliance_30_days'), language)}")
+                    lines.append(f"   Status Pematuhan HDA: {_hda_compliance_label(defect.get('hda_compliance_30_days'), language, defect.get('status'))}")
             else:
                 lines.append("Tiada kecacatan yang telah diselesaikan direkodkan.")
             
@@ -779,13 +828,13 @@ def generate_fast_report(role, report_data, language="ms"):
                     description = _translate(_fast_text(defect.get('description')), language, role, "defect_description")
                     lines.append(f"   Keterangan: {description}")
                     lines.append(f"   Unit: {_fast_text(defect.get('unit'))}")
-                    lines.append(f"   Tarikh Dilaporkan: {_fast_text(defect.get('reported_date'))}")
-                    lines.append(f"   Tarikh Siap Dijadualkan: {_fast_text(defect.get('deadline'))}")
-                    lines.append(f"   Tarikh Siap Sebenar: {_fast_text(defect.get('actual_completion_date'))}")
+                    lines.append(f"   Tarikh Dilaporkan: {_format_display_date(defect.get('reported_date'), language)}")
+                    lines.append(f"   Tarikh Siap Dijadualkan: {_format_display_date(defect.get('deadline'), language)}")
+                    lines.append(f"   Tarikh Siap Sebenar: {_format_display_date(defect.get('actual_completion_date'), language)}")
                     status_value = _status_label(_fast_text(defect.get("status"), ""), language)
                     lines.append(f"   Status Semasa: {status_value}")
                     lines.append(f"   Status Tertunggak: {_bool_label(defect.get('overdue'), language)}")
-                    lines.append(f"   Pematuhan HDA (30 Hari): {_bool_label(defect.get('hda_compliance_30_days'), language)}")
+                    lines.append(f"   Status Pematuhan HDA: {_hda_compliance_label(defect.get('hda_compliance_30_days'), language, defect.get('status'))}")
             else:
                 lines.append("Tiada kecacatan yang masih tertunggak atau tertunda.")
             
@@ -820,8 +869,16 @@ def generate_fast_report(role, report_data, language="ms"):
             pending = int(stats.get("pending_defects", 0) or 0)
             overdue = int(stats.get("overdue_defects", 0) or 0)
             hda_non_compliant = int(stats.get("hda_non_compliant_defects", 0) or 0)
+            closed = int(stats.get("closed_defects", 0) or 0)
             
-            lines.append(f"Jumlah keseluruhan kecacatan: {total}. Telah diselesaikan: {completed}. Masih belum diselesaikan: {pending}. Direkodkan sebagai tertunggak: {overdue}. Tidak mematuhi tempoh 30 hari HDA: {hda_non_compliant}.")
+            lines.extend([
+                f"Jumlah keseluruhan kecacatan: {total}",
+                f"Telah diselesaikan: {completed}",
+                f"Kes Ditutup: {closed}",
+                f"Masih belum diselesaikan: {pending}",
+                f"Direkodkan sebagai tertunggak: {overdue}",
+                f"Tidak mematuhi tempoh 30 hari HDA: {hda_non_compliant}",
+            ])
             
             lines.extend([
                 "",
@@ -850,7 +907,7 @@ def generate_fast_report(role, report_data, language="ms"):
             labels["homeowner_request_text"].format(
                 claim_amount=_fast_text(case_info.get("claim_amount")),
                 item_service=_fast_text(case_info.get("item_service")),
-                transaction_date=_fast_text(case_info.get("transaction_date")),
+                transaction_date=_format_display_date(case_info.get("transaction_date"), language),
             ),
             "",
         ]
@@ -887,9 +944,9 @@ def generate_fast_report(role, report_data, language="ms"):
                     description = _translate(_fast_text(defect.get('description')), language, role, "defect_description")
                     lines.append(f"   Description: {description}")
                     lines.append(f"   Unit: {_fast_text(defect.get('unit'))}")
-                    lines.append(f"   Reported Date: {_fast_text(defect.get('reported_date'))}")
-                    lines.append(f"   Scheduled Completion Date: {_fast_text(defect.get('deadline'))}")
-                    lines.append(f"   Actual Completion Date: {_fast_text(defect.get('actual_completion_date'))}")
+                    lines.append(f"   Reported Date: {_format_display_date(defect.get('reported_date'), language)}")
+                    lines.append(f"   Scheduled Completion Date: {_format_display_date(defect.get('deadline'), language)}")
+                    lines.append(f"   Actual Completion Date: {_format_display_date(defect.get('actual_completion_date'), language)}")
                     
                     status_value = _status_label(_fast_text(defect.get("status"), ""), language)
                     if status_value == _fast_label(language, "completed"):
@@ -897,7 +954,7 @@ def generate_fast_report(role, report_data, language="ms"):
                     
                     lines.append(f"   Status: {status_value}")
                     lines.append(f"   Overdue Status: {_bool_label(defect.get('overdue'), language)}")
-                    lines.append(f"   HDA Compliance (30 Days): {_bool_label(defect.get('hda_compliance_30_days'), language)}")
+                    lines.append(f"   HDA Compliance Status: {_hda_compliance_label(defect.get('hda_compliance_30_days'), language, defect.get('status'))}")
                     lines.append(f"   Priority: {_fast_text(defect.get('priority'), 'Normal')}")
                     remarks_text = _fast_text(defect.get("remarks"), "")
                     if remarks_text:
@@ -924,7 +981,7 @@ def generate_fast_report(role, report_data, language="ms"):
             lines.extend([
                 "",
                 "5. Formal Request from the Claimant",
-                f"The Claimant has submitted a claim to the Malaysia Consumer Claims Tribunal for the amount of {_fast_text(case_info.get('claim_amount'))}, in relation to {_fast_text(case_info.get('item_service'))} carried out on {_fast_text(case_info.get('transaction_date'))}.",
+                f"The Claimant has submitted a claim to the Malaysia Consumer Claims Tribunal for the amount of {_fast_text(case_info.get('claim_amount'))}, in relation to {_fast_text(case_info.get('item_service'))} carried out on {_format_display_date(case_info.get('transaction_date'), language)}.",
                 "",
                 "6. Conclusion",
                 "This support report is prepared solely to summarise and present information relating to defects reported during the Defect Liability Period (DLP), based on the records submitted by the Claimant, for the purpose of reference and consideration by the Malaysia Consumer Claims Tribunal, without making any determination of fault, liability, or legal decision.",
@@ -966,11 +1023,11 @@ def generate_fast_report(role, report_data, language="ms"):
                     description = _translate(_fast_text(defect.get('description')), language, role, "defect_description")
                     lines.append(f"   Description: {description}")
                     lines.append(f"   Unit: {_fast_text(defect.get('unit'))}")
-                    lines.append(f"   Reported Date: {_fast_text(defect.get('reported_date'))}")
-                    lines.append(f"   Scheduled Completion Date: {_fast_text(defect.get('deadline'))}")
-                    lines.append(f"   Actual Completion Date: {_fast_text(defect.get('actual_completion_date'))}")
+                    lines.append(f"   Reported Date: {_format_display_date(defect.get('reported_date'), language)}")
+                    lines.append(f"   Scheduled Completion Date: {_format_display_date(defect.get('deadline'), language)}")
+                    lines.append(f"   Actual Completion Date: {_format_display_date(defect.get('actual_completion_date'), language)}")
                     lines.append(f"   Days to Complete: {_fast_text(defect.get('days_to_complete'))}")
-                    lines.append(f"   HDA Compliance (30 Days): {_bool_label(defect.get('hda_compliance_30_days'), language)}")
+                    lines.append(f"   HDA Compliance Status: {_hda_compliance_label(defect.get('hda_compliance_30_days'), language, defect.get('status'))}")
             else:
                 lines.append("No completed defects are recorded.")
             
@@ -987,13 +1044,13 @@ def generate_fast_report(role, report_data, language="ms"):
                     description = _translate(_fast_text(defect.get('description')), language, role, "defect_description")
                     lines.append(f"   Description: {description}")
                     lines.append(f"   Unit: {_fast_text(defect.get('unit'))}")
-                    lines.append(f"   Reported Date: {_fast_text(defect.get('reported_date'))}")
-                    lines.append(f"   Scheduled Completion Date: {_fast_text(defect.get('deadline'))}")
-                    lines.append(f"   Actual Completion Date: {_fast_text(defect.get('actual_completion_date'))}")
+                    lines.append(f"   Reported Date: {_format_display_date(defect.get('reported_date'), language)}")
+                    lines.append(f"   Scheduled Completion Date: {_format_display_date(defect.get('deadline'), language)}")
+                    lines.append(f"   Actual Completion Date: {_format_display_date(defect.get('actual_completion_date'), language)}")
                     status_value = _status_label(_fast_text(defect.get("status"), ""), language)
                     lines.append(f"   Current Status: {status_value}")
                     lines.append(f"   Overdue Status: {_bool_label(defect.get('overdue'), language)}")
-                    lines.append(f"   HDA Compliance (30 Days): {_bool_label(defect.get('hda_compliance_30_days'), language)}")
+                    lines.append(f"   HDA Compliance Status: {_hda_compliance_label(defect.get('hda_compliance_30_days'), language, defect.get('status'))}")
             else:
                 lines.append("No outstanding or delayed defects are recorded.")
             
@@ -1028,8 +1085,16 @@ def generate_fast_report(role, report_data, language="ms"):
             pending = int(stats.get("pending_defects", 0) or 0)
             overdue = int(stats.get("overdue_defects", 0) or 0)
             hda_non_compliant = int(stats.get("hda_non_compliant_defects", 0) or 0)
+            closed = int(stats.get("closed_defects", 0) or 0)
             
-            lines.append(f"Total recorded defects: {total}. Completed: {completed}. Still unresolved: {pending}. Recorded as overdue: {overdue}. Non-compliant with 30-day HDA requirement: {hda_non_compliant}.")
+            lines.extend([
+                f"Total recorded defects: {total}",
+                f"Completed: {completed}",
+                f"Closed Cases: {closed}",
+                f"Still unresolved: {pending}",
+                f"Recorded as overdue: {overdue}",
+                f"Non-compliant with 30-day HDA requirement: {hda_non_compliant}",
+            ])
             
             lines.extend([
                 "",
@@ -1117,7 +1182,7 @@ def generate_ai_report(role, report_data, language="ms"):
     # Prepend canonical report header for English only; avoid duplicating titles for Malay
     if (language or "").strip().lower() == "en":
         out = (
-            f"{lang_config.get('ai_title', '')}\n"
+            f"{lang_config.get('ai_title', '')}\n\n"
             f"{lang_config.get('report_title', '')}\n"
             f"{generated_datetime_label}: {generated_datetime_value}\n\n"
             f"{ai_text}"
@@ -1145,11 +1210,14 @@ def add_legal_metadata(
     language: str = "ms",
 ) -> dict:
     legal_manager = get_legal_manager()
+    signature_timestamp = legal_manager._now_app_timezone()
+    report_id = legal_manager.build_public_report_id(report_id, signature_timestamp)
     signature = legal_manager.generate_digital_signature(
         report_id=report_id,
         report_content=report_content,
         user_id=user_id,
         role=role,
+        timestamp=signature_timestamp,
     )
     timeline = legal_manager.create_event_timeline(
         report_id=report_id,
@@ -1194,6 +1262,7 @@ def format_legal_report(
     labels = {
         "ms": {
             "signature_section": "BAHAGIAN TANDATANGAN DIGITAL",
+            "certificate_no": "No. Sijil",
             "signature_id": "ID Tandatangan",
             "timestamp": "Tarikh & Masa",
             "hash": "Cincang Integriti",
@@ -1203,6 +1272,7 @@ def format_legal_report(
         },
         "en": {
             "signature_section": "DIGITAL SIGNATURE SECTION",
+            "certificate_no": "Certificate No.",
             "signature_id": "Signature ID",
             "timestamp": "Timestamp",
             "hash": "Integrity Hash",
@@ -1213,17 +1283,35 @@ def format_legal_report(
     }
 
     lang_labels = labels.get(language, labels["ms"])
+    status_values = {
+        "ms": {
+            "COMPLIANT": "Mematuhi",
+            "PENDING_REVIEW": "Tidak Mematuhi",
+            "PENDING": "Tidak Mematuhi",
+            "NON_COMPLIANT": "Tidak Mematuhi",
+        },
+        "en": {
+            "COMPLIANT": "Compliant",
+            "PENDING_REVIEW": "Non-Compliant",
+            "PENDING": "Non-Compliant",
+            "NON_COMPLIANT": "Non-Compliant",
+        },
+    }.get(language, {})
+    raw_compliance_status = certificate.get("compliance_status", "PENDING")
+    compliance_status = status_values.get(raw_compliance_status, raw_compliance_status)
+
     formatted = f"""{report_content}
 
 ---
 
 {lang_labels['signature_section']}
+{lang_labels['certificate_no']}: {certificate.get('certificate_no', certificate.get('certificate_id', 'N/A'))}
 {lang_labels['signature_id']}: {signature.get('signature_id', 'N/A')}
 {lang_labels['timestamp']}: {signature.get('timestamp', 'N/A')}
 {lang_labels['hash']}: {signature.get('content_hash', 'N/A')[:32]}...
 
 {lang_labels['certificate_section']}
-{lang_labels['compliance_status']}: {certificate.get('compliance_status', 'PENDING')}
+{lang_labels['compliance_status']}: {compliance_status}
 
 {lang_labels['event_timeline']}
 {legal_metadata.get('timeline', {}).get('summary', 'No events')}

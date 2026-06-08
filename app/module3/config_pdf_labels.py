@@ -40,7 +40,7 @@ PDF_LABELS = {
         "actual_completion_date": "Tarikh Siap Sebenar",
         "status": "Status",
         "overdue": "Status Tertunggak",
-        "hda_compliant": "Pematuhan HDA (30 Hari)",
+        "hda_compliant": "Status Pematuhan HDA",
         "priority": "Keutamaan",
         "remarks": "Ulasan",
         "evidence": "Bukti Kecacatan",
@@ -54,12 +54,12 @@ PDF_LABELS = {
                     "en": "Certificate of Defect Record Compliance Summary",
                 },
                 "Developer": {
-                    "ms": "Sijil Ringkasan Pematuhan Rekod Kecacatan",
-                    "en": "Certificate of Defect Record Compliance Summary",
+                    "ms": "Sijil Ringkasan Pematuhan Pelaksanaan Pembaikan",
+                    "en": "Certificate of Defect Rectification Compliance Summary",
                 },
                 "Legal": {
-                    "ms": "Sijil Ringkasan Pematuhan Rekod Kecacatan",
-                    "en": "Certificate of Defect Record Compliance Summary",
+                    "ms": "Sijil Ringkasan Pematuhan Perundangan",
+                    "en": "Certificate of Legal Compliance Summary",
                 },
             },
             "report_info": "Maklumat Laporan",
@@ -72,9 +72,10 @@ PDF_LABELS = {
             "timestamp": "Tarikh & Masa",
             "status": "Status",
             "status_values": {
-                "COMPLIANT": "PATUH",
-                "PENDING_REVIEW": "MENUNGGU SEMAKAN",
-                "PENDING": "MENUNGGU SEMAKAN"
+                "COMPLIANT": "Mematuhi",
+                "PENDING_REVIEW": "Tidak Mematuhi",
+                "PENDING": "Tidak Mematuhi",
+                "NON_COMPLIANT": "Tidak Mematuhi"
             },
             "total": "Jumlah Kecacatan",
             "completed": "Telah Selesai",
@@ -121,7 +122,7 @@ PDF_LABELS = {
         "actual_completion_date": "Actual Completion Date",
         "status": "Status",
         "overdue": "Overdue Status",
-        "hda_compliant": "HDA Compliance (30 Days)",
+        "hda_compliant": "HDA Compliance Status",
         "priority": "Priority",
         "remarks": "Remarks",
         "evidence": "Defect Evidence",
@@ -153,9 +154,10 @@ PDF_LABELS = {
             "timestamp": "Timestamp",
             "status": "Status",
             "status_values": {
-                "COMPLIANT": "COMPLIANT",
-                "PENDING_REVIEW": "PENDING REVIEW",
-                "PENDING": "PENDING"
+                "COMPLIANT": "Compliant",
+                "PENDING_REVIEW": "Non-Compliant",
+                "PENDING": "Non-Compliant",
+                "NON_COMPLIANT": "Non-Compliant"
             },
             "total": "Total Defects",
             "completed": "Completed",

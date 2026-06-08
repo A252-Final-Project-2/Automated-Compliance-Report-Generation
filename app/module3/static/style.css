@@ -356,7 +356,7 @@ tbody tr:hover {
 .report-preview .report-title {
     font-size: 16pt; /* main title (formal) */
     font-weight: bold;
-    margin: 0;
+    margin: 0 0 14px;
     padding: 0;
     color: #000;
     text-align: center;
@@ -365,16 +365,20 @@ tbody tr:hover {
     font-family: 'Times New Roman', Times, serif;
 }
 
-.report-preview .report-subtitle {
+.report-preview .report-subtitle,
+.report-preview .report-role-title {
     font-size: 14pt;
     font-weight: bold;
-    margin: 0;
     padding: 0;
     color: #000;
     text-align: left;
     line-height: 1.2;
     white-space: normal;
     font-family: 'Times New Roman', Times, serif;
+}
+
+.report-preview .report-subtitle {
+    margin: 0;
 }
 
 .report-preview .report-meta {
@@ -390,15 +394,7 @@ tbody tr:hover {
 }
 
 .report-preview .report-role-title {
-    font-size: 14pt; /* role/title size */
-    color: #000;
     margin: 26px 0 10px;
-    padding: 0;
-    text-align: left;
-    font-weight: bold;
-    line-height: 1.2;
-    white-space: normal;
-    font-family: 'Times New Roman', Times, serif;
 }
 
 .report-preview .report-content {
@@ -426,12 +422,24 @@ tbody tr:hover {
     white-space: normal;
 }
 
+.report-preview .preview-line.field-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25rem) minmax(11.5rem, 14.5rem) 0.6rem minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: 0.12rem;
+    white-space: normal;
+}
+
 .report-preview .preview-line.empty {
     min-height: 0.55em;
 }
 
 .report-preview .preview-label,
-.report-preview .preview-value {
+.report-preview .preview-value,
+.report-preview .preview-indent,
+.report-preview .preview-field-label,
+.report-preview .preview-field-colon,
+.report-preview .preview-field-value {
     font-family: 'Times New Roman', Times, serif;
     font-size: 12pt;
 }
@@ -446,6 +454,37 @@ tbody tr:hover {
     min-width: 0;
     white-space: normal;
     overflow-wrap: anywhere;
+}
+
+.report-preview .preview-indent {
+    grid-column: 1;
+    white-space: pre;
+}
+
+.report-preview .preview-field-label {
+    grid-column: 2;
+    min-width: 0;
+    white-space: normal;
+}
+
+.report-preview .preview-field-colon {
+    grid-column: 3;
+    text-align: center;
+}
+
+.report-preview .preview-field-value {
+    grid-column: 4;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.report-preview .preview-line.image-label-row .preview-field-label {
+    grid-column: 2 / -1;
+}
+
+.report-preview .preview-line.legal-stat-row {
+    grid-template-columns: minmax(0, 1.25rem) minmax(18rem, 23rem) 0.6rem minmax(0, 1fr);
 }
 
 /* Match PDF left margin for main numbered headers */
@@ -463,6 +502,21 @@ tbody tr:hover {
     font-weight: 700;
     margin: 0.25em 0 0.1em;
     padding-left: 0;
+}
+
+.report-preview .preview-line.header.appendix-main {
+    margin-top: 14px;
+    margin-bottom: 4px;
+}
+
+.report-preview .preview-line.header.appendix-owner {
+    margin-top: 16px;
+    margin-bottom: 4px;
+}
+
+.report-preview .preview-line.header.appendix-list {
+    margin-top: 8px;
+    margin-bottom: 6px;
 }
 
 /* Topbar styles moved from template partial */

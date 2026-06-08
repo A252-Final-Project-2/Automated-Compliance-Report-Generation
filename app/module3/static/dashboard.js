@@ -277,6 +277,41 @@ function escapeRegExp(value) {
     return String(value ?? '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+const REPORT_DETAIL_LABELS = [
+    'Description',
+    'Keterangan',
+    'Unit',
+    'Reported Date',
+    'Tarikh Dilaporkan',
+    'Scheduled Completion Date',
+    'Tarikh Siap Dijadualkan',
+    'Actual Completion Date',
+    'Completed',
+    'Tarikh Siap Sebenar',
+    'Tarikh Siap',
+    'Days to Complete',
+    'Tempoh Siap (Hari)',
+    'Status',
+    'Current Status',
+    'Status Semasa',
+    'Overdue Status',
+    'Status Tertunggak',
+    'HDA Compliance (30 Days)',
+    'HDA Compliance Status',
+    'Pematuhan HDA (30 Hari)',
+    'Status Pematuhan HDA',
+    'Priority',
+    'Keutamaan',
+    'Remarks',
+    'Ulasan',
+    'Closed Rule',
+    'Peraturan Ditutup',
+    'Defect Image',
+    'Gambar Kecacatan',
+    'Uploaded',
+    'Muat Naik',
+];
+
 function hideEncryptedFragments(value) {
     return String(value ?? '').replace(/gAAAA[A-Za-z0-9_\-=]+/g, '[Encrypted data unavailable]');
 }
@@ -286,37 +321,180 @@ function preserveLeadingSpaces(value) {
 }
 
 function normalizeDefectDetailIndentation(value) {
-    const detailLabels = [
-        'Description',
-        'Keterangan',
-        'Unit',
-        'Reported Date',
-        'Tarikh Dilaporkan',
-        'Scheduled Completion Date',
-        'Tarikh Siap Dijadualkan',
-        'Actual Completion Date',
-        'Tarikh Siap Sebenar',
-        'Tarikh Siap',
-        'Days to Complete',
-        'Tempoh Siap (Hari)',
-        'Status',
-        'Current Status',
-        'Status Semasa',
-        'Overdue Status',
-        'Status Tertunggak',
-        'HDA Compliance (30 Days)',
-        'Pematuhan HDA (30 Hari)',
-        'Priority',
-        'Keutamaan',
-        'Remarks',
-        'Ulasan',
-    ];
-    const escapedLabels = detailLabels.map(escapeRegExp).join('|');
+    let text = String(value ?? '')
+        .replace(/(?<!\n)\n(?=[ \t]*(?:[a-z]|[A-Z])\.\s+(?:Defect ID|Kecacatan ID)\b)/g, '\n\n')
+        .replace(/^[ \t]*(Peraturan Ditutup\s*:)\s*\n[ \t]*(Ditutup selepas[^\n]*)$/gim, '$1 $2')
+        .replace(/^[ \t]*(Closed Rule\s*:)\s*\n[ \t]*(Closed after[^\n]*)$/gim, '$1 $2');
+
+    const escapedLabels = REPORT_DETAIL_LABELS.map(escapeRegExp).join('|');
     const detailLinePattern = new RegExp(`^[ \\t]*(${escapedLabels}\\s*:)`, 'gim');
-    return String(value ?? '').replace(detailLinePattern, '   $1');
+    return text.replace(detailLinePattern, '   $1');
+}
+
+function normalizePriorityValuesForLanguage(value, language) {
+    const isMalay = ['ms', 'bm', 'malay', 'melayu'].includes(String(language || '').toLowerCase());
+    const replacements = isMalay
+        ? { high: 'Tinggi', medium: 'Sederhana', low: 'Rendah' }
+        : { tinggi: 'High', sederhana: 'Medium', rendah: 'Low' };
+    const labelPattern = isMalay ? '(Keutamaan\\s*:\\s*)' : '(Priority\\s*:\\s*)';
+    const valuePattern = isMalay ? '(high|medium|low)' : '(tinggi|sederhana|rendah)';
+    const priorityPattern = new RegExp(`^\\s*${labelPattern}${valuePattern}\\s*$`, 'gim');
+
+    return String(value ?? '').replace(priorityPattern, (_match, label, rawValue) => {
+        const normalized = replacements[String(rawValue || '').trim().toLowerCase()] || String(rawValue || '').trim();
+        return `${label.trim()} ${normalized}`;
+    });
+}
+
+function normalizeHdaComplianceValues(value, language) {
+    const isMalay = ['ms', 'bm', 'malay', 'melayu'].includes(String(language || '').toLowerCase());
+    const targetLabel = isMalay ? 'Status Pematuhan HDA' : 'HDA Compliance Status';
+    const sourceLabels = [
+        'HDA Compliance (30 Days)',
+        'HDA Compliance Status',
+        'Pematuhan HDA (30 Hari)',
+        'Status Pematuhan HDA',
+    ].map(escapeRegExp).join('|');
+
+    const valueMap = isMalay
+        ? {
+            yes: 'Mematuhi',
+            ya: 'Mematuhi',
+            compliant: 'Mematuhi',
+            mematuhi: 'Mematuhi',
+            no: 'Tidak Mematuhi',
+            tidak: 'Tidak Mematuhi',
+            'non-compliant': 'Tidak Mematuhi',
+            'tidak mematuhi': 'Tidak Mematuhi',
+            pending: 'Tidak Mematuhi',
+            'under review': 'Tidak Mematuhi',
+            'dalam semakan': 'Tidak Mematuhi',
+        }
+        : {
+            yes: 'Compliant',
+            ya: 'Compliant',
+            compliant: 'Compliant',
+            mematuhi: 'Compliant',
+            no: 'Non-Compliant',
+            tidak: 'Non-Compliant',
+            'non-compliant': 'Non-Compliant',
+            'tidak mematuhi': 'Non-Compliant',
+            pending: 'Non-Compliant',
+            'under review': 'Non-Compliant',
+            'dalam semakan': 'Non-Compliant',
+        };
+
+    const hdaPattern = new RegExp(`^([ \\t]*)(${sourceLabels})\\s*:\\s*(.+?)\\s*$`, 'gim');
+    return String(value ?? '').replace(hdaPattern, (_match, indent, _label, rawValue) => {
+        const normalized = String(rawValue || '').trim().toLowerCase();
+        const fieldIndent = indent || '   ';
+        return `${fieldIndent}${targetLabel}: ${valueMap[normalized] || rawValue.trim()}`;
+    });
+}
+
+function normalizeOverdueStatusValues(value, language) {
+    const isMalay = ['ms', 'bm', 'malay', 'melayu'].includes(String(language || '').toLowerCase());
+    const targetLabel = isMalay ? 'Status Tertunggak' : 'Overdue Status';
+    const sourceLabels = ['Overdue Status', 'Status Tertunggak'].map(escapeRegExp).join('|');
+    const valueMap = isMalay
+        ? {
+            yes: 'Tertunggak',
+            ya: 'Tertunggak',
+            overdue: 'Tertunggak',
+            tertunggak: 'Tertunggak',
+            no: 'Tidak Tertunggak',
+            tidak: 'Tidak Tertunggak',
+            'not overdue': 'Tidak Tertunggak',
+            'tidak tertunggak': 'Tidak Tertunggak',
+        }
+        : {
+            yes: 'Overdue',
+            ya: 'Overdue',
+            overdue: 'Overdue',
+            tertunggak: 'Overdue',
+            no: 'Not Overdue',
+            tidak: 'Not Overdue',
+            'not overdue': 'Not Overdue',
+            'tidak tertunggak': 'Not Overdue',
+        };
+
+    const overduePattern = new RegExp(`^([ \\t]*)(${sourceLabels})\\s*:\\s*(.+?)\\s*$`, 'gim');
+    return String(value ?? '').replace(overduePattern, (_match, indent, _label, rawValue) => {
+        const normalized = String(rawValue || '').trim().toLowerCase();
+        return `${indent}${targetLabel}: ${valueMap[normalized] || rawValue.trim()}`;
+    });
+}
+
+function normalizeReportSectionSpacing(value) {
+    return String(value ?? '')
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .replace(/\n(?!\n)(?=\s*\d+\.\s+)/g, '\n\n')
+        .replace(/\n(?!\n)(?=\s*(?:AI\s+DISCLAIMER|PENAFIAN\s+AI)\s*:)/gi, '\n\n')
+        .replace(/^(\d+\.\s+[^\n]+)\n(?!\n)/gm, '$1\n\n')
+        .replace(/^((?:AI\s+DISCLAIMER|PENAFIAN\s+AI)\s*:)\n(?!\n)/gim, '$1\n\n')
+        .replace(
+            /\n+\s*(?=(?:1\.\s+Tujuan\s+Laporan|1\.\s+Purpose\s+of\s+the\s+Report|1\.\s+Latar\s+Belakang\s+Kes|1\.\s+Case\s+Background|5\.\s+Pemerhatian\s+Berkaitan\s+Pematuhan\s+Tempoh|5\.\s+Observations\s+on\s+Timeframe\s+Compliance|4\.\s+Pemerhatian\s+Berkaitan\s+Pematuhan\s+dan\s+Tarikh\s+Akhir|3\.\s+Pemerhatian\s+Berkaitan\s+Status\s+dan\s+Tempoh|3\.\s+Recorded\s+Status\s+and\s+Timeframe\s+Observations)\s*$)/gim,
+            '\n\n\n'
+        );
+}
+
+function normalizeLegalStatisticsSection(value) {
+    let text = String(value ?? '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+    text = text.replace(
+        /(2\.\s*Kedudukan Statistik Rekod Kecacatan\s*\n+)\s*Jumlah keseluruhan kecacatan:\s*(\d+)\.?\s*Telah diselesaikan:\s*(\d+)\.?\s*(?:Kes Ditutup:\s*(\d+)\.?\s*)?Masih belum diselesaikan:\s*(\d+)\.?\s*Direkodkan sebagai\s+tertunggak:\s*(\d+)\.?\s*Tidak mematuhi tempoh 30 hari HDA:\s*(\d+)\.?/gis,
+        (_match, heading, total, completed, closed, pending, overdue, hda) => (
+            `${heading}Jumlah keseluruhan kecacatan: ${total}\n` +
+            `Telah diselesaikan: ${completed}\n` +
+            `Kes Ditutup: ${closed || '0'}\n` +
+            `Masih belum diselesaikan: ${pending}\n` +
+            `Direkodkan sebagai tertunggak: ${overdue}\n` +
+            `Tidak mematuhi tempoh 30 hari HDA: ${hda}\n\n`
+        )
+    );
+
+    text = text.replace(
+        /(2\.\s*Statistical Position of Defect Records\s*\n+)\s*Total recorded defects:\s*(\d+)\.?\s*Completed:\s*(\d+)\.?\s*(?:Closed Cases:\s*(\d+)\.?\s*)?Still unresolved:\s*(\d+)\.?\s*Recorded as overdue:\s*(\d+)\.?\s*Non-compliant with 30-day HDA requirement:\s*(\d+)\.?/gis,
+        (_match, heading, total, completed, closed, pending, overdue, hda) => (
+            `${heading}Total recorded defects: ${total}\n` +
+            `Completed: ${completed}\n` +
+            `Closed Cases: ${closed || '0'}\n` +
+            `Still unresolved: ${pending}\n` +
+            `Recorded as overdue: ${overdue}\n` +
+            `Non-compliant with 30-day HDA requirement: ${hda}\n\n`
+        )
+    );
+
+    return text;
 }
 
 function renderReportPreviewBody(value) {
+    let inLegalStatisticsSection = false;
+    const reportDetailLinePattern = new RegExp(
+        `^(\\s*)(${REPORT_DETAIL_LABELS.map(escapeRegExp).join('|')})\\s*:\\s*(.*)$`,
+        'i'
+    );
+    const legalStatisticLabels = [
+        'Total recorded defects',
+        'Completed',
+        'Closed Cases',
+        'Still unresolved',
+        'Recorded as overdue',
+        'Non-compliant with 30-day HDA requirement',
+        'Jumlah keseluruhan kecacatan',
+        'Telah diselesaikan',
+        'Kes Ditutup',
+        'Masih belum diselesaikan',
+        'Direkodkan sebagai tertunggak',
+        'Tidak mematuhi tempoh 30 hari HDA',
+    ];
+    const legalStatisticLinePattern = new RegExp(
+        `^\\s*(?:${legalStatisticLabels.map(escapeRegExp).join('|')})\\s*:\\s*.+$`,
+        'i'
+    );
+
     return String(value ?? '')
         .split('\n')
         .map((line) => {
@@ -334,11 +512,15 @@ function renderReportPreviewBody(value) {
                 /^\s*BUTIRAN\s+KES\s+DITUTUP\b/i,
                 /^\s*CLOSED\s+CASE\s+DETAILS\b/i,
                 /^\s*MAKLUMAT\s+PEMILIK\s+MENUNTUT[:\s]/i,
+                /^\s*REKOD\s+KES\s+DITUTUP\s+PEMILIK\s+MENUNTUT[:\s]/i,
                 /^\s*CLAIMANT\s+OWNER\s+DETAILS[:\s]/i,
+                /^\s*CLAIMANT\s+OWNER\s+CLOSED\s+CASE\s+RECORDS[:\s]/i,
                 /^\s*SENARAI\s+KECACATAN\s+PEMILIK\s+MENUNTUT[:\s]/i,
                 /^\s*CLAIMANT\s+OWNER\s+DEFECT\s+LIST[:\s]/i,
                 /^\s*MAKLUMAT\s+PEMILIK\s+LAIN[:\s]/i,
+                /^\s*REKOD\s+KES\s+DITUTUP\s+PEMILIK\s+LAIN[:\s]/i,
                 /^\s*OTHER\s+OWNER\s+DETAILS[:\s]/i,
+                /^\s*OTHER\s+OWNER\s+CLOSED\s+CASE\s+RECORDS[:\s]/i,
                 /^\s*SENARAI\s+KECACATAN\s+PEMILIK\s+LAIN[:\s]/i,
                 /^\s*OTHER\s+OWNER\s+DEFECT\s+LIST[:\s]/i,
                 /^\s*KECACATAN\s+BERKAITAN\s+PIHAK\s+YANG\s+MENUNTUT[:\s]/i,
@@ -354,6 +536,8 @@ function renderReportPreviewBody(value) {
             // Bold main numbered headers (e.g., "1. Tujuan Laporan") and keep same indent
             const numberedHeaderMatch = line.match(/^(\s*)(\d+\.\s+)(.+)$/);
             if (numberedHeaderMatch) {
+                const headerText = numberedHeaderMatch[3].trim();
+                inLegalStatisticsSection = /^(Statistical Position of Defect Records|Kedudukan Statistik Rekod Kecacatan)$/i.test(headerText);
                 const leading = '&nbsp;'.repeat(numberedHeaderMatch[1].length);
                 const numberPart = escapeHtml(numberedHeaderMatch[2]);
                 const rest = escapeHtml(numberedHeaderMatch[3]);
@@ -369,17 +553,59 @@ function renderReportPreviewBody(value) {
 
             const isPdfBoldLine = pdfBoldLinePatterns.some((p) => p.test(line));
             if (isPdfBoldLine) {
-                return `<div class="preview-line header">${preserveLeadingSpaces(escapeHtml(line))}</div>`;
+                const appendixMainHeader = /^\s*(APPENDIX\s+A|LAMPIRAN\s+A)\s*:/i.test(line);
+                const ownerHeader = /^\s*(CLAIMANT\s+OWNER\s+DETAILS|CLAIMANT\s+OWNER\s+CLOSED\s+CASE\s+RECORDS|OTHER\s+OWNER\s+DETAILS|OTHER\s+OWNER\s+CLOSED\s+CASE\s+RECORDS|MAKLUMAT\s+PEMILIK\s+MENUNTUT|REKOD\s+KES\s+DITUTUP\s+PEMILIK\s+MENUNTUT|MAKLUMAT\s+PEMILIK\s+LAIN|REKOD\s+KES\s+DITUTUP\s+PEMILIK\s+LAIN)\s*:/i.test(line);
+                const defectListHeader = /^\s*(CLAIMANT\s+OWNER\s+DEFECT\s+LIST|OTHER\s+OWNER\s+DEFECT\s+LIST|SENARAI\s+KECACATAN\s+PEMILIK\s+MENUNTUT|SENARAI\s+KECACATAN\s+PEMILIK\s+LAIN)\s*:/i.test(line);
+                const extraClass = appendixMainHeader
+                    ? ' appendix-main'
+                    : ownerHeader
+                        ? ' appendix-owner'
+                        : defectListHeader
+                            ? ' appendix-list'
+                            : '';
+                return `<div class="preview-line header${extraClass}">${preserveLeadingSpaces(escapeHtml(line))}</div>`;
+            }
+
+            if (inLegalStatisticsSection && legalStatisticLinePattern.test(line)) {
+                const statisticMatch = line.match(/^(\s*)([^:]+)\s*:\s*(.+)$/);
+                if (statisticMatch) {
+                    const leading = '&nbsp;'.repeat(statisticMatch[1].length);
+                    return `
+                        <div class="preview-line field-row legal-stat-row">
+                            <span class="preview-indent">${leading}</span><span class="preview-field-label">${escapeHtml(statisticMatch[2].trim())}</span><span class="preview-field-colon">:</span><span class="preview-field-value">${escapeHtml(statisticMatch[3].trim())}</span>
+                        </div>
+                    `.trim();
+                }
+                return `<div class="preview-line">${escapeHtml(line.trim())}</div>`;
+            }
+
+            const detailMatch = line.match(reportDetailLinePattern);
+            if (detailMatch) {
+                const leading = '&nbsp;'.repeat(detailMatch[1].length);
+                const labelText = detailMatch[2];
+                const valueText = detailMatch[3];
+                if (!valueText.trim() && /^(Defect Image|Gambar Kecacatan)$/i.test(labelText)) {
+                    return `
+                        <div class="preview-line field-row image-label-row">
+                            <span class="preview-indent">${leading}</span><span class="preview-field-label">${escapeHtml(labelText)}:</span>
+                        </div>
+                    `.trim();
+                }
+                return `
+                    <div class="preview-line field-row">
+                        <span class="preview-indent">${leading}</span><span class="preview-field-label">${escapeHtml(labelText)}</span><span class="preview-field-colon">:</span><span class="preview-field-value">${escapeHtml(valueText)}</span>
+                    </div>
+                `.trim();
             }
 
             const match = line.match(/^(\s*)([^:]{1,90}:\s+)(.+)$/);
             if (match) {
                 const leading = '&nbsp;'.repeat(match[1].length);
-                const labelText = match[2];
+                const labelText = match[2].replace(/:\s*$/, '');
                 const valueText = match[3];
                 return `
-                    <div class="preview-line hanging">
-                        <span class="preview-label">${leading}${escapeHtml(labelText)}</span><span class="preview-value">${escapeHtml(valueText)}</span>
+                    <div class="preview-line field-row">
+                        <span class="preview-indent">${leading}</span><span class="preview-field-label">${escapeHtml(labelText)}</span><span class="preview-field-colon">:</span><span class="preview-field-value">${escapeHtml(valueText)}</span>
                     </div>
                 `.trim();
             }
@@ -763,7 +989,7 @@ function generateReport(role) {
         const tribunalTitle = titleLabels[roleKey] || titleLabels.homeowner;
         const generatedLabel = reportLanguage === 'ms' ? 'Tarikh Jana' : 'Generated Date';
 
-        let bodyText = reportText;
+        let bodyText = normalizePriorityValuesForLanguage(reportText, reportLanguage);
         const knownHeaderLines = new Set([
             headerLabels.ai,
             headerLabels.tribunal,
@@ -784,7 +1010,13 @@ function generateReport(role) {
             }
             break;
         }
-        bodyText = bodyLines.join('\n').trim();
+        bodyText = normalizeLegalStatisticsSection(bodyLines.join('\n').trim());
+        bodyText = normalizeOverdueStatusValues(bodyText, reportLanguage);
+        bodyText = normalizeHdaComplianceValues(bodyText, reportLanguage);
+        bodyText = normalizeReportSectionSpacing(bodyText);
+        bodyText = normalizePriorityValuesForLanguage(bodyText, reportLanguage);
+        bodyText = normalizeOverdueStatusValues(bodyText, reportLanguage);
+        bodyText = normalizeHdaComplianceValues(bodyText, reportLanguage);
         bodyText = normalizeDefectDetailIndentation(bodyText);
 
         // Render the preview with the canonical header structure matching PDF format
@@ -804,13 +1036,14 @@ function generateReport(role) {
         // Store full report for PDF export using the canonical header text
         document.getElementById('pdf-ai-report').value = [
             headerLabels.ai,
+            '',
             tribunalTitle,
             generatedAt ? `${generatedLabel}: ${generatedAt}` : '',
             '',
             canonicalSubtitle,
             '',
             bodyText,
-        ].filter((item, index) => item || index === 3 || index === 5).join('\n').trim();
+        ].filter((item, index) => item || index === 1 || index === 4 || index === 6).join('\n').trim();
         document.getElementById('export-btn').disabled = false;
         renderMissingDataPanel(null);
         showToast('✓ Report generated successfully!', 'success');

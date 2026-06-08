@@ -67,11 +67,15 @@ def _translate_defect_list(defects_source, include_remarks=False):
             "deadline": d.get("deadline", ""),
             "actual_completion_date": d.get("actual_completion_date", "-"),
             "days_to_complete": d.get("days_to_complete", "-"),
-            "overdue": d.get("overdue", "No"),
+            "overdue": (
+                "Overdue"
+                if str(d.get("overdue", "")).strip().lower() in {"yes", "ya", "overdue", "tertunggak"}
+                else "Not Overdue"
+            ),
             "hda_compliance_30_days": (
-                "Complied with 30-Day Requirement under HDA"
+                "Compliant"
                 if d.get("hda_compliance_30_days") == "Yes"
-                else "Failed to Comply with 30-Day Requirement under HDA"
+                else "Non-Compliant"
             ),
             "priority": d.get("priority", "")
         }
@@ -181,7 +185,7 @@ a. Defect ID [defect_id]:
    Days to Complete: [days_to_complete] (include ONLY if Status is Completed)
    Status: [status]
    Overdue Status: [overdue]
-   HDA Compliance (30 Days): [hda_compliance_30_days]
+   HDA Compliance Status: [hda_compliance_30_days]
    Priority: [priority]
    Remarks: [remarks]
 
@@ -273,7 +277,7 @@ a. Kecacatan ID [defect_id]:
     Tempoh Siap (Hari): [days_to_complete] (paparkan HANYA jika Status ialah Telah Diselesaikan)
    Status: [status]
    Status Tertunggak: [overdue]
-   Pematuhan HDA (30 Hari): [hda_compliance_30_days]
+   Status Pematuhan HDA: [hda_compliance_30_days]
    Keutamaan: [priority]
    Ulasan: [remarks]
 
@@ -381,7 +385,7 @@ a. Defect ID [defect_id]
    Scheduled Completion Date: [deadline]
    Actual Completion Date: [actual_completion_date]
     Days to Complete: [days_to_complete] (include ONLY for Completed defects)
-   HDA Compliance (30 Days): [hda_compliance_30_days]
+   HDA Compliance Status: [hda_compliance_30_days]
 
 b. Defect ID [defect_id]
 ...]
@@ -397,7 +401,7 @@ a. Defect ID [defect_id]
    Actual Completion Date: [actual_completion_date]
    Current Status: [status]
    Overdue Status: [overdue]
-   HDA Compliance (30 Days): [hda_compliance_30_days]
+   HDA Compliance Status: [hda_compliance_30_days]
 
 b. Defect ID [defect_id]
 ...]
@@ -503,7 +507,7 @@ a. ID Kecacatan [defect_id]
    Tarikh Siap Dijadualkan: [deadline]
    Tarikh Siap Sebenar: [actual_completion_date]
     Tempoh Siap (Hari): [days_to_complete] (paparkan HANYA untuk kecacatan yang Telah Diselesaikan)
-   Pematuhan HDA (30 Hari): [hda_compliance_30_days]
+   Status Pematuhan HDA: [hda_compliance_30_days]
 
 b. ID Kecacatan [defect_id]
 ...]
@@ -519,7 +523,7 @@ a. ID Kecacatan [defect_id]
    Tarikh Siap Sebenar: [actual_completion_date]
    Status Semasa: [status]
    Status Tertunggak: [overdue]
-   Pematuhan HDA (30 Hari): [hda_compliance_30_days]
+   Status Pematuhan HDA: [hda_compliance_30_days]
 
 b. ID Kecacatan [defect_id]
 ...]
@@ -636,7 +640,7 @@ by referring to the following information for each defect:
 - Days to Complete (for records with status Completed only)
 - Current Status
 - Overdue Status
-- HDA Compliance (30 Days)
+- HDA Compliance Status
 
 The observations should summarise the patterns or conditions
 recorded in the data, such as:

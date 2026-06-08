@@ -1041,6 +1041,7 @@ def _load_report_metadata(user_id=None, role=None, claimant_user_id=None):
             "transaction_date": "-",
             "document_name": "Dokumen Sokongan Borang 1",
             "state_name": DEFAULT_STATE_NAME,
+            "project_name": "-",
         }
 
         claimant = {
@@ -1113,6 +1114,7 @@ def _load_report_metadata(user_id=None, role=None, claimant_user_id=None):
                     case_info["item_service"] = _display_text(homeowner_row[8]) or case_info["item_service"]
                     case_info["transaction_date"] = _format_transaction_date(homeowner_row[9])
                     homeowner_project_name = _display_text(homeowner_row[10]) if len(homeowner_row) > 10 else ""
+                    case_info["project_name"] = homeowner_project_name or case_info["project_name"]
                 else:
                     homeowner_project_name = ""
                 if _is_missing_required(claimant.get("name")):
@@ -1166,7 +1168,8 @@ def _load_report_metadata(user_id=None, role=None, claimant_user_id=None):
                     cur.execute(
                         """
                         SELECT name, ic_number, email, phone_number, address,
-                               court_location, state_name, claim_amount, item_service, transaction_date
+                               court_location, state_name, claim_amount, item_service, transaction_date,
+                               project_name
                         FROM report_homeowner_profile
                         WHERE homeowner_id = %s
                         LIMIT 1
@@ -1180,7 +1183,8 @@ def _load_report_metadata(user_id=None, role=None, claimant_user_id=None):
                     cur.execute(
                         """
                         SELECT name, ic_number, email, phone_number, address,
-                               court_location, state_name, claim_amount, item_service, transaction_date
+                               court_location, state_name, claim_amount, item_service, transaction_date,
+                               project_name
                         FROM report_homeowner_profile
                         ORDER BY homeowner_id ASC
                         LIMIT 1
@@ -1211,6 +1215,8 @@ def _load_report_metadata(user_id=None, role=None, claimant_user_id=None):
                     case_info["claim_amount"] = _display_text(claimant_row[7]) or case_info["claim_amount"]
                     case_info["item_service"] = _display_text(claimant_row[8]) or case_info["item_service"]
                     case_info["transaction_date"] = _format_transaction_date(claimant_row[9])
+                    homeowner_project_name = _display_text(claimant_row[10]) if len(claimant_row) > 10 else ""
+                    case_info["project_name"] = homeowner_project_name or case_info["project_name"]
 
                 respondent_row = None
 
@@ -1218,7 +1224,7 @@ def _load_report_metadata(user_id=None, role=None, claimant_user_id=None):
                 # If that cannot be determined, fall back to legal profile or saved respondent.
                 if active_role == "Legal":
                     # Try to determine homeowner's project name from profile
-                    homeowner_project_name = None
+                    homeowner_project_name = case_info.get("project_name") if not _is_missing_required(case_info.get("project_name")) else None
                     if target_homeowner_id:
                         cur.execute(
                             "SELECT project_name FROM report_homeowner_profile WHERE homeowner_id = %s LIMIT 1",
@@ -1327,17 +1333,21 @@ def build_summary_stats(stats, defects=None):
     Includes overdue count and HDA non-compliance count
     """
 
+    def _is_closed_defect(defect):
+        return defect.get("closed") or str(defect.get("status", "")).strip().lower() in {
+            "closed",
+            "ditutup",
+            "archived",
+            "diarkib",
+        }
+
     def _is_completed_status(value):
         status_value = str(value or "").strip().lower()
         return status_value in {
             "completed",
-            "closed",
-            "archived",
             "telah diselesaikan",
             "telah selesai",
             "selesai",
-            "ditutup",
-            "diarkib",
         }
 
     overdue_count = 0
@@ -1351,12 +1361,12 @@ def build_summary_stats(stats, defects=None):
         if not completed_total:
             completed_total = len([
                 d for d in defects
-                if d.get("closed") or _is_completed_status(d.get("status"))
+                if not _is_closed_defect(d) and _is_completed_status(d.get("status"))
             ])
         if not closed_total:
             closed_total = len([
                 d for d in defects
-                if d.get("closed") or str(d.get("status", "")).strip().lower() in {"closed", "ditutup", "archived", "diarkib"}
+                if _is_closed_defect(d)
             ])
 
     total_defects = int(stats.get("total", 0) or 0)
