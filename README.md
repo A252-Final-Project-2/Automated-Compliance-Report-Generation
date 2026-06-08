@@ -212,19 +212,6 @@ Inside [app/module3](app/module3), there are batch files that wrap the Docker co
 
 These are useful for users who prefer double-clicking a script instead of typing commands.
 
-## Login Accounts
-
-The login page uses role-based accounts. The seeded demo credentials are:
-
-- `homeowner` / `home123`
-- `developer` / `dev123`
-- `legal` / `legal123`
-- `homeowner2` / `home223`
-- `developer2` / `dev223`
-- `legal2` / `legal223`
-- `admin` / `admin123`
-
-By default the app uses database-backed login accounts. A demo fallback mode exists for local testing only and should stay disabled in production.
 
 ## Main User Flow
 
@@ -348,11 +335,3 @@ docker compose down
 docker compose build --no-cache
 docker compose up -d
 
-Demo accounts
-homeowner / home123
-developer / dev123
-legal / legal123
-homeowner2 / home223
-developer2 / dev223
-legal2 / legal223
-admin / admin123
